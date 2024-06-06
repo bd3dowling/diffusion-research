@@ -1,0 +1,3 @@
+[submodule "diffusionlib"]
+	path = diffusionlib
+	url = git@github.com:bd3dowling/diffusionlib.git
