@@ -1,0 +1,141 @@
+% Template for MEng/BEng/MSc final reports
+% EEE Department - Imperial College London
+%
+% INSTRUCTIONS
+% (1) Compile using LuaLatex (it is the successor of pdflatex). To check this on Overleaf, click on the Menu on the top left.
+% (2) Complete the SETUP below
+% (3) Students of Imperial College can claim a free premium Overleaf account, see https://www.imperial.ac.uk/admin-services/ict/self-service/computers-printing/devices-and-software/get-software/get-software-for-students/overleaf/ 
+% Claim the free premium account because as your report becomes more and more complex you may reach the timeout limit of the free account.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% DO NOT MODIFY FROM HERE ...
+\documentclass[10pt]{ic_eee_thesis}
+
+\usepackage[style=ieee,backend=biber,hyperref=auto]{biblatex}
+\addbibresource{references.bib}
+% ... TO HERE
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%% SETUP %%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% EDIT THE FOLLOWING INFORMATION WITH YOUR DATA
+% COMPLETE PART A
+% IF YOU ARE DOING A MENG/BENG COMPLETE ALSO PART B
+% IF YOU ARE DOING AN MSC IGNORE PART B
+% LINES STARTING WITH % ARE COMMENTS. UNCOMMENT JUST ONE OF A SET OF OPTIONS
+% MAKE SURE YOU CHECK AND UPDATE ALL INFORMATION, INCLUDING SUBMITYEAR
+
+
+%%%%%%%%%%% PART A %%%%%%%%%%%
+% PICK A DEGREE FROM THE LIST BELOW 
+% BY COMMENTING OUT/IN YOUR DEGREE
+% DO NOT MODIFY THE NAMES
+%\degree{MEng}
+%\degree{BEng}
+\degree{MSc}
+
+\title{Title of your FYP/MSc Report}
+\subtitle{Subtitle if needed} % use \subtitle{} to remove the subtitle
+\author{N.S. Surname}
+\cid{00000000}
+\supervisor{Dr N.S. Surname \\[1mm] Prof. A. Another} %UK: Dr no dot, prof has dot
+\submityear{2024}
+
+% PICK A COURSE FROM THE LIST BELOW 
+% DO NOT MODIFY THE NAMES
+%%%%%%%%% BENG-MENG COMMON LIST
+%\course{Electrical and Electronic Engineering}
+%\course{Electronic and Information Engineering}
+%%%%%%%%% MENG-ONLY LIST
+%\course{Electrical and Electronic Engineering with Management} 
+%\course{Electrical and Electronic Engineering with a Year Abroad}
+%\course{Electronic and Information Engineering with a Year Abroad}
+%%%%%%%%% MSC LIST
+%\course{Analogue and Digital Integrated Circuit Design}
+%\course{Applied Machine Learning}
+%\course{Communications and Signal Processing}
+\course{Control and Optimisation}
+%\course{Future Power Networks}
+
+
+% Do you want a list of figures?
+% Do you want a list of tables?
+% Do you want an acknowledgement page?
+% Do you want a list of acronyms?
+\setboolean{list_of_figures}{true} % false or true - Default is true
+\setboolean{list_of_tables}{false} % false or true - Default is false
+\setboolean{acknowledgement}{true} % false or true - Default is true
+\setboolean{acronyms}{true} % false or true - Default is true
+
+% If you want to print your thesis, consider changing the command below to true. If true, the command adds labels at the edge of the pages which will make easy to identify a chapter running through the pages with the finger. It is just a visual setting. The default values are different for MENG/BEng and MSc as a consequence of the different approval process. In any case, you can change this to either true or false as you prefer.
+%\setboolean{edge_labels}{false} % default for MEng
+\setboolean{edge_labels}{true} % default for MSc
+
+%The preferred spacing for FYP/MSc reports is doublespacing. This is because it is easier for markers to annotate the document while marking. Some students requested the implementation of the singlespacing option. This can be activated below by changing from true to false, but discuss this with your supervisor first.
+\setboolean{double_spacing}{true} %Default is true. If you want to change this, ask your supervisor if they are OK with singlespacing.
+
+%%%%%%%%%%% PART B %%%%%%%%%%% 
+% ONLY FOR MENG/BENG. MSC IGNORE THIS
+% THESE ADDITIONAL SETTINGS HAVE BEEN ASKED BY THE MEng COMMITTEE BUT NOT BY THE MSC COMMITTEE
+% Is this an interim report or final thesis?
+\setboolean{final_thesis}{true} % true for final Thesis / false for interim report
+\secondmarker{Second Marker\\[2mm]{\large \textsc Dr Jane Doe}} %If you do not know who your second marker is, use \secondmarker{}
+
+%%%%%%%%%%%%% END SETUP %%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+% ADDITIONAL PACKAGES
+% You can add your packages below. Note that the following packages are already loaded: pgfcore, geometry, bookmark, graphicx, setspace, kantlipsum, fontspec, polygrossia (default English), minitoc, silence, background, xpatch, tikzpagenodes, totcount, fancyhdr, titlesec and the tikz libraries calc, shapes.symbols and shapes.misc  
+
+%Examples
+\usepackage{amsmath}
+\usepackage{amsfonts} 
+%...
+
+% ADDITIONAL COMMANDS
+%Examples
+\DeclareMathOperator{\diag}{diag}
+\DeclareMathOperator{\vect}{vec}
+%...
+
+
+\begin{document}
+
+\preamble % Do not change - required
+
+% EDIT THE CONTENT OF THE FILES
+% Abstract.tex
+% OrigSta_Copyright.tex
+% Acknowledgement.tex
+% You can find them under the folder 
+% "chapters" on the left column
+
+% ADD AS MANY CHAPTERS AS NEEDED
+% BY CREATING .TEX FILES IN THE FOLDER chapters
+% AND ADDING \input{namechapter.tex} BELOW
+\input{Chapter1.tex}
+\input{Chapter2.tex}
+
+% You can change the title of the conclusions by changing the text between { }
+\conclusions{Conclusions} % Do not remove - required
+% EDIT THE CONTENT OF THE FILE
+% Conclusions.tex
+% You can find it under the folder 
+% "chapters" on the left column
+
+% APPENDICES ARE OPTIONAL
+% COMMENT OUT BOTH LINES BELOW TO REMOVE THEM
+% ADD CHAPTERS TO ADD MULTIPLE APPENDICES
+\appendix 
+\input{AppendixA.tex}
+%\input{AppendixB.tex} % Example second appendix (need to create the file in "chapters")
+
+
+\cleardoublepage % Do not change - required
+\RemoveLabels % Do not change - required
+\thesisspacing % Do not change - required
+\printbibliography[title={Bibliography},heading=bibintoc] % Do not change - required
+
+\end{document}
