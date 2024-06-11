@@ -10,7 +10,7 @@
 % Imperial College's logo from Imperial College's website
 
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{statsmsc}[2024/04/18 Thesis template for MSc in Statistics]
+\ProvidesClass{make_files/statsmsc}[2024/04/18 Thesis template for MSc in Statistics]
 
 \LoadClass[fontsize=12pt,headings=optiontohead,twoside=false, parskip=half]{scrbook}
 \counterwithout{section}{chapter}
