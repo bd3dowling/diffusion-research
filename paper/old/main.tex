@@ -1,0 +1,42 @@
+\documentclass[10pt]{make_files/class}
+\usepackage{make_files/packages}
+\usepackage{make_files/macros}
+
+\addbibresource{references.bib}
+
+\title{Diffusion Modelling for Inverse Problems}
+\subtitle{Summer Research Project}
+\author{B. Dowling}
+\cid{02458886}
+\supervisor{Dr D.O. Akyildiz}
+\submityear{2024}
+
+\degree{MSc}
+\course{Statistics}
+\setboolean{list_of_figures}{true}
+\setboolean{list_of_tables}{false}
+\setboolean{acknowledgement}{true}
+\setboolean{acronyms}{true}
+\setboolean{edge_labels}{true}
+\setboolean{double_spacing}{true}
+\setboolean{final_thesis}{true}
+
+\begin{document}
+
+\preamble
+
+\input{chapter_1.tex}
+\input{chapter_2.tex}
+
+\conclusions{conclusion}
+
+\appendix 
+\input{appendix_a.tex}
+
+\cleardoublepage
+\RemoveLabels
+\thesisspacing
+
+\printbibliography[title={Bibliography},heading=bibintoc]
+
+\end{document}
