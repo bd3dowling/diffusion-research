@@ -1,4 +1,4 @@
 [submodule "diffusionlib"]
 	path = diffusionlib
 	url = git@github.com:bd3dowling/diffusionlib.git
-	branch = ben/torch-translate
+	branch = main
