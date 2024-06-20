@@ -7,13 +7,13 @@ import numpy as np
 import torch
 import yaml
 
-from diffusionlib.conditioning_method.torch import get_conditioning_method
-from diffusionlib.dataset import get_dataset
+from diffusionlib._unused.torch_conditioning_method import get_conditioning_method
+from diffusionlib._unused.torch_sampler import create_sampler
 from diffusionlib.config_definition.model import ModelConfig, ModelName
-from diffusionlib.model.torch import create_model
+from diffusionlib.dataset import get_dataset
+from diffusionlib.model.definition.unet import create_model
 from diffusionlib.noise import get_noise
 from diffusionlib.operator import get_operator
-from diffusionlib.sampler.torch import create_sampler
 from diffusionlib.util.array import to_numpy
 from diffusionlib.util.image import mask_generator
 from diffusionlib.util.logger import get_logger
