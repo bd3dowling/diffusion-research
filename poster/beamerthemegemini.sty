@@ -28,13 +28,14 @@
 ]
 
 \setbeamerfont{headline}{family=\Raleway}
-\setbeamerfont{headline title}{size=\Huge,series=\bfseries}
+\setbeamerfont{headline title}{size=\VeryHuge,series=\bfseries}
 \setbeamerfont{headline author}{size=\Large}
 \setbeamerfont{headline institute}{size=\normalsize}
-\setbeamerfont{block title}{family=\Raleway,size=\large,series=\bfseries}
+\setbeamerfont{block title}{family=\Raleway,size=\LARGE,series=\bfseries}
 \setbeamerfont{heading}{family=\Lato,series=\bfseries}
 \setbeamerfont{caption}{size=\small}
-\setbeamerfont{footline}{family=\Raleway,size=\normalsize}
+\setbeamerfont{footline}{family=\Raleway,size=\Large}
+% \setbeamerfont{block body}{size=\Large}
 
 % ====================
 % Macros
@@ -107,7 +108,7 @@
 \newcommand{\logoleft}[1]{
   \newcommand{\insertlogoleft}{#1}
   \settowidth{\logoleftwidth}{\insertlogoleft}
-  \addtolength{\logoleftwidth}{10ex}
+  \addtolength{\logoleftwidth}{15ex}
   \setlength{\maxlogowidth}{\maxof{\logoleftwidth}{\logorightwidth}}
 }
 
@@ -133,10 +134,11 @@
         \ifx \inserttitle \empty \else
         {\usebeamerfont{headline title}\usebeamercolor[fg]{headline title}\inserttitle\\[0.5ex]}
         \fi
+        \vskip3ex
         \ifx \beamer@shortauthor \empty \else
         {\usebeamerfont{headline author}\usebeamercolor[fg]{headline author}\insertauthor\\[1ex]}
         \fi
-        \ifx \insertinstitute \empty \else
+        \ifx \insertinstitute \else
         {\usebeamerfont{headline institute}\usebeamercolor[fg]{headline institute}\insertinstitute\\[1ex]}
         \fi
       \end{column}
