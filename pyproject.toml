@@ -20,6 +20,14 @@ ruff = "^0.4.8"
 pylint = "^3.2.3"
 mypy = "^1.10.0"
 
+[tool.poetry.group.metal]
+optional = true
+
+[tool.poetry.group.metal.dependencies]
+jax-metal = "^0.1.0"
+jax = "0.4.26"
+jaxlib = "0.4.26"
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
