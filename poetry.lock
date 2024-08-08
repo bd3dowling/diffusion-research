@@ -894,6 +894,26 @@ files = [
 ]
 
 [[package]]
+name = "diffrax"
+version = "0.6.0"
+description = "GPU+autodiff-capable ODE/SDE/CDE solvers written in JAX."
+optional = false
+python-versions = "~=3.9"
+files = [
+    {file = "diffrax-0.6.0-py3-none-any.whl", hash = "sha256:7a59a796fd91e9c1cb20c37696c9f758681a3f24e72ff354a5a6aa335d3cde3a"},
+    {file = "diffrax-0.6.0.tar.gz", hash = "sha256:937207070bd7fdfe99178e23ec1787a630df7e3969b381e072ca6a14f5e2f3d3"},
+]
+
+[package.dependencies]
+equinox = ">=0.11.2"
+jax = ">=0.4.28"
+jaxtyping = ">=0.2.24"
+lineax = ">=0.0.5"
+optimistix = ">=0.0.7"
+typeguard = "2.13.3"
+typing-extensions = ">=4.5.0"
+
+[[package]]
 name = "diffusionlib"
 version = "0.1.0"
 description = "Library for diffusion modelling and inverse problem solving"
@@ -2331,6 +2351,23 @@ docs = ["requests (>=2.0.0)"]
 typing = ["mypy (>=1.0.0)", "types-setuptools"]
 
 [[package]]
+name = "lineax"
+version = "0.0.5"
+description = "Linear solvers in JAX and Equinox."
+optional = false
+python-versions = "~=3.9"
+files = [
+    {file = "lineax-0.0.5-py3-none-any.whl", hash = "sha256:601bcd121b32707642a6bae65188d5925ff6f2c3c46a99954592a6e8be82ac63"},
+    {file = "lineax-0.0.5.tar.gz", hash = "sha256:ed41098dbd94b639287f15682e19cd9ec1dc9ecad6844ee861536044a0e3285c"},
+]
+
+[package.dependencies]
+equinox = ">=0.11.3"
+jax = ">=0.4.26"
+jaxtyping = ">=0.2.20"
+typing-extensions = ">=4.5.0"
+
+[[package]]
 name = "llvmlite"
 version = "0.43.0"
 description = "lightweight wrapper around basic LLVM functionality"
@@ -3360,6 +3397,24 @@ docs = ["dm-haiku (>=0.0.11)", "ipython (>=8.8.0)", "matplotlib (>=3.5.0)", "mys
 dp-accounting = ["absl-py (>=1.0.0)", "attrs (>=21.4.0)", "mpmath (>=1.2.1)", "numpy (>=1.21.4)", "scipy (>=1.7.1)"]
 examples = ["dm-haiku (>=0.0.3)", "tensorflow (>=2.4.0)", "tensorflow-datasets (>=4.2.0)"]
 test = ["dm-haiku (>=0.0.3)", "dm-tree (>=0.1.7)", "flax (==0.5.3)"]
+
+[[package]]
+name = "optimistix"
+version = "0.0.7"
+description = "Nonlinear optimisation in JAX and Equinox."
+optional = false
+python-versions = "~=3.9"
+files = [
+    {file = "optimistix-0.0.7-py3-none-any.whl", hash = "sha256:7d1b1b3ab5462142d38f7e1171b597e3df591c7c33de43f85435dc7c0b9aa317"},
+    {file = "optimistix-0.0.7.tar.gz", hash = "sha256:0c649293b01c2029a5f9878fbb912d4977105830b4368b0d44b710b621c49ac3"},
+]
+
+[package.dependencies]
+equinox = ">=0.11.1"
+jax = ">=0.4.18"
+jaxtyping = ">=0.2.23"
+lineax = ">=0.0.4"
+typing-extensions = ">=4.5.0"
 
 [[package]]
 name = "optree"
@@ -6194,4 +6249,4 @@ test = ["big-O", "importlib-resources", "jaraco.functools", "jaraco.itertools", 
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.12"
-content-hash = "87b3ec20e9a4931d9ffc7a5ff27d6d350cbda7fd53eb756d835e567e9130b700"
+content-hash = "df5d644792eef454d7587357a0e82e1944b750ac65d5839400e9ad00b9e0e316"
