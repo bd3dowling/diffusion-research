@@ -1,3 +1,7 @@
+# data
+data/*
+!data/.gitkeep
+
 # macOS
 .DS_Store
 
