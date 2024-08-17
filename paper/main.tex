@@ -1,8 +1,11 @@
 \documentclass{make_files/statsmsc}
 \usepackage{make_files/packages}
 \usepackage{make_files/macros}
+\usepackage[backend=biber,style=apa]{biblatex}
 
-\title{Diffusion Modelling for Inverse Problems}
+\addbibresource{references.bib}
+
+\title{Sequential Monte Carlo Guided Diffusion Sampling for General Optimization}
 \author{Brendan Dowling}
 \CID{02458886}
 \supervisor{Dr Deniz O. Akyildiz}
@@ -13,26 +16,24 @@
 
 \maketitle
 
-\include{chapters/preamble}
-\include{chapters/introduction}
-\include{chapters/methods}
-\include{chapters/results}
-\include{chapters/discussion}
-\include{chapters/endmatter}
+\include{chapters/0_preamble}
+\include{chapters/1_introduction}
+\include{chapters/2_background}
+\include{chapters/3_methods}
+\include{chapters/4_experiments_and_results}
+\include{chapters/5_conclusion}
+\include{chapters/6_endmatter}
 
-\bibliographystyle{apalike}
-\bibliography{references}
+\printbibliography[heading=bibintoc, title={References}]
 
 \clearpage
 
 % reset page counter and start appendix pages numbering
 \pagenumbering{arabic}
-\renewcommand*{\thepage}{Supplementary Material Page \arabic{page}}
+\renewcommand*{\thepage}{A.\arabic{page}}
 \renewcommand{\thesection}{\Alph{section}}
 
 \appendix
-\include{chapters/appendix}
-%=========================================================
-
+\include{chapters/7_appendix}
 
 \end{document}

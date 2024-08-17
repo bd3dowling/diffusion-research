@@ -1,0 +1,38 @@
+\chapter*{Appendices}
+\addcontentsline{toc}{chapter}{Appendices}
+\markboth{Appendices}{Appendices}
+
+\section{Figures}\label{sec:figures}
+
+Text
+
+\section{Tables}\label{sec:tables}
+
+Text
+
+\section{Proofs}\label{sec:proofs}
+
+Text
+
+\section{Extra}
+
+\begin{remark}[DDIM Representation]
+    Under DDIM:
+    \begin{equation*}
+        u_t = \sqrt{\alpha_{t-1}} \quad
+        v_t = -\sqrt{1 - \overline{\alpha}_{t-1} - \sigma_t^2}\sqrt{1 - \overline{\alpha}_t} \quad
+        w_t = \sigma_t
+    \end{equation*}
+    with $\{\sigma_t\}_{t=1}^T$ an arbitrary conditional variance sequence. It's common to consider:
+    \begin{equation*}
+        \sigma_t(\eta) = \eta\sqrt{\frac{1 - \alpha_{t-1}}{1 - \alpha_t}}\sqrt{1 - \frac{\alpha_t}{\alpha_{t-1}}},\quad \eta \in [0,1]
+    \end{equation*}
+    with $\eta=1$ ultimately reducing $u_t, v_t, w_t$ to the DDPM values, and $\eta=0$ corresponding
+    to deterministic generation \parencite{songDenoisingDiffusionImplicit2020}.
+\end{remark}
+
+\begin{remark}[Time Respacing]
+    One of the remarkable features of the DDIM algorithm is it enabling \emph{time respacing}
+    whereby we can sample from the backwards process in fewer timesteps. In this paper, we don't
+    consider such respacing though in principle our methodology does not prohibit it.
+\end{remark}

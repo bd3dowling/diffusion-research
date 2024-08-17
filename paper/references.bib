@@ -1,27 +1,807 @@
-@article{efron1979,
-	title        = {Bootstrap Methods: Another Look at the Jackknife},
-	author       = {Efron, Bradley},
-	year         = 1979,
-	journal      = {Annals of Statistics},
-	volume       = 7,
-	number       = 1,
-	pages        = {1--26}
+@article{hoDenoisingDiffusionProbabilistic2020,
+  title = {Denoising {{Diffusion Probabilistic Models}}},
+  author = {Ho, Jonathan and Jain, Ajay and Abbeel, Pieter},
+  date = {2020},
+  publisher = {arXiv},
+  doi = {10.48550/ARXIV.2006.11239},
+  url = {https://arxiv.org/abs/2006.11239},
+  urldate = {2023-11-19},
+  abstract = {We present high quality image synthesis results using diffusion probabilistic models, a class of latent variable models inspired by considerations from nonequilibrium thermodynamics. Our best results are obtained by training on a weighted variational bound designed according to a novel connection between diffusion probabilistic models and denoising score matching with Langevin dynamics, and our models naturally admit a progressive lossy decompression scheme that can be interpreted as a generalization of autoregressive decoding. On the unconditional CIFAR10 dataset, we obtain an Inception score of 9.46 and a state-of-the-art FID score of 3.17. On 256x256 LSUN, we obtain sample quality similar to ProgressiveGAN. Our implementation is available at https://github.com/hojonathanho/diffusion},
+  version = {2},
+  keywords = {FOS: Computer and information sciences,Machine Learning (cs.LG),Machine Learning (stat.ML)},
+  file = {/Users/ben/Zotero/storage/GQT99KAX/Ho et al. - 2020 - Denoising Diffusion Probabilistic Models.pdf}
 }
-@book{efrontib,
-	title        = {An introduction to the bootstrap},
-	author       = {Efron, Bradley and Tibshirani, Robert J},
-	year         = 1994,
-	publisher    = {CRC press}
+
+@article{hoogeboomSimpleDiffusionEndtoend2023,
+  title = {Simple Diffusion: {{End-to-end}} Diffusion for High Resolution Images},
+  shorttitle = {Simple Diffusion},
+  author = {Hoogeboom, Emiel and Heek, Jonathan and Salimans, Tim},
+  date = {2023},
+  publisher = {arXiv},
+  doi = {10.48550/ARXIV.2301.11093},
+  url = {https://arxiv.org/abs/2301.11093},
+  urldate = {2023-11-19},
+  abstract = {Currently, applying diffusion models in pixel space of high resolution images is difficult. Instead, existing approaches focus on diffusion in lower dimensional spaces (latent diffusion), or have multiple super-resolution levels of generation referred to as cascades. The downside is that these approaches add additional complexity to the diffusion framework. This paper aims to improve denoising diffusion for high resolution images while keeping the model as simple as possible. The paper is centered around the research question: How can one train a standard denoising diffusion models on high resolution images, and still obtain performance comparable to these alternate approaches? The four main findings are: 1) the noise schedule should be adjusted for high resolution images, 2) It is sufficient to scale only a particular part of the architecture, 3) dropout should be added at specific locations in the architecture, and 4) downsampling is an effective strategy to avoid high resolution feature maps. Combining these simple yet effective techniques, we achieve state-of-the-art on image generation among diffusion models without sampling modifiers on ImageNet.},
+  version = {1},
+  keywords = {Computer Vision and Pattern Recognition (cs.CV),FOS: Computer and information sciences,Machine Learning (cs.LG),Machine Learning (stat.ML)},
+  file = {/Users/ben/Zotero/storage/N476JQNM/Hoogeboom et al. - 2023 - simple diffusion End-to-end diffusion for high re.pdf}
 }
-@book{dickens1859,
-	title        = {A Tale of Two Cities},
-	author       = {Dickens, Charles},
-	year         = 1859,
-	publisher    = {Chapman \& Hall}
+
+@article{chenImportanceNoiseScheduling2023,
+  title = {On the {{Importance}} of {{Noise Scheduling}} for {{Diffusion Models}}},
+  author = {Chen, Ting},
+  date = {2023},
+  publisher = {arXiv},
+  doi = {10.48550/ARXIV.2301.10972},
+  url = {https://arxiv.org/abs/2301.10972},
+  urldate = {2023-11-19},
+  abstract = {We empirically study the effect of noise scheduling strategies for denoising diffusion generative models. There are three findings: (1) the noise scheduling is crucial for the performance, and the optimal one depends on the task (e.g., image sizes), (2) when increasing the image size, the optimal noise scheduling shifts towards a noisier one (due to increased redundancy in pixels), and (3) simply scaling the input data by a factor of \$b\$ while keeping the noise schedule function fixed (equivalent to shifting the logSNR by \$\textbackslash log b\$) is a good strategy across image sizes. This simple recipe, when combined with recently proposed Recurrent Interface Network (RIN), yields state-of-the-art pixel-based diffusion models for high-resolution images on ImageNet, enabling single-stage, end-to-end generation of diverse and high-fidelity images at 1024\$\textbackslash times\$1024 resolution (without upsampling/cascades).},
+  version = {4},
+  keywords = {Computer Vision and Pattern Recognition (cs.CV),FOS: Computer and information sciences,Graphics (cs.GR),Machine Learning (cs.LG),Multimedia (cs.MM)},
+  file = {/Users/ben/Zotero/storage/Q3FXCRG6/Chen - 2023 - On the Importance of Noise Scheduling for Diffusio.pdf}
 }
-@misc{lorem,
-	title        = {Lorem {I}psum: All the Facts and {L}ipsum Generator},
-	author       = {{Lipsum Generator}},
-	year         = 2024,
-	howpublished = {\url{https://www.lipsum.com/}. Accessed 2024-04-18.}
+
+@article{liDiffusionModelsImage2023,
+  title = {Diffusion {{Models}} for {{Image Restoration}} and {{Enhancement}} -- {{A Comprehensive Survey}}},
+  author = {Li, Xin and Ren, Yulin and Jin, Xin and Lan, Cuiling and Wang, Xingrui and Zeng, Wenjun and Wang, Xinchao and Chen, Zhibo},
+  date = {2023},
+  publisher = {arXiv},
+  doi = {10.48550/ARXIV.2308.09388},
+  url = {https://arxiv.org/abs/2308.09388},
+  urldate = {2023-11-19},
+  abstract = {Image restoration (IR) has been an indispensable and challenging task in the low-level vision field, which strives to improve the subjective quality of images distorted by various forms of degradation. Recently, the diffusion model has achieved significant advancements in the visual generation of AIGC, thereby raising an intuitive question, "whether diffusion model can boost image restoration". To answer this, some pioneering studies attempt to integrate diffusion models into the image restoration task, resulting in superior performances than previous GAN-based methods. Despite that, a comprehensive and enlightening survey on diffusion model-based image restoration remains scarce. In this paper, we are the first to present a comprehensive review of recent diffusion model-based methods on image restoration, encompassing the learning paradigm, conditional strategy, framework design, modeling strategy, and evaluation. Concretely, we first introduce the background of the diffusion model briefly and then present two prevalent workflows that exploit diffusion models in image restoration. Subsequently, we classify and emphasize the innovative designs using diffusion models for both IR and blind/real-world IR, intending to inspire future development. To evaluate existing methods thoroughly, we summarize the commonly-used dataset, implementation details, and evaluation metrics. Additionally, we present the objective comparison for open-sourced methods across three tasks, including image super-resolution, deblurring, and inpainting. Ultimately, informed by the limitations in existing works, we propose five potential and challenging directions for the future research of diffusion model-based IR, including sampling efficiency, model compression, distortion simulation and estimation, distortion invariant learning, and framework design.},
+  version = {1},
+  keywords = {Computer Vision and Pattern Recognition (cs.CV),FOS: Computer and information sciences},
+  file = {/Users/ben/Zotero/storage/HSLZ5QT3/Li et al. - 2023 - Diffusion Models for Image Restoration and Enhance.pdf}
+}
+
+@article{tangWhatDAAMInterpreting2022,
+  title = {What the {{DAAM}}: {{Interpreting Stable Diffusion Using Cross Attention}}},
+  shorttitle = {What the {{DAAM}}},
+  author = {Tang, Raphael and Liu, Linqing and Pandey, Akshat and Jiang, Zhiying and Yang, Gefei and Kumar, Karun and Stenetorp, Pontus and Lin, Jimmy and Ture, Ferhan},
+  date = {2022},
+  publisher = {arXiv},
+  doi = {10.48550/ARXIV.2210.04885},
+  url = {https://arxiv.org/abs/2210.04885},
+  urldate = {2023-11-19},
+  abstract = {Large-scale diffusion neural networks represent a substantial milestone in text-to-image generation, but they remain poorly understood, lacking interpretability analyses. In this paper, we perform a text-image attribution analysis on Stable Diffusion, a recently open-sourced model. To produce pixel-level attribution maps, we upscale and aggregate cross-attention word-pixel scores in the denoising subnetwork, naming our method DAAM. We evaluate its correctness by testing its semantic segmentation ability on nouns, as well as its generalized attribution quality on all parts of speech, rated by humans. We then apply DAAM to study the role of syntax in the pixel space, characterizing head--dependent heat map interaction patterns for ten common dependency relations. Finally, we study several semantic phenomena using DAAM, with a focus on feature entanglement, where we find that cohyponyms worsen generation quality and descriptive adjectives attend too broadly. To our knowledge, we are the first to interpret large diffusion models from a visuolinguistic perspective, which enables future lines of research. Our code is at https://github.com/castorini/daam.},
+  version = {5},
+  keywords = {Computation and Language (cs.CL),Computer Vision and Pattern Recognition (cs.CV),FOS: Computer and information sciences},
+  file = {/Users/ben/Zotero/storage/I4Q3K5RI/Tang et al. - 2022 - What the DAAM Interpreting Stable Diffusion Using.pdf}
+}
+
+@article{luoUnderstandingDiffusionModels2022,
+  title = {Understanding {{Diffusion Models}}: {{A Unified Perspective}}},
+  shorttitle = {Understanding {{Diffusion Models}}},
+  author = {Luo, Calvin},
+  date = {2022},
+  publisher = {arXiv},
+  doi = {10.48550/ARXIV.2208.11970},
+  url = {https://arxiv.org/abs/2208.11970},
+  urldate = {2023-11-19},
+  abstract = {Diffusion models have shown incredible capabilities as generative models; indeed, they power the current state-of-the-art models on text-conditioned image generation such as Imagen and DALL-E 2. In this work we review, demystify, and unify the understanding of diffusion models across both variational and score-based perspectives. We first derive Variational Diffusion Models (VDM) as a special case of a Markovian Hierarchical Variational Autoencoder, where three key assumptions enable tractable computation and scalable optimization of the ELBO. We then prove that optimizing a VDM boils down to learning a neural network to predict one of three potential objectives: the original source input from any arbitrary noisification of it, the original source noise from any arbitrarily noisified input, or the score function of a noisified input at any arbitrary noise level. We then dive deeper into what it means to learn the score function, and connect the variational perspective of a diffusion model explicitly with the Score-based Generative Modeling perspective through Tweedie's Formula. Lastly, we cover how to learn a conditional distribution using diffusion models via guidance.},
+  version = {1},
+  keywords = {Computer Vision and Pattern Recognition (cs.CV),FOS: Computer and information sciences,Machine Learning (cs.LG)},
+  file = {/Users/ben/Zotero/storage/FSY8JMNP/Luo - 2022 - Understanding Diffusion Models A Unified Perspect.pdf}
+}
+
+@article{songHowTrainYour2021,
+  title = {How to {{Train Your Energy-Based Models}}},
+  author = {Song, Yang and Kingma, Diederik P.},
+  date = {2021},
+  publisher = {arXiv},
+  doi = {10.48550/ARXIV.2101.03288},
+  url = {https://arxiv.org/abs/2101.03288},
+  urldate = {2023-11-19},
+  abstract = {Energy-Based Models (EBMs), also known as non-normalized probabilistic models, specify probability density or mass functions up to an unknown normalizing constant. Unlike most other probabilistic models, EBMs do not place a restriction on the tractability of the normalizing constant, thus are more flexible to parameterize and can model a more expressive family of probability distributions. However, the unknown normalizing constant of EBMs makes training particularly difficult. Our goal is to provide a friendly introduction to modern approaches for EBM training. We start by explaining maximum likelihood training with Markov chain Monte Carlo (MCMC), and proceed to elaborate on MCMC-free approaches, including Score Matching (SM) and Noise Constrastive Estimation (NCE). We highlight theoretical connections among these three approaches, and end with a brief survey on alternative training methods, which are still under active research. Our tutorial is targeted at an audience with basic understanding of generative models who want to apply EBMs or start a research project in this direction.},
+  version = {2},
+  keywords = {FOS: Computer and information sciences,Machine Learning (cs.LG),Machine Learning (stat.ML)},
+  file = {/Users/ben/Zotero/storage/KDZFHCTA/Song and Kingma - 2021 - How to Train Your Energy-Based Models.pdf}
+}
+
+@article{pidstrigachScoreBasedGenerativeModels2022,
+  title = {Score-{{Based Generative Models Detect Manifolds}}},
+  author = {Pidstrigach, Jakiw},
+  date = {2022},
+  publisher = {arXiv},
+  doi = {10.48550/ARXIV.2206.01018},
+  url = {https://arxiv.org/abs/2206.01018},
+  urldate = {2023-11-19},
+  abstract = {Score-based generative models (SGMs) need to approximate the scores \$\textbackslash nabla \textbackslash log p\_t\$ of the intermediate distributions as well as the final distribution \$p\_T\$ of the forward process. The theoretical underpinnings of the effects of these approximations are still lacking. We find precise conditions under which SGMs are able to produce samples from an underlying (low-dimensional) data manifold \$\textbackslash mathcal\{M\}\$. This assures us that SGMs are able to generate the "right kind of samples". For example, taking \$\textbackslash mathcal\{M\}\$ to be the subset of images of faces, we find conditions under which the SGM robustly produces an image of a face, even though the relative frequencies of these images might not accurately represent the true data generating distribution. Moreover, this analysis is a first step towards understanding the generalization properties of SGMs: Taking \$\textbackslash mathcal\{M\}\$ to be the set of all training samples, our results provide a precise description of when the SGM memorizes its training data.},
+  version = {3},
+  keywords = {68T99,FOS: Computer and information sciences,FOS: Mathematics,I.2.0,Machine Learning (cs.LG),Machine Learning (stat.ML),Numerical Analysis (math.NA),Probability (math.PR)},
+  file = {/Users/ben/Zotero/storage/TE5EM3YI/Pidstrigach - 2022 - Score-Based Generative Models Detect Manifolds.pdf}
+}
+
+@article{liuGenerativeDiffusionModels2023,
+  title = {Generative {{Diffusion Models}} on {{Graphs}}: {{Methods}} and {{Applications}}},
+  shorttitle = {Generative {{Diffusion Models}} on {{Graphs}}},
+  author = {Liu, Chengyi and Fan, Wenqi and Liu, Yunqing and Li, Jiatong and Li, Hang and Liu, Hui and Tang, Jiliang and Li, Qing},
+  date = {2023},
+  publisher = {arXiv},
+  doi = {10.48550/ARXIV.2302.02591},
+  url = {https://arxiv.org/abs/2302.02591},
+  urldate = {2023-11-19},
+  abstract = {Diffusion models, as a novel generative paradigm, have achieved remarkable success in various image generation tasks such as image inpainting, image-to-text translation, and video generation. Graph generation is a crucial computational task on graphs with numerous real-world applications. It aims to learn the distribution of given graphs and then generate new graphs. Given the great success of diffusion models in image generation, increasing efforts have been made to leverage these techniques to advance graph generation in recent years. In this paper, we first provide a comprehensive overview of generative diffusion models on graphs, In particular, we review representative algorithms for three variants of graph diffusion models, i.e., Score Matching with Langevin Dynamics (SMLD), Denoising Diffusion Probabilistic Model (DDPM), and Score-based Generative Model (SGM). Then, we summarize the major applications of generative diffusion models on graphs with a specific focus on molecule and protein modeling. Finally, we discuss promising directions in generative diffusion models on graph-structured data. For this survey, we also created a GitHub project website by collecting the supporting resources for generative diffusion models on graphs, at the link: https://github.com/ChengyiLIU-cs/Generative-Diffusion-Models-on-Graphs},
+  version = {3},
+  keywords = {Artificial Intelligence (cs.AI),FOS: Computer and information sciences,Machine Learning (cs.LG),Social and Information Networks (cs.SI)},
+  file = {/Users/ben/Zotero/storage/ZTS6L4PZ/Liu et al. - 2023 - Generative Diffusion Models on Graphs Methods and.pdf}
+}
+
+@article{yangDiffusionModelsComprehensive2022,
+  title = {Diffusion {{Models}}: {{A Comprehensive Survey}} of {{Methods}} and {{Applications}}},
+  shorttitle = {Diffusion {{Models}}},
+  author = {Yang, Ling and Zhang, Zhilong and Song, Yang and Hong, Shenda and Xu, Runsheng and Zhao, Yue and Zhang, Wentao and Cui, Bin and Yang, Ming-Hsuan},
+  date = {2022},
+  publisher = {arXiv},
+  doi = {10.48550/ARXIV.2209.00796},
+  url = {https://arxiv.org/abs/2209.00796},
+  urldate = {2023-11-19},
+  abstract = {Diffusion models have emerged as a powerful new family of deep generative models with record-breaking performance in many applications, including image synthesis, video generation, and molecule design. In this survey, we provide an overview of the rapidly expanding body of work on diffusion models, categorizing the research into three key areas: efficient sampling, improved likelihood estimation, and handling data with special structures. We also discuss the potential for combining diffusion models with other generative models for enhanced results. We further review the wide-ranging applications of diffusion models in fields spanning from computer vision, natural language generation, temporal data modeling, to interdisciplinary applications in other scientific disciplines. This survey aims to provide a contextualized, in-depth look at the state of diffusion models, identifying the key areas of focus and pointing to potential areas for further exploration. Github: https://github.com/YangLing0818/Diffusion-Models-Papers-Survey-Taxonomy.},
+  version = {11},
+  keywords = {Artificial Intelligence (cs.AI),Computer Vision and Pattern Recognition (cs.CV),FOS: Computer and information sciences,Machine Learning (cs.LG)},
+  file = {/Users/ben/Zotero/storage/FUH4QT8D/Yang et al. - 2022 - Diffusion Models A Comprehensive Survey of Method.pdf}
+}
+
+@article{liuConvNet2020s2022,
+  title = {A {{ConvNet}} for the 2020s},
+  author = {Liu, Zhuang and Mao, Hanzi and Wu, Chao-Yuan and Feichtenhofer, Christoph and Darrell, Trevor and Xie, Saining},
+  date = {2022},
+  publisher = {arXiv},
+  doi = {10.48550/ARXIV.2201.03545},
+  url = {https://arxiv.org/abs/2201.03545},
+  urldate = {2023-11-19},
+  abstract = {The "Roaring 20s" of visual recognition began with the introduction of Vision Transformers (ViTs), which quickly superseded ConvNets as the state-of-the-art image classification model. A vanilla ViT, on the other hand, faces difficulties when applied to general computer vision tasks such as object detection and semantic segmentation. It is the hierarchical Transformers (e.g., Swin Transformers) that reintroduced several ConvNet priors, making Transformers practically viable as a generic vision backbone and demonstrating remarkable performance on a wide variety of vision tasks. However, the effectiveness of such hybrid approaches is still largely credited to the intrinsic superiority of Transformers, rather than the inherent inductive biases of convolutions. In this work, we reexamine the design spaces and test the limits of what a pure ConvNet can achieve. We gradually "modernize" a standard ResNet toward the design of a vision Transformer, and discover several key components that contribute to the performance difference along the way. The outcome of this exploration is a family of pure ConvNet models dubbed ConvNeXt. Constructed entirely from standard ConvNet modules, ConvNeXts compete favorably with Transformers in terms of accuracy and scalability, achieving 87.8\% ImageNet top-1 accuracy and outperforming Swin Transformers on COCO detection and ADE20K segmentation, while maintaining the simplicity and efficiency of standard ConvNets.},
+  version = {2},
+  keywords = {Computer Vision and Pattern Recognition (cs.CV),FOS: Computer and information sciences},
+  file = {/Users/ben/Zotero/storage/QLBNDXRY/Liu et al. - 2022 - A ConvNet for the 2020s.pdf}
+}
+
+@article{peeblesScalableDiffusionModels2022,
+  title = {Scalable {{Diffusion Models}} with {{Transformers}}},
+  author = {Peebles, William and Xie, Saining},
+  date = {2022},
+  publisher = {arXiv},
+  doi = {10.48550/ARXIV.2212.09748},
+  url = {https://arxiv.org/abs/2212.09748},
+  urldate = {2023-11-19},
+  abstract = {We explore a new class of diffusion models based on the transformer architecture. We train latent diffusion models of images, replacing the commonly-used U-Net backbone with a transformer that operates on latent patches. We analyze the scalability of our Diffusion Transformers (DiTs) through the lens of forward pass complexity as measured by Gflops. We find that DiTs with higher Gflops -- through increased transformer depth/width or increased number of input tokens -- consistently have lower FID. In addition to possessing good scalability properties, our largest DiT-XL/2 models outperform all prior diffusion models on the class-conditional ImageNet 512x512 and 256x256 benchmarks, achieving a state-of-the-art FID of 2.27 on the latter.},
+  version = {2},
+  keywords = {Computer Vision and Pattern Recognition (cs.CV),FOS: Computer and information sciences,Machine Learning (cs.LG)},
+  file = {/Users/ben/Zotero/storage/SI9WLCLJ/Peebles and Xie - 2022 - Scalable Diffusion Models with Transformers.pdf}
+}
+
+@article{vaswaniAttentionAllYou2017,
+  title = {Attention {{Is All You Need}}},
+  author = {Vaswani, Ashish and Shazeer, Noam and Parmar, Niki and Uszkoreit, Jakob and Jones, Llion and Gomez, Aidan N. and Kaiser, Lukasz and Polosukhin, Illia},
+  date = {2017},
+  publisher = {arXiv},
+  doi = {10.48550/ARXIV.1706.03762},
+  url = {https://arxiv.org/abs/1706.03762},
+  urldate = {2023-11-19},
+  abstract = {The dominant sequence transduction models are based on complex recurrent or convolutional neural networks in an encoder-decoder configuration. The best performing models also connect the encoder and decoder through an attention mechanism. We propose a new simple network architecture, the Transformer, based solely on attention mechanisms, dispensing with recurrence and convolutions entirely. Experiments on two machine translation tasks show these models to be superior in quality while being more parallelizable and requiring significantly less time to train. Our model achieves 28.4 BLEU on the WMT 2014 English-to-German translation task, improving over the existing best results, including ensembles by over 2 BLEU. On the WMT 2014 English-to-French translation task, our model establishes a new single-model state-of-the-art BLEU score of 41.8 after training for 3.5 days on eight GPUs, a small fraction of the training costs of the best models from the literature. We show that the Transformer generalizes well to other tasks by applying it successfully to English constituency parsing both with large and limited training data.},
+  version = {7},
+  keywords = {Computation and Language (cs.CL),FOS: Computer and information sciences,Machine Learning (cs.LG)},
+  file = {/Users/ben/Zotero/storage/E4JD8WZ2/Vaswani et al. - 2017 - Attention Is All You Need.pdf}
+}
+
+@article{nicholGLIDEPhotorealisticImage2021,
+  title = {{{GLIDE}}: {{Towards Photorealistic Image Generation}} and {{Editing}} with {{Text-Guided Diffusion Models}}},
+  shorttitle = {{{GLIDE}}},
+  author = {Nichol, Alex and Dhariwal, Prafulla and Ramesh, Aditya and Shyam, Pranav and Mishkin, Pamela and McGrew, Bob and Sutskever, Ilya and Chen, Mark},
+  date = {2021},
+  publisher = {arXiv},
+  doi = {10.48550/ARXIV.2112.10741},
+  url = {https://arxiv.org/abs/2112.10741},
+  urldate = {2023-11-19},
+  abstract = {Diffusion models have recently been shown to generate high-quality synthetic images, especially when paired with a guidance technique to trade off diversity for fidelity. We explore diffusion models for the problem of text-conditional image synthesis and compare two different guidance strategies: CLIP guidance and classifier-free guidance. We find that the latter is preferred by human evaluators for both photorealism and caption similarity, and often produces photorealistic samples. Samples from a 3.5 billion parameter text-conditional diffusion model using classifier-free guidance are favored by human evaluators to those from DALL-E, even when the latter uses expensive CLIP reranking. Additionally, we find that our models can be fine-tuned to perform image inpainting, enabling powerful text-driven image editing. We train a smaller model on a filtered dataset and release the code and weights at https://github.com/openai/glide-text2im.},
+  version = {3},
+  keywords = {Computer Vision and Pattern Recognition (cs.CV),FOS: Computer and information sciences,Graphics (cs.GR),Machine Learning (cs.LG)},
+  file = {/Users/ben/Zotero/storage/8QLB4UDJ/Nichol et al. - 2021 - GLIDE Towards Photorealistic Image Generation and.pdf}
+}
+
+@article{sahariaPaletteImagetoImageDiffusion2021,
+  title = {Palette: {{Image-to-Image Diffusion Models}}},
+  shorttitle = {Palette},
+  author = {Saharia, Chitwan and Chan, William and Chang, Huiwen and Lee, Chris A. and Ho, Jonathan and Salimans, Tim and Fleet, David J. and Norouzi, Mohammad},
+  date = {2021},
+  publisher = {arXiv},
+  doi = {10.48550/ARXIV.2111.05826},
+  url = {https://arxiv.org/abs/2111.05826},
+  urldate = {2023-11-19},
+  abstract = {This paper develops a unified framework for image-to-image translation based on conditional diffusion models and evaluates this framework on four challenging image-to-image translation tasks, namely colorization, inpainting, uncropping, and JPEG restoration. Our simple implementation of image-to-image diffusion models outperforms strong GAN and regression baselines on all tasks, without task-specific hyper-parameter tuning, architecture customization, or any auxiliary loss or sophisticated new techniques needed. We uncover the impact of an L2 vs. L1 loss in the denoising diffusion objective on sample diversity, and demonstrate the importance of self-attention in the neural architecture through empirical studies. Importantly, we advocate a unified evaluation protocol based on ImageNet, with human evaluation and sample quality scores (FID, Inception Score, Classification Accuracy of a pre-trained ResNet-50, and Perceptual Distance against original images). We expect this standardized evaluation protocol to play a role in advancing image-to-image translation research. Finally, we show that a generalist, multi-task diffusion model performs as well or better than task-specific specialist counterparts. Check out https://diffusion-palette.github.io for an overview of the results.},
+  version = {2},
+  keywords = {Computer Vision and Pattern Recognition (cs.CV),FOS: Computer and information sciences,Machine Learning (cs.LG)},
+  file = {/Users/ben/Zotero/storage/IHEV8LSR/Saharia et al. - 2021 - Palette Image-to-Image Diffusion Models.pdf}
+}
+
+@article{rombachHighResolutionImageSynthesis2021,
+  title = {High-{{Resolution Image Synthesis}} with {{Latent Diffusion Models}}},
+  author = {Rombach, Robin and Blattmann, Andreas and Lorenz, Dominik and Esser, Patrick and Ommer, Björn},
+  date = {2021},
+  publisher = {arXiv},
+  doi = {10.48550/ARXIV.2112.10752},
+  url = {https://arxiv.org/abs/2112.10752},
+  urldate = {2023-11-19},
+  abstract = {By decomposing the image formation process into a sequential application of denoising autoencoders, diffusion models (DMs) achieve state-of-the-art synthesis results on image data and beyond. Additionally, their formulation allows for a guiding mechanism to control the image generation process without retraining. However, since these models typically operate directly in pixel space, optimization of powerful DMs often consumes hundreds of GPU days and inference is expensive due to sequential evaluations. To enable DM training on limited computational resources while retaining their quality and flexibility, we apply them in the latent space of powerful pretrained autoencoders. In contrast to previous work, training diffusion models on such a representation allows for the first time to reach a near-optimal point between complexity reduction and detail preservation, greatly boosting visual fidelity. By introducing cross-attention layers into the model architecture, we turn diffusion models into powerful and flexible generators for general conditioning inputs such as text or bounding boxes and high-resolution synthesis becomes possible in a convolutional manner. Our latent diffusion models (LDMs) achieve a new state of the art for image inpainting and highly competitive performance on various tasks, including unconditional image generation, semantic scene synthesis, and super-resolution, while significantly reducing computational requirements compared to pixel-based DMs. Code is available at https://github.com/CompVis/latent-diffusion .},
+  version = {2},
+  keywords = {Computer Vision and Pattern Recognition (cs.CV),FOS: Computer and information sciences},
+  file = {/Users/ben/Zotero/storage/PQ5AZYCJ/Rombach et al. - 2021 - High-Resolution Image Synthesis with Latent Diffus.pdf}
+}
+
+@article{kingmaAutoEncodingVariationalBayes2013,
+  title = {Auto-{{Encoding Variational Bayes}}},
+  author = {Kingma, Diederik P and Welling, Max},
+  date = {2013},
+  publisher = {arXiv},
+  doi = {10.48550/ARXIV.1312.6114},
+  url = {https://arxiv.org/abs/1312.6114},
+  urldate = {2023-11-19},
+  abstract = {How can we perform efficient inference and learning in directed probabilistic models, in the presence of continuous latent variables with intractable posterior distributions, and large datasets? We introduce a stochastic variational inference and learning algorithm that scales to large datasets and, under some mild differentiability conditions, even works in the intractable case. Our contributions are two-fold. First, we show that a reparameterization of the variational lower bound yields a lower bound estimator that can be straightforwardly optimized using standard stochastic gradient methods. Second, we show that for i.i.d. datasets with continuous latent variables per datapoint, posterior inference can be made especially efficient by fitting an approximate inference model (also called a recognition model) to the intractable posterior using the proposed lower bound estimator. Theoretical advantages are reflected in experimental results.},
+  version = {11},
+  keywords = {FOS: Computer and information sciences,Machine Learning (cs.LG),Machine Learning (stat.ML)},
+  file = {/Users/ben/Zotero/storage/JV7BQZZA/Kingma and Welling - 2013 - Auto-Encoding Variational Bayes.pdf}
+}
+
+@article{oordNeuralDiscreteRepresentation2017,
+  title = {Neural {{Discrete Representation Learning}}},
+  author = {family=Oord, given=Aaron, prefix=van den, useprefix=false and Vinyals, Oriol and Kavukcuoglu, Koray},
+  date = {2017},
+  publisher = {arXiv},
+  doi = {10.48550/ARXIV.1711.00937},
+  url = {https://arxiv.org/abs/1711.00937},
+  urldate = {2023-11-19},
+  abstract = {Learning useful representations without supervision remains a key challenge in machine learning. In this paper, we propose a simple yet powerful generative model that learns such discrete representations. Our model, the Vector Quantised-Variational AutoEncoder (VQ-VAE), differs from VAEs in two key ways: the encoder network outputs discrete, rather than continuous, codes; and the prior is learnt rather than static. In order to learn a discrete latent representation, we incorporate ideas from vector quantisation (VQ). Using the VQ method allows the model to circumvent issues of "posterior collapse" -- where the latents are ignored when they are paired with a powerful autoregressive decoder -- typically observed in the VAE framework. Pairing these representations with an autoregressive prior, the model can generate high quality images, videos, and speech as well as doing high quality speaker conversion and unsupervised learning of phonemes, providing further evidence of the utility of the learnt representations.},
+  version = {2},
+  keywords = {FOS: Computer and information sciences,Machine Learning (cs.LG)},
+  file = {/Users/ben/Zotero/storage/FHRCE5D9/Oord et al. - 2017 - Neural Discrete Representation Learning.pdf}
+}
+
+@article{songDenoisingDiffusionImplicit2020,
+  title = {Denoising {{Diffusion Implicit Models}}},
+  author = {Song, Jiaming and Meng, Chenlin and Ermon, Stefano},
+  date = {2020},
+  publisher = {arXiv},
+  doi = {10.48550/ARXIV.2010.02502},
+  url = {https://arxiv.org/abs/2010.02502},
+  urldate = {2023-11-19},
+  abstract = {Denoising diffusion probabilistic models (DDPMs) have achieved high quality image generation without adversarial training, yet they require simulating a Markov chain for many steps to produce a sample. To accelerate sampling, we present denoising diffusion implicit models (DDIMs), a more efficient class of iterative implicit probabilistic models with the same training procedure as DDPMs. In DDPMs, the generative process is defined as the reverse of a Markovian diffusion process. We construct a class of non-Markovian diffusion processes that lead to the same training objective, but whose reverse process can be much faster to sample from. We empirically demonstrate that DDIMs can produce high quality samples \$10 \textbackslash times\$ to \$50 \textbackslash times\$ faster in terms of wall-clock time compared to DDPMs, allow us to trade off computation for sample quality, and can perform semantically meaningful image interpolation directly in the latent space.},
+  version = {4},
+  keywords = {Computer Vision and Pattern Recognition (cs.CV),FOS: Computer and information sciences,Machine Learning (cs.LG)},
+  file = {/Users/ben/Zotero/storage/X7TZE2LS/Song et al. - 2020 - Denoising Diffusion Implicit Models.pdf}
+}
+
+@article{sahariaPhotorealisticTexttoImageDiffusion2022,
+  title = {Photorealistic {{Text-to-Image Diffusion Models}} with {{Deep Language Understanding}}},
+  author = {Saharia, Chitwan and Chan, William and Saxena, Saurabh and Li, Lala and Whang, Jay and Denton, Emily and Ghasemipour, Seyed Kamyar Seyed and Ayan, Burcu Karagol and Mahdavi, S. Sara and Lopes, Rapha Gontijo and Salimans, Tim and Ho, Jonathan and Fleet, David J and Norouzi, Mohammad},
+  date = {2022},
+  publisher = {arXiv},
+  doi = {10.48550/ARXIV.2205.11487},
+  url = {https://arxiv.org/abs/2205.11487},
+  urldate = {2023-11-19},
+  abstract = {We present Imagen, a text-to-image diffusion model with an unprecedented degree of photorealism and a deep level of language understanding. Imagen builds on the power of large transformer language models in understanding text and hinges on the strength of diffusion models in high-fidelity image generation. Our key discovery is that generic large language models (e.g. T5), pretrained on text-only corpora, are surprisingly effective at encoding text for image synthesis: increasing the size of the language model in Imagen boosts both sample fidelity and image-text alignment much more than increasing the size of the image diffusion model. Imagen achieves a new state-of-the-art FID score of 7.27 on the COCO dataset, without ever training on COCO, and human raters find Imagen samples to be on par with the COCO data itself in image-text alignment. To assess text-to-image models in greater depth, we introduce DrawBench, a comprehensive and challenging benchmark for text-to-image models. With DrawBench, we compare Imagen with recent methods including VQ-GAN+CLIP, Latent Diffusion Models, and DALL-E 2, and find that human raters prefer Imagen over other models in side-by-side comparisons, both in terms of sample quality and image-text alignment. See https://imagen.research.google/ for an overview of the results.},
+  version = {1},
+  keywords = {Computer Vision and Pattern Recognition (cs.CV),FOS: Computer and information sciences,Machine Learning (cs.LG)},
+  file = {/Users/ben/Zotero/storage/STNJ7J36/Saharia et al. - 2022 - Photorealistic Text-to-Image Diffusion Models with.pdf}
+}
+
+@article{batzolisConditionalImageGeneration2021,
+  title = {Conditional {{Image Generation}} with {{Score-Based Diffusion Models}}},
+  author = {Batzolis, Georgios and Stanczuk, Jan and Schönlieb, Carola-Bibiane and Etmann, Christian},
+  date = {2021},
+  publisher = {arXiv},
+  doi = {10.48550/ARXIV.2111.13606},
+  url = {https://arxiv.org/abs/2111.13606},
+  urldate = {2023-11-21},
+  abstract = {Score-based diffusion models have emerged as one of the most promising frameworks for deep generative modelling. In this work we conduct a systematic comparison and theoretical analysis of different approaches to learning conditional probability distributions with score-based diffusion models. In particular, we prove results which provide a theoretical justification for one of the most successful estimators of the conditional score. Moreover, we introduce a multi-speed diffusion framework, which leads to a new estimator for the conditional score, performing on par with previous state-of-the-art approaches. Our theoretical and experimental findings are accompanied by an open source library MSDiff which allows for application and further research of multi-speed diffusion models.},
+  version = {1},
+  keywords = {Computer Vision and Pattern Recognition (cs.CV),FOS: Computer and information sciences,Machine Learning (cs.LG),Machine Learning (stat.ML)},
+  file = {/Users/ben/Zotero/storage/V479T8PP/Batzolis et al. - 2021 - Conditional Image Generation with Score-Based Diff.pdf}
+}
+
+@article{chungDiffusionPosteriorSampling2022,
+  title = {Diffusion {{Posterior Sampling}} for {{General Noisy Inverse Problems}}},
+  author = {Chung, Hyungjin and Kim, Jeongsol and Mccann, Michael T. and Klasky, Marc L. and Ye, Jong Chul},
+  date = {2022},
+  publisher = {arXiv},
+  doi = {10.48550/ARXIV.2209.14687},
+  url = {https://arxiv.org/abs/2209.14687},
+  urldate = {2023-11-29},
+  abstract = {Diffusion models have been recently studied as powerful generative inverse problem solvers, owing to their high quality reconstructions and the ease of combining existing iterative solvers. However, most works focus on solving simple linear inverse problems in noiseless settings, which significantly under-represents the complexity of real-world problems. In this work, we extend diffusion solvers to efficiently handle general noisy (non)linear inverse problems via approximation of the posterior sampling. Interestingly, the resulting posterior sampling scheme is a blended version of diffusion sampling with the manifold constrained gradient without a strict measurement consistency projection step, yielding a more desirable generative path in noisy settings compared to the previous studies. Our method demonstrates that diffusion models can incorporate various measurement noise statistics such as Gaussian and Poisson, and also efficiently handle noisy nonlinear inverse problems such as Fourier phase retrieval and non-uniform deblurring. Code available at https://github.com/DPS2022/diffusion-posterior-sampling},
+  version = {3},
+  keywords = {Artificial Intelligence (cs.AI),Computer Vision and Pattern Recognition (cs.CV),FOS: Computer and information sciences,Machine Learning (cs.LG),Machine Learning (stat.ML)},
+  file = {/Users/ben/Zotero/storage/CCJWDES6/Chung et al. - 2022 - Diffusion Posterior Sampling for General Noisy Inv.pdf}
+}
+
+@book{chopinIntroductionSequentialMonte2020,
+  title = {An Introduction to Sequential {{Monte Carlo}}},
+  author = {Chopin, Nicolas and Papaspiliopoulos, Omiros},
+  date = {2020},
+  series = {Springer Series in Statistics},
+  publisher = {Springer},
+  location = {Cham, Switzerland},
+  isbn = {978-3-030-47845-2 978-3-030-47844-5},
+  langid = {english},
+  pagetotal = {378},
+  file = {/Users/ben/Zotero/storage/QZIKLNYL/Chopin and Papaspiliopoulos - 2020 - An introduction to sequential Monte Carlo.pdf}
+}
+
+@incollection{delmoralCentralLimitTheorems2011,
+  title = {Central {{Limit Theorems}}},
+  shorttitle = {Feynman-{{Kac}} Formulae},
+  booktitle = {Feynman-{{Kac}} Formulae: Genealogical and Interacting Particle Systems with Applications},
+  author = {Del Moral, Pierre},
+  date = {2011},
+  pages = {291--330},
+  publisher = {Springer},
+  location = {New York},
+  isbn = {978-1-4419-1902-1},
+  langid = {english},
+  annotation = {OCLC: 1063493341},
+  file = {/Users/ben/Zotero/storage/8QZUBR6E/Del Moral - 2011 - Central Limit Theorems.pdf}
+}
+
+@online{relicLossyImageCompression2024,
+  title = {Lossy {{Image Compression}} with {{Foundation Diffusion Models}}},
+  author = {Relic, Lucas and Azevedo, Roberto and Gross, Markus and Schroers, Christopher},
+  date = {2024-04-12},
+  eprint = {2404.08580},
+  eprinttype = {arXiv},
+  eprintclass = {cs, eess},
+  url = {http://arxiv.org/abs/2404.08580},
+  urldate = {2024-05-23},
+  abstract = {Incorporating diffusion models in the image compression domain has the potential to produce realistic and detailed reconstructions, especially at extremely low bitrates. Previous methods focus on using diffusion models as expressive decoders robust to quantization errors in the conditioning signals, yet achieving competitive results in this manner requires costly training of the diffusion model and long inference times due to the iterative generative process. In this work we formulate the removal of quantization error as a denoising task, using diffusion to recover lost information in the transmitted image latent. Our approach allows us to perform less than 10\textbackslash\% of the full diffusion generative process and requires no architectural changes to the diffusion model, enabling the use of foundation models as a strong prior without additional fine tuning of the backbone. Our proposed codec outperforms previous methods in quantitative realism metrics, and we verify that our reconstructions are qualitatively preferred by end users, even when other methods use twice the bitrate.},
+  pubstate = {prepublished},
+  keywords = {Computer Science - Computer Vision and Pattern Recognition,Electrical Engineering and Systems Science - Image and Video Processing},
+  file = {/Users/ben/Zotero/storage/CMAV6G3J/Relic et al. - 2024 - Lossy Image Compression with Foundation Diffusion .pdf;/Users/ben/Zotero/storage/RJZJ4IZ8/2404.html}
+}
+
+@inproceedings{song2023pseudoinverseguided,
+  title = {Pseudoinverse-Guided Diffusion Models for Inverse Problems},
+  booktitle = {International Conference on Learning Representations},
+  author = {Song, Jiaming and Vahdat, Arash and Mardani, Morteza and Kautz, Jan},
+  date = {2023},
+  url = {https://openreview.net/forum?id=9_gsMA8MRKQ},
+  file = {/Users/ben/Zotero/storage/A4VTUZS6/Song et al. - 2023 - Pseudoinverse-guided diffusion models for inverse .pdf}
+}
+
+@online{kawarDenoisingDiffusionRestoration2022,
+  title = {Denoising {{Diffusion Restoration Models}}},
+  author = {Kawar, Bahjat and Elad, Michael and Ermon, Stefano and Song, Jiaming},
+  date = {2022-10-12},
+  eprint = {2201.11793},
+  eprinttype = {arXiv},
+  eprintclass = {cs, eess},
+  url = {http://arxiv.org/abs/2201.11793},
+  urldate = {2024-05-23},
+  abstract = {Many interesting tasks in image restoration can be cast as linear inverse problems. A recent family of approaches for solving these problems uses stochastic algorithms that sample from the posterior distribution of natural images given the measurements. However, efficient solutions often require problem-specific supervised training to model the posterior, whereas unsupervised methods that are not problem-specific typically rely on inefficient iterative methods. This work addresses these issues by introducing Denoising Diffusion Restoration Models (DDRM), an efficient, unsupervised posterior sampling method. Motivated by variational inference, DDRM takes advantage of a pre-trained denoising diffusion generative model for solving any linear inverse problem. We demonstrate DDRM's versatility on several image datasets for super-resolution, deblurring, inpainting, and colorization under various amounts of measurement noise. DDRM outperforms the current leading unsupervised methods on the diverse ImageNet dataset in reconstruction quality, perceptual quality, and runtime, being 5x faster than the nearest competitor. DDRM also generalizes well for natural images out of the distribution of the observed ImageNet training set.},
+  pubstate = {prepublished},
+  keywords = {Computer Science - Computer Vision and Pattern Recognition,Computer Science - Machine Learning,Electrical Engineering and Systems Science - Image and Video Processing},
+  file = {/Users/ben/Zotero/storage/DZZUK7LI/Kawar et al. - 2022 - Denoising Diffusion Restoration Models.pdf;/Users/ben/Zotero/storage/U4PCJEII/2201.html}
+}
+
+@online{janatiDivideandConquerPosteriorSampling2024,
+  title = {Divide-and-{{Conquer Posterior Sampling}} for {{Denoising Diffusion Priors}}},
+  author = {Janati, Yazid and Durmus, Alain and Moulines, Eric and Olsson, Jimmy},
+  date = {2024-03-17},
+  eprint = {2403.11407},
+  eprinttype = {arXiv},
+  eprintclass = {cs, stat},
+  url = {http://arxiv.org/abs/2403.11407},
+  urldate = {2024-05-24},
+  abstract = {Interest in the use of Denoising Diffusion Models (DDM) as priors for solving inverse Bayesian problems has recently increased significantly. However, sampling from the resulting posterior distribution poses a challenge. To solve this problem, previous works have proposed approximations to bias the drift term of the diffusion. In this work, we take a different approach and utilize the specific structure of the DDM prior to define a set of intermediate and simpler posterior sampling problems, resulting in a lower approximation error compared to previous methods. We empirically demonstrate the reconstruction capability of our method for general linear inverse problems using synthetic examples and various image restoration tasks.},
+  pubstate = {prepublished},
+  keywords = {Computer Science - Machine Learning,Statistics - Machine Learning},
+  file = {/Users/ben/Zotero/storage/MDW5RL6A/Janati et al. - 2024 - Divide-and-Conquer Posterior Sampling for Denoisin.pdf;/Users/ben/Zotero/storage/YUYBWBDQ/2403.html}
+}
+
+@online{nicholImprovedDenoisingDiffusion2021,
+  title = {Improved {{Denoising Diffusion Probabilistic Models}}},
+  author = {Nichol, Alex and Dhariwal, Prafulla},
+  date = {2021-02-18},
+  eprint = {2102.09672},
+  eprinttype = {arXiv},
+  eprintclass = {cs, stat},
+  url = {http://arxiv.org/abs/2102.09672},
+  urldate = {2024-05-29},
+  abstract = {Denoising diffusion probabilistic models (DDPM) are a class of generative models which have recently been shown to produce excellent samples. We show that with a few simple modifications, DDPMs can also achieve competitive log-likelihoods while maintaining high sample quality. Additionally, we find that learning variances of the reverse diffusion process allows sampling with an order of magnitude fewer forward passes with a negligible difference in sample quality, which is important for the practical deployment of these models. We additionally use precision and recall to compare how well DDPMs and GANs cover the target distribution. Finally, we show that the sample quality and likelihood of these models scale smoothly with model capacity and training compute, making them easily scalable. We release our code at https://github.com/openai/improved-diffusion},
+  pubstate = {prepublished},
+  keywords = {Computer Science - Artificial Intelligence,Computer Science - Machine Learning,Statistics - Machine Learning},
+  file = {/Users/ben/Zotero/storage/3QJ9ZUJ5/Nichol and Dhariwal - 2021 - Improved Denoising Diffusion Probabilistic Models.pdf;/Users/ben/Zotero/storage/JJW39YFP/2102.html}
+}
+
+@online{pengImprovingDiffusionModels2024,
+  title = {Improving {{Diffusion Models}} for {{Inverse Problems Using Optimal Posterior Covariance}}},
+  author = {Peng, Xinyu and Zheng, Ziyang and Dai, Wenrui and Xiao, Nuoqian and Li, Chenglin and Zou, Junni and Xiong, Hongkai},
+  date = {2024-02-03},
+  eprint = {2402.02149},
+  eprinttype = {arXiv},
+  eprintclass = {cs},
+  url = {http://arxiv.org/abs/2402.02149},
+  urldate = {2024-05-30},
+  abstract = {Recent diffusion models provide a promising zero-shot solution to noisy linear inverse problems without retraining for specific inverse problems. In this paper, we propose the first unified interpretation for existing zero-shot methods from the perspective of approximating the conditional posterior mean for the reverse diffusion process of conditional sampling. We reveal that recent methods are equivalent to making isotropic Gaussian approximations to intractable posterior distributions over clean images given diffused noisy images, with the only difference in the handcrafted design of isotropic posterior covariances. Inspired by this finding, we propose a general plug-and-play posterior covariance optimization based on maximum likelihood estimation to improve recent methods. To achieve optimal posterior covariance without retraining, we provide general solutions based on two approaches specifically designed to leverage pre-trained models with and without reverse covariances. Experimental results demonstrate that the proposed methods significantly enhance the overall performance or robustness to hyperparameters of recent methods. Code is available at https://github.com/xypeng9903/k-diffusion-inverse-problems},
+  pubstate = {prepublished},
+  keywords = {Computer Science - Computer Vision and Pattern Recognition,Computer Science - Machine Learning},
+  file = {/Users/ben/Zotero/storage/KA46WG5U/Peng et al. - 2024 - Improving Diffusion Models for Inverse Problems Us.pdf;/Users/ben/Zotero/storage/8DLKF2BC/2402.html}
+}
+
+@online{songScoreBasedGenerativeModeling2021,
+  title = {Score-{{Based Generative Modeling}} through {{Stochastic Differential Equations}}},
+  author = {Song, Yang and Sohl-Dickstein, Jascha and Kingma, Diederik P. and Kumar, Abhishek and Ermon, Stefano and Poole, Ben},
+  date = {2021-02-10},
+  eprint = {2011.13456},
+  eprinttype = {arXiv},
+  eprintclass = {cs, stat},
+  url = {http://arxiv.org/abs/2011.13456},
+  urldate = {2024-05-31},
+  abstract = {Creating noise from data is easy; creating data from noise is generative modeling. We present a stochastic differential equation (SDE) that smoothly transforms a complex data distribution to a known prior distribution by slowly injecting noise, and a corresponding reverse-time SDE that transforms the prior distribution back into the data distribution by slowly removing the noise. Crucially, the reverse-time SDE depends only on the time-dependent gradient field (\textbackslash aka, score) of the perturbed data distribution. By leveraging advances in score-based generative modeling, we can accurately estimate these scores with neural networks, and use numerical SDE solvers to generate samples. We show that this framework encapsulates previous approaches in score-based generative modeling and diffusion probabilistic modeling, allowing for new sampling procedures and new modeling capabilities. In particular, we introduce a predictor-corrector framework to correct errors in the evolution of the discretized reverse-time SDE. We also derive an equivalent neural ODE that samples from the same distribution as the SDE, but additionally enables exact likelihood computation, and improved sampling efficiency. In addition, we provide a new way to solve inverse problems with score-based models, as demonstrated with experiments on class-conditional generation, image inpainting, and colorization. Combined with multiple architectural improvements, we achieve record-breaking performance for unconditional image generation on CIFAR-10 with an Inception score of 9.89 and FID of 2.20, a competitive likelihood of 2.99 bits/dim, and demonstrate high fidelity generation of 1024 x 1024 images for the first time from a score-based generative model.},
+  pubstate = {prepublished},
+  keywords = {Computer Science - Machine Learning,Statistics - Machine Learning},
+  file = {/Users/ben/Zotero/storage/KWP9NRUX/Song et al. - 2021 - Score-Based Generative Modeling through Stochastic.pdf;/Users/ben/Zotero/storage/UPBHEPYG/2011.html}
+}
+
+@online{trippeDiffusionProbabilisticModeling2023,
+  title = {Diffusion Probabilistic Modeling of Protein Backbones in {{3D}} for the Motif-Scaffolding Problem},
+  author = {Trippe, Brian L. and Yim, Jason and Tischer, Doug and Baker, David and Broderick, Tamara and Barzilay, Regina and Jaakkola, Tommi},
+  date = {2023-03-19},
+  eprint = {2206.04119},
+  eprinttype = {arXiv},
+  eprintclass = {cs, q-bio, stat},
+  url = {http://arxiv.org/abs/2206.04119},
+  urldate = {2024-06-05},
+  abstract = {Construction of a scaffold structure that supports a desired motif, conferring protein function, shows promise for the design of vaccines and enzymes. But a general solution to this motif-scaffolding problem remains open. Current machine-learning techniques for scaffold design are either limited to unrealistically small scaffolds (up to length 20) or struggle to produce multiple diverse scaffolds. We propose to learn a distribution over diverse and longer protein backbone structures via an E(3)-equivariant graph neural network. We develop SMCDiff to efficiently sample scaffolds from this distribution conditioned on a given motif; our algorithm is the first to theoretically guarantee conditional samples from a diffusion model in the large-compute limit. We evaluate our designed backbones by how well they align with AlphaFold2-predicted structures. We show that our method can (1) sample scaffolds up to 80 residues and (2) achieve structurally diverse scaffolds for a fixed motif.},
+  pubstate = {prepublished},
+  keywords = {Computer Science - Machine Learning,Quantitative Biology - Biomolecules,Statistics - Machine Learning},
+  file = {/Users/ben/Zotero/storage/BA7BE2QG/Trippe et al. - 2023 - Diffusion probabilistic modeling of protein backbo.pdf;/Users/ben/Zotero/storage/3L66TEA8/2206.html}
+}
+
+@online{wuPracticalAsymptoticallyExact2023,
+  title = {Practical and {{Asymptotically Exact Conditional Sampling}} in {{Diffusion Models}}},
+  author = {Wu, Luhuan and Trippe, Brian L. and Naesseth, Christian A. and Blei, David M. and Cunningham, John P.},
+  date = {2023-06-30},
+  eprint = {2306.17775},
+  eprinttype = {arXiv},
+  eprintclass = {cs, q-bio, stat},
+  url = {http://arxiv.org/abs/2306.17775},
+  urldate = {2024-06-05},
+  abstract = {Diffusion models have been successful on a range of conditional generation tasks including molecular design and text-to-image generation. However, these achievements have primarily depended on task-specific conditional training or error-prone heuristic approximations. Ideally, a conditional generation method should provide exact samples for a broad range of conditional distributions without requiring task-specific training. To this end, we introduce the Twisted Diffusion Sampler, or TDS. TDS is a sequential Monte Carlo (SMC) algorithm that targets the conditional distributions of diffusion models. The main idea is to use twisting, an SMC technique that enjoys good computational efficiency, to incorporate heuristic approximations without compromising asymptotic exactness. We first find in simulation and on MNIST image inpainting and class-conditional generation tasks that TDS provides a computational statistical trade-off, yielding more accurate approximations with many particles but with empirical improvements over heuristics with as few as two particles. We then turn to motif-scaffolding, a core task in protein design, using a TDS extension to Riemannian diffusion models. On benchmark test cases, TDS allows flexible conditioning criteria and often outperforms the state of the art.},
+  pubstate = {prepublished},
+  keywords = {Computer Science - Machine Learning,Quantitative Biology - Biomolecules,Statistics - Machine Learning},
+  file = {/Users/ben/Zotero/storage/X3IVVXYA/Wu et al. - 2023 - Practical and Asymptotically Exact Conditional Sam.pdf;/Users/ben/Zotero/storage/7HDAVE6Y/2306.html}
+}
+
+@online{brosseTamedUnadjustedLangevin2018,
+  title = {The {{Tamed Unadjusted Langevin Algorithm}}},
+  author = {Brosse, Nicolas and Durmus, Alain and Moulines, Éric and Sabanis, Sotirios},
+  date = {2018-11-25},
+  eprint = {1710.05559},
+  eprinttype = {arXiv},
+  eprintclass = {stat},
+  url = {http://arxiv.org/abs/1710.05559},
+  urldate = {2024-06-05},
+  abstract = {In this article, we consider the problem of sampling from a probability measure \$\textbackslash pi\$ having a density on \$\textbackslash mathbb\{R\}\textasciicircum d\$ known up to a normalizing constant, \$x\textbackslash mapsto \textbackslash mathrm\{e\}\textasciicircum\{-U(x)\} / \textbackslash int\_\{\textbackslash mathbb\{R\}\textasciicircum d\} \textbackslash mathrm\{e\}\textasciicircum\{-U(y)\} \textbackslash mathrm\{d\} y\$. The Euler discretization of the Langevin stochastic differential equation (SDE) is known to be unstable in a precise sense, when the potential \$U\$ is superlinear, i.e. \$\textbackslash liminf\_\{\textbackslash Vert x \textbackslash Vert\textbackslash to+\textbackslash infty\} \textbackslash Vert \textbackslash nabla U(x) \textbackslash Vert / \textbackslash Vert x \textbackslash Vert = +\textbackslash infty\$. Based on previous works on the taming of superlinear drift coefficients for SDEs, we introduce the Tamed Unadjusted Langevin Algorithm (TULA) and obtain non-asymptotic bounds in \$V\$-total variation norm and Wasserstein distance of order \$2\$ between the iterates of TULA and \$\textbackslash pi\$, as well as weak error bounds. Numerical experiments are presented which support our findings.},
+  pubstate = {prepublished},
+  keywords = {Statistics - Methodology},
+  file = {/Users/ben/Zotero/storage/XT6ME2YT/Brosse et al. - 2018 - The Tamed Unadjusted Langevin Algorithm.pdf;/Users/ben/Zotero/storage/QR58A3K2/1710.html}
+}
+
+@online{heManifoldPreservingGuided2023,
+  title = {Manifold {{Preserving Guided Diffusion}}},
+  author = {He, Yutong and Murata, Naoki and Lai, Chieh-Hsin and Takida, Yuhta and Uesaka, Toshimitsu and Kim, Dongjun and Liao, Wei-Hsiang and Mitsufuji, Yuki and Kolter, J. Zico and Salakhutdinov, Ruslan and Ermon, Stefano},
+  date = {2023-11-27},
+  eprint = {2311.16424},
+  eprinttype = {arXiv},
+  eprintclass = {cs},
+  doi = {10.48550/arXiv.2311.16424},
+  url = {http://arxiv.org/abs/2311.16424},
+  urldate = {2024-06-05},
+  abstract = {Despite the recent advancements, conditional image generation still faces challenges of cost, generalizability, and the need for task-specific training. In this paper, we propose Manifold Preserving Guided Diffusion (MPGD), a training-free conditional generation framework that leverages pretrained diffusion models and off-the-shelf neural networks with minimal additional inference cost for a broad range of tasks. Specifically, we leverage the manifold hypothesis to refine the guided diffusion steps and introduce a shortcut algorithm in the process. We then propose two methods for on-manifold training-free guidance using pre-trained autoencoders and demonstrate that our shortcut inherently preserves the manifolds when applied to latent diffusion models. Our experiments show that MPGD is efficient and effective for solving a variety of conditional generation applications in low-compute settings, and can consistently offer up to 3.8x speed-ups with the same number of diffusion steps while maintaining high sample quality compared to the baselines.},
+  pubstate = {prepublished},
+  keywords = {Computer Science - Artificial Intelligence,Computer Science - Computer Vision and Pattern Recognition,Computer Science - Machine Learning},
+  file = {/Users/ben/Zotero/storage/VBE8TAMW/He et al. - 2023 - Manifold Preserving Guided Diffusion.pdf;/Users/ben/Zotero/storage/UK3ZRMVN/2311.html}
+}
+
+@book{sussmanFunctionalDifferentialGeometry2013,
+  title = {Functional Differential Geometry},
+  author = {Sussman, Gerald Jay and Wisdom, Jack and Farr, Will},
+  date = {2013},
+  publisher = {The MIT Press},
+  location = {Cambridge, MA},
+  isbn = {978-0-262-01934-7},
+  pagetotal = {228},
+  keywords = {Functional differential equations,Geometry Differential,Mathematical physics},
+  file = {/Users/ben/Zotero/storage/NWQA46P4/Sussman et al. - 2013 - Functional differential geometry.pdf}
+}
+
+@inproceedings{douDiffusionPosteriorSampling2023,
+  title = {Diffusion {{Posterior Sampling}} for {{Linear Inverse Problem Solving}}: {{A Filtering Perspective}}},
+  shorttitle = {Diffusion {{Posterior Sampling}} for {{Linear Inverse Problem Solving}}},
+  author = {Dou, Zehao and Song, Yang},
+  date = {2023-10-13},
+  url = {https://openreview.net/forum?id=tplXNcHZs1&referrer=%5Bthe%20profile%20of%20Yang%20Song%5D(%2Fprofile%3Fid%3D~Yang_Song1)},
+  urldate = {2024-06-08},
+  abstract = {Diffusion models have achieved tremendous success in generating high-dimensional data like images, videos and audio. These models provide powerful data priors that can solve linear inverse problems in zero shot through Bayesian posterior sampling. However, exact posterior sampling for diffusion models is intractable. Current solutions often hinge on approximations that are either computationally expensive or lack strong theoretical guarantees. In this work, we introduce an efficient diffusion sampling algorithm for linear inverse problems that is guaranteed to be asymptotically accurate. We reveal a link between Bayesian posterior sampling and Bayesian filtering in diffusion models, proving the former as a specific instance of the latter. Our method, termed filtering posterior sampling, leverages sequential Monte Carlo methods to solve the corresponding filtering problem. It seamlessly integrates with all Markovian diffusion samplers, requires no model re-training, and guarantees accurate samples from the Bayesian posterior as particle counts rise. Empirical tests demonstrate that our method generates better or comparable results than leading zero-shot diffusion posterior samplers on tasks like image inpainting, super-resolution, and deblurring.},
+  eventtitle = {The {{Twelfth International Conference}} on {{Learning Representations}}},
+  langid = {english},
+  file = {/Users/ben/Zotero/storage/U3DQCYV3/Dou and Song - 2023 - Diffusion Posterior Sampling for Linear Inverse Pr.pdf}
+}
+
+@inproceedings{das2024buildingdiffusionmodels,
+  title = {Building Diffusion Model's Theory from Ground Up},
+  booktitle = {{{ICLR}} Blogposts 2024},
+  author = {Das, Ayan},
+  year = {May 7, 2024, 2024},
+  url = {https://iclr-blogposts.github.io/2024/blog/diffusion-theory-from-scratch/},
+  abstract = {Diffusion Models, a new generative model family, have taken the world by storm after the seminal paper by Ho et al. [2020]. While diffusion models are often described as a probabilistic Markov Chains, their underlying principle is based on the decade-old theory of Stochastic Differential Equations (SDE), as found out later by Song et al. [2021]. In this article, we will go back and revisit the 'fundamental ingredients' behind the SDE formulation and show how the idea can be 'shaped' to get to the modern form of Score-based Diffusion Models. We'll start from the very definition of the 'score', how it was used in the context of generative modeling, how we achieve the necessary theoretical guarantees and how the critical design choices were made to finally arrive at the more 'principled' framework of Score-based Diffusion. Throughout this article, we provide several intuitive illustrations for ease of understanding.}
+}
+
+@online{das2021,
+  title = {An Introduction to {{Diffusion Probabilistic Models}}},
+  author = {Das, Ayan},
+  date = {2021-12-04},
+  url = {https://ayandas.me//blogs/2021-12-04-diffusion-prob-models.html},
+  langid = {english}
+}
+
+@article{weng2021diffusion,
+  title = {What Are Diffusion Models?},
+  author = {Weng, Lilian},
+  date = {2021-07},
+  journaltitle = {lilianweng.github.io},
+  url = {https://lilianweng.github.io/posts/2021-07-11-diffusion-models/}
+}
+
+@online{dhariwalDiffusionModelsBeat2021,
+  title = {Diffusion {{Models Beat GANs}} on {{Image Synthesis}}},
+  author = {Dhariwal, Prafulla and Nichol, Alex},
+  date = {2021-06-01},
+  eprint = {2105.05233},
+  eprinttype = {arXiv},
+  eprintclass = {cs, stat},
+  doi = {10.48550/arXiv.2105.05233},
+  url = {http://arxiv.org/abs/2105.05233},
+  urldate = {2024-06-11},
+  abstract = {We show that diffusion models can achieve image sample quality superior to the current state-of-the-art generative models. We achieve this on unconditional image synthesis by finding a better architecture through a series of ablations. For conditional image synthesis, we further improve sample quality with classifier guidance: a simple, compute-efficient method for trading off diversity for fidelity using gradients from a classifier. We achieve an FID of 2.97 on ImageNet 128\$\textbackslash times\$128, 4.59 on ImageNet 256\$\textbackslash times\$256, and 7.72 on ImageNet 512\$\textbackslash times\$512, and we match BigGAN-deep even with as few as 25 forward passes per sample, all while maintaining better coverage of the distribution. Finally, we find that classifier guidance combines well with upsampling diffusion models, further improving FID to 3.94 on ImageNet 256\$\textbackslash times\$256 and 3.85 on ImageNet 512\$\textbackslash times\$512. We release our code at https://github.com/openai/guided-diffusion},
+  pubstate = {prepublished},
+  keywords = {Computer Science - Artificial Intelligence,Computer Science - Computer Vision and Pattern Recognition,Computer Science - Machine Learning,Statistics - Machine Learning},
+  file = {/Users/ben/Zotero/storage/2YENZUX3/Dhariwal and Nichol - 2021 - Diffusion Models Beat GANs on Image Synthesis.pdf;/Users/ben/Zotero/storage/YI2K9MHX/2105.html}
+}
+
+@online{songGenerativeModelingEstimating,
+  title = {Generative {{Modeling}} by {{Estimating Gradients}} of the {{Data Distribution}}},
+  author = {Song, Yang},
+  url = {https://yang-song.net/blog/2021/score/},
+  urldate = {2024-06-11},
+  file = {/Users/ben/Zotero/storage/NRHDSZ72/score.html}
+}
+
+@online{routFirstOrderTweedieSolving2023,
+  title = {Beyond {{First-Order Tweedie}}: {{Solving Inverse Problems}} Using {{Latent Diffusion}}},
+  shorttitle = {Beyond {{First-Order Tweedie}}},
+  author = {Rout, Litu and Chen, Yujia and Kumar, Abhishek and Caramanis, Constantine and Shakkottai, Sanjay and Chu, Wen-Sheng},
+  date = {2023-12-01},
+  eprint = {2312.00852},
+  eprinttype = {arXiv},
+  eprintclass = {cs, stat},
+  doi = {10.48550/arXiv.2312.00852},
+  url = {http://arxiv.org/abs/2312.00852},
+  urldate = {2024-06-11},
+  abstract = {Sampling from the posterior distribution poses a major computational challenge in solving inverse problems using latent diffusion models. Common methods rely on Tweedie's first-order moments, which are known to induce a quality-limiting bias. Existing second-order approximations are impractical due to prohibitive computational costs, making standard reverse diffusion processes intractable for posterior sampling. This paper introduces Second-order Tweedie sampler from Surrogate Loss (STSL), a novel sampler that offers efficiency comparable to first-order Tweedie with a tractable reverse process using second-order approximation. Our theoretical results reveal that the second-order approximation is lower bounded by our surrogate loss that only requires \$O(1)\$ compute using the trace of the Hessian, and by the lower bound we derive a new drift term to make the reverse process tractable. Our method surpasses SoTA solvers PSLD and P2L, achieving 4X and 8X reduction in neural function evaluations, respectively, while notably enhancing sampling quality on FFHQ, ImageNet, and COCO benchmarks. In addition, we show STSL extends to text-guided image editing and addresses residual distortions present from corrupted images in leading text-guided image editing methods. To our best knowledge, this is the first work to offer an efficient second-order approximation in solving inverse problems using latent diffusion and editing real-world images with corruptions.},
+  pubstate = {prepublished},
+  keywords = {Computer Science - Computer Vision and Pattern Recognition,Computer Science - Machine Learning,Statistics - Machine Learning},
+  file = {/Users/ben/Zotero/storage/ZE36TDRW/Rout et al. - 2023 - Beyond First-Order Tweedie Solving Inverse Proble.pdf;/Users/ben/Zotero/storage/YKA2GE3I/2312.html}
+}
+
+@online{boysTweedieMomentProjected2023,
+  title = {Tweedie {{Moment Projected Diffusions For Inverse Problems}}},
+  author = {Boys, Benjamin and Girolami, Mark and Pidstrigach, Jakiw and Reich, Sebastian and Mosca, Alan and Akyildiz, O. Deniz},
+  date = {2023-11-22},
+  eprint = {2310.06721},
+  eprinttype = {arXiv},
+  eprintclass = {stat},
+  url = {http://arxiv.org/abs/2310.06721},
+  urldate = {2024-06-23},
+  abstract = {Diffusion generative models unlock new possibilities for inverse problems as they allow for the incorporation of strong empirical priors into the process of scientific inference. Recently, diffusion models received significant attention for solving inverse problems by posterior sampling, but many challenges remain open due to the intractability of this sampling process. Prior work resorted to Gaussian approximations to conditional densities of the reverse process, leveraging Tweedie's formula to parameterise its mean, complemented with various heuristics. In this work, we leverage higher order information using Tweedie's formula and obtain a finer approximation with a principled covariance estimate. This novel approximation removes any time-dependent step-size hyperparameters required by earlier methods, and enables higher quality approximations of the posterior density which results in better samples. Specifically, we tackle noisy linear inverse problems and obtain a novel approximation to the gradient of the likelihood. We then plug this gradient estimate into various diffusion models and show that this method is optimal for a Gaussian data distribution. We illustrate the empirical effectiveness of our approach for general linear inverse problems on toy synthetic examples as well as image restoration using pretrained diffusion models as the prior. We show that our method improves the sample quality by providing statistically principled approximations to diffusion posterior sampling problem.},
+  pubstate = {prepublished},
+  keywords = {Statistics - Computation},
+  file = {/Users/ben/Zotero/storage/ET5NQLG8/Boys et al. - 2023 - Tweedie Moment Projected Diffusions For Inverse Pr.pdf;/Users/ben/Zotero/storage/H2LYHP9V/2310.html}
+}
+
+@article{akyildizParallelSequentialMonte2020,
+  title = {Parallel Sequential {{Monte Carlo}} for Stochastic Gradient-Free Nonconvex Optimization},
+  author = {Akyildiz, Ömer Deniz and Crisan, Dan and Míguez, Joaquín},
+  date = {2020-11},
+  journaltitle = {Statistics and Computing},
+  shortjournal = {Stat Comput},
+  volume = {30},
+  number = {6},
+  pages = {1645--1663},
+  issn = {0960-3174, 1573-1375},
+  doi = {10.1007/s11222-020-09964-4},
+  url = {https://link.springer.com/10.1007/s11222-020-09964-4},
+  urldate = {2024-07-26},
+  abstract = {Abstract             We introduce and analyze a parallel sequential Monte Carlo methodology for the numerical solution of optimization problems that involve the minimization of a cost function that consists of the sum of many individual components.  The proposed scheme is a stochastic zeroth-order optimization algorithm which demands only the capability to evaluate small subsets of components of the cost function. It can be depicted as a bank of samplers that generate particle approximations of several sequences of probability measures. These measures are constructed in such a way that they have associated probability density functions whose global maxima coincide with the global minima of the original cost function. The algorithm selects the best performing sampler and uses it to approximate a global minimum of the cost function. We prove analytically that the resulting estimator converges to a global minimum of the cost function almost surely and provide explicit convergence rates in terms of the number of generated Monte Carlo samples and the dimension of the search space. We show, by way of numerical examples, that the algorithm can tackle cost functions with multiple minima or with broad “flat” regions which are hard to minimize using gradient-based techniques.},
+  langid = {english},
+  file = {/Users/ben/Zotero/storage/4HERYCMK/Akyildiz et al. - 2020 - Parallel sequential Monte Carlo for stochastic gra.pdf;/Users/ben/Zotero/storage/J2DU7USC/Parallel Sequential Monte Carlo.pdf}
+}
+
+@online{guoGradientGuidanceDiffusion2024,
+  title = {Gradient {{Guidance}} for {{Diffusion Models}}: {{An Optimization Perspective}}},
+  shorttitle = {Gradient {{Guidance}} for {{Diffusion Models}}},
+  author = {Guo, Yingqing and Yuan, Hui and Yang, Yukang and Chen, Minshuo and Wang, Mengdi},
+  date = {2024-04-23},
+  eprint = {2404.14743},
+  eprinttype = {arXiv},
+  eprintclass = {cs, stat},
+  url = {http://arxiv.org/abs/2404.14743},
+  urldate = {2024-07-26},
+  abstract = {Diffusion models have demonstrated empirical successes in various applications and can be adapted to task-specific needs via guidance. This paper introduces a form of gradient guidance for adapting or fine-tuning diffusion models towards user-specified optimization objectives. We study the theoretic aspects of a guided score-based sampling process, linking the gradient-guided diffusion model to first-order optimization. We show that adding gradient guidance to the sampling process of a pre-trained diffusion model is essentially equivalent to solving a regularized optimization problem, where the regularization term acts as a prior determined by the pre-training data. Diffusion models are able to learn data's latent subspace, however, explicitly adding the gradient of an external objective function to the sample process would jeopardize the structure in generated samples. To remedy this issue, we consider a modified form of gradient guidance based on a forward prediction loss, which leverages the pre-trained score function to preserve the latent structure in generated samples. We further consider an iteratively fine-tuned version of gradient-guided diffusion where one can query gradients at newly generated data points and update the score network using new samples. This process mimics a first-order optimization iteration in expectation, for which we proved O(1/K) convergence rate to the global optimum when the objective function is concave.},
+  pubstate = {prepublished},
+  keywords = {Computer Science - Machine Learning,Statistics - Machine Learning},
+  file = {/Users/ben/Zotero/storage/G7F3BHAW/Guo et al. - 2024 - Gradient Guidance for Diffusion Models An Optimiz.pdf;/Users/ben/Zotero/storage/IT8BMQW2/2404.html}
+}
+
+@online{kongDiffusionModelsConstrained2024,
+  title = {Diffusion {{Models}} as {{Constrained Samplers}} for {{Optimization}} with {{Unknown Constraints}}},
+  author = {Kong, Lingkai and Du, Yuanqi and Mu, Wenhao and Neklyudov, Kirill and De Bortoli, Valentin and Wang, Haorui and Wu, Dongxia and Ferber, Aaron and Ma, Yi-An and Gomes, Carla P. and Zhang, Chao},
+  date = {2024-04-29},
+  eprint = {2402.18012},
+  eprinttype = {arXiv},
+  eprintclass = {cs},
+  url = {http://arxiv.org/abs/2402.18012},
+  urldate = {2024-07-26},
+  abstract = {Addressing real-world optimization problems becomes particularly challenging when analytic objective functions or constraints are unavailable. While numerous studies have addressed the issue of unknown objectives, limited research has focused on scenarios where feasibility constraints are not given explicitly. Overlooking these constraints can lead to spurious solutions that are unrealistic in practice. To deal with such unknown constraints, we propose to perform optimization within the data manifold using diffusion models. To constrain the optimization process to the data manifold, we reformulate the original optimization problem as a sampling problem from the product of the Boltzmann distribution defined by the objective function and the data distribution learned by the diffusion model. To enhance sampling efficiency, we propose a two-stage framework that begins with a guided diffusion process for warm-up, followed by a Langevin dynamics stage for further correction. Theoretical analysis shows that the initial stage results in a distribution focused on feasible solutions, thereby providing a better initialization for the later stage. Comprehensive experiments on a synthetic dataset, six real-world black-box optimization datasets, and a multi-objective optimization dataset show that our method achieves better or comparable performance with previous state-of-the-art baselines.},
+  pubstate = {prepublished},
+  keywords = {Computer Science - Artificial Intelligence,Computer Science - Machine Learning},
+  file = {/Users/ben/Zotero/storage/DRDU6UZJ/Kong et al. - 2024 - Diffusion Models as Constrained Samplers for Optim.pdf;/Users/ben/Zotero/storage/RMUJ7GG5/2402.html}
+}
+
+@online{krishnamoorthyDiffusionModelsBlackBox2023,
+  title = {Diffusion {{Models}} for {{Black-Box Optimization}}},
+  author = {Krishnamoorthy, Siddarth and Mashkaria, Satvik Mehul and Grover, Aditya},
+  date = {2023-08-21},
+  eprint = {2306.07180},
+  eprinttype = {arXiv},
+  eprintclass = {cs},
+  url = {http://arxiv.org/abs/2306.07180},
+  urldate = {2024-07-31},
+  abstract = {The goal of offline black-box optimization (BBO) is to optimize an expensive black-box function using a fixed dataset of function evaluations. Prior works consider forward approaches that learn surrogates to the black-box function and inverse approaches that directly map function values to corresponding points in the input domain of the black-box function. These approaches are limited by the quality of the offline dataset and the difficulty in learning one-to-many mappings in high dimensions, respectively. We propose Denoising Diffusion Optimization Models (DDOM), a new inverse approach for offline black-box optimization based on diffusion models. Given an offline dataset, DDOM learns a conditional generative model over the domain of the black-box function conditioned on the function values. We investigate several design choices in DDOM, such as re-weighting the dataset to focus on high function values and the use of classifier-free guidance at test-time to enable generalization to function values that can even exceed the dataset maxima. Empirically, we conduct experiments on the Design-Bench benchmark and show that DDOM achieves results competitive with state-of-the-art baselines.},
+  pubstate = {prepublished},
+  keywords = {Computer Science - Machine Learning},
+  file = {/Users/ben/Zotero/storage/XA34NDR4/Krishnamoorthy et al. - 2023 - Diffusion Models for Black-Box Optimization.pdf;/Users/ben/Zotero/storage/PF7D4NSN/2306.html}
+}
+
+@online{chehabPracticalDiffusionPath2024,
+  title = {A {{Practical Diffusion Path}} for {{Sampling}}},
+  author = {Chehab, Omar and Korba, Anna},
+  date = {2024-06-20},
+  eprint = {2406.14040},
+  eprinttype = {arXiv},
+  eprintclass = {cs, stat},
+  url = {http://arxiv.org/abs/2406.14040},
+  urldate = {2024-08-01},
+  abstract = {Diffusion models are state-of-the-art methods in generative modeling when samples from a target probability distribution are available, and can be efficiently sampled, using score matching to estimate score vectors guiding a Langevin process. However, in the setting where samples from the target are not available, e.g. when this target's density is known up to a normalization constant, the score estimation task is challenging. Previous approaches rely on Monte Carlo estimators that are either computationally heavy to implement or sample-inefficient. In this work, we propose a computationally attractive alternative, relying on the so-called dilation path, that yields score vectors that are available in closed-form. This path interpolates between a Dirac and the target distribution using a convolution. We propose a simple implementation of Langevin dynamics guided by the dilation path, using adaptive step-sizes. We illustrate the results of our sampling method on a range of tasks, and shows it performs better than classical alternatives.},
+  pubstate = {prepublished},
+  keywords = {Computer Science - Machine Learning,Statistics - Machine Learning},
+  file = {/Users/ben/Zotero/storage/CJD6EFR7/Chehab and Korba - 2024 - A Practical Diffusion Path for Sampling.pdf;/Users/ben/Zotero/storage/NE3K78KA/Chehab and Korba - 2024 - A Practical Diffusion Path for Sampling.pdf;/Users/ben/Zotero/storage/JBX3AFI8/2406.html}
+}
+
+@online{trabuccoDesignBenchBenchmarksDataDriven2022,
+  title = {Design-{{Bench}}: {{Benchmarks}} for {{Data-Driven Offline Model-Based Optimization}}},
+  shorttitle = {Design-{{Bench}}},
+  author = {Trabucco, Brandon and Geng, Xinyang and Kumar, Aviral and Levine, Sergey},
+  date = {2022-02-17},
+  eprint = {2202.08450},
+  eprinttype = {arXiv},
+  eprintclass = {cs},
+  doi = {10.48550/arXiv.2202.08450},
+  url = {http://arxiv.org/abs/2202.08450},
+  urldate = {2024-08-09},
+  abstract = {Black-box model-based optimization (MBO) problems, where the goal is to find a design input that maximizes an unknown objective function, are ubiquitous in a wide range of domains, such as the design of proteins, DNA sequences, aircraft, and robots. Solving model-based optimization problems typically requires actively querying the unknown objective function on design proposals, which means physically building the candidate molecule, aircraft, or robot, testing it, and storing the result. This process can be expensive and time consuming, and one might instead prefer to optimize for the best design using only the data one already has. This setting -- called offline MBO -- poses substantial and different algorithmic challenges than more commonly studied online techniques. A number of recent works have demonstrated success with offline MBO for high-dimensional optimization problems using high-capacity deep neural networks. However, the lack of standardized benchmarks in this emerging field is making progress difficult to track. To address this, we present Design-Bench, a benchmark for offline MBO with a unified evaluation protocol and reference implementations of recent methods. Our benchmark includes a suite of diverse and realistic tasks derived from real-world optimization problems in biology, materials science, and robotics that present distinct challenges for offline MBO. Our benchmark and reference implementations are released at github.com/rail-berkeley/design-bench and github.com/rail-berkeley/design-baselines.},
+  pubstate = {prepublished},
+  keywords = {Computer Science - Machine Learning},
+  file = {/Users/ben/Zotero/storage/7CNG2ZK2/Trabucco et al. - 2022 - Design-Bench Benchmarks for Data-Driven Offline M.pdf;/Users/ben/Zotero/storage/MNICG93W/2202.html}
+}
+
+@online{songGenerativeModelingEstimating2020,
+  title = {Generative {{Modeling}} by {{Estimating Gradients}} of the {{Data Distribution}}},
+  author = {Song, Yang and Ermon, Stefano},
+  date = {2020-10-10},
+  eprint = {1907.05600},
+  eprinttype = {arXiv},
+  eprintclass = {cs, stat},
+  doi = {10.48550/arXiv.1907.05600},
+  url = {http://arxiv.org/abs/1907.05600},
+  urldate = {2024-08-10},
+  abstract = {We introduce a new generative model where samples are produced via Langevin dynamics using gradients of the data distribution estimated with score matching. Because gradients can be ill-defined and hard to estimate when the data resides on low-dimensional manifolds, we perturb the data with different levels of Gaussian noise, and jointly estimate the corresponding scores, i.e., the vector fields of gradients of the perturbed data distribution for all noise levels. For sampling, we propose an annealed Langevin dynamics where we use gradients corresponding to gradually decreasing noise levels as the sampling process gets closer to the data manifold. Our framework allows flexible model architectures, requires no sampling during training or the use of adversarial methods, and provides a learning objective that can be used for principled model comparisons. Our models produce samples comparable to GANs on MNIST, CelebA and CIFAR-10 datasets, achieving a new state-of-the-art inception score of 8.87 on CIFAR-10. Additionally, we demonstrate that our models learn effective representations via image inpainting experiments.},
+  pubstate = {prepublished},
+  keywords = {Computer Science - Machine Learning,Statistics - Machine Learning},
+  file = {/Users/ben/Zotero/storage/AUVQYV4B/Song and Ermon - 2020 - Generative Modeling by Estimating Gradients of the.pdf;/Users/ben/Zotero/storage/5679PP9Q/1907.html}
+}
+
+@article{akyildizNudgingParticleFilter2020,
+  title = {Nudging the Particle Filter},
+  author = {Akyildiz, Ömer Deniz and Míguez, Joaquín},
+  date = {2020-03-01},
+  journaltitle = {Statistics and Computing},
+  shortjournal = {Stat Comput},
+  volume = {30},
+  number = {2},
+  pages = {305--330},
+  issn = {1573-1375},
+  doi = {10.1007/s11222-019-09884-y},
+  url = {https://doi.org/10.1007/s11222-019-09884-y},
+  urldate = {2024-08-10},
+  abstract = {We investigate a new sampling scheme aimed at improving the performance of particle filters whenever (a) there is a significant mismatch between the assumed model dynamics and the actual system, or (b) the posterior probability tends to concentrate in relatively small regions of the state space. The proposed scheme pushes some particles toward specific regions where the likelihood is expected to be high, an operation known as nudging in the geophysics literature. We reinterpret nudging in a form applicable to any particle filtering scheme, as it does not involve any changes in the rest of the algorithm. Since the particles are modified, but the importance weights do not account for this modification, the use of nudging leads to additional bias in the resulting estimators. However, we prove analytically that nudged particle filters can still attain asymptotic convergence with the same error rates as conventional particle methods. Simple analysis also yields an alternative interpretation of the nudging operation that explains its robustness to model errors. Finally, we show numerical results that illustrate the improvements that can be attained using the proposed scheme. In particular, we present nonlinear tracking examples with synthetic data and a model inference example using real-world financial data.},
+  langid = {english},
+  keywords = {Approximation errors.,Data assimilation,Model errors,Nudging,Particle filtering,Robust filtering},
+  file = {/Users/ben/Zotero/storage/EHKQ7S62/Akyildiz and Míguez - 2020 - Nudging the particle filter.pdf}
+}
+
+@article{delmoralAdaptiveResamplingStrategies2012,
+  title = {On Adaptive Resampling Strategies for Sequential {{Monte Carlo}} Methods},
+  author = {Del Moral, Pierre and Doucet, Arnaud and Jasra, Ajay},
+  date = {2012-02-01},
+  journaltitle = {Bernoulli},
+  shortjournal = {Bernoulli},
+  volume = {18},
+  number = {1},
+  eprint = {1203.0464},
+  eprinttype = {arXiv},
+  eprintclass = {math, stat},
+  issn = {1350-7265},
+  doi = {10.3150/10-BEJ335},
+  url = {http://arxiv.org/abs/1203.0464},
+  urldate = {2024-08-10},
+  abstract = {Sequential Monte Carlo (SMC) methods are a class of techniques to sample approximately from any sequence of probability distributions using a combination of importance sampling and resampling steps. This paper is concerned with the convergence analysis of a class of SMC methods where the times at which resampling occurs are computed online using criteria such as the effective sample size. This is a popular approach amongst practitioners but there are very few convergence results available for these methods. By combining semigroup techniques with an original coupling argument, we obtain functional central limit theorems and uniform exponential concentration estimates for these algorithms.},
+  keywords = {Mathematics - Statistics Theory},
+  file = {/Users/ben/Zotero/storage/8LJ4AL7P/Del Moral et al. - 2012 - On adaptive resampling strategies for sequential M.pdf;/Users/ben/Zotero/storage/PN6MAVDV/1203.html}
+}
+
+@online{cardosoMonteCarloGuided2023,
+  title = {Monte {{Carlo}} Guided {{Diffusion}} for {{Bayesian}} Linear Inverse Problems},
+  author = {Cardoso, Gabriel and Idrissi, Yazid Janati El and Corff, Sylvain Le and Moulines, Eric},
+  date = {2023-10-25},
+  eprint = {2308.07983},
+  eprinttype = {arXiv},
+  eprintclass = {cs, stat},
+  doi = {10.48550/arXiv.2308.07983},
+  url = {http://arxiv.org/abs/2308.07983},
+  urldate = {2024-08-13},
+  abstract = {Ill-posed linear inverse problems arise frequently in various applications, from computational photography to medical imaging. A recent line of research exploits Bayesian inference with informative priors to handle the ill-posedness of such problems. Amongst such priors, score-based generative models (SGM) have recently been successfully applied to several different inverse problems. In this study, we exploit the particular structure of the prior defined by the SGM to define a sequence of intermediate linear inverse problems. As the noise level decreases, the posteriors of these inverse problems get closer to the target posterior of the original inverse problem. To sample from this sequence of posteriors, we propose the use of Sequential Monte Carlo (SMC) methods. The proposed algorithm, MCGDiff, is shown to be theoretically grounded and we provide numerical simulations showing that it outperforms competing baselines when dealing with ill-posed inverse problems in a Bayesian setting.},
+  pubstate = {prepublished},
+  keywords = {Computer Science - Machine Learning,Statistics - Machine Learning,Statistics - Methodology},
+  file = {/Users/ben/Zotero/storage/E3CCVLZV/Cardoso et al. - 2023 - Monte Carlo guided Diffusion for Bayesian linear i.pdf;/Users/ben/Zotero/storage/WVM5QSB6/2308.html}
+}
+
+@article{hwangLaplaceMethodRevisited1980,
+  title = {Laplace's {{Method Revisited}}: {{Weak Convergence}} of {{Probability Measures}}},
+  shorttitle = {Laplace's {{Method Revisited}}},
+  author = {Hwang, Chii-Ruey},
+  date = {1980-12-01},
+  journaltitle = {The Annals of Probability},
+  shortjournal = {Ann. Probab.},
+  volume = {8},
+  number = {6},
+  issn = {0091-1798},
+  doi = {10.1214/aop/1176994579},
+  url = {https://projecteuclid.org/journals/annals-of-probability/volume-8/issue-6/Laplaces-Method-Revisited-Weak-Convergence-of-Probability-Measures/10.1214/aop/1176994579.full},
+  urldate = {2024-08-15},
+  file = {/Users/ben/Zotero/storage/IUJ6WFJC/Hwang - 1980 - Laplace's Method Revisited Weak Convergence of Pr.pdf}
+}
+
+@article{andersonReversetimeDiffusionEquation1982,
+  title = {Reverse-Time Diffusion Equation Models},
+  author = {Anderson, Brian D.O.},
+  date = {1982-05},
+  journaltitle = {Stochastic Processes and their Applications},
+  shortjournal = {Stochastic Processes and their Applications},
+  volume = {12},
+  number = {3},
+  pages = {313--326},
+  issn = {03044149},
+  doi = {10.1016/0304-4149(82)90051-5},
+  url = {https://linkinghub.elsevier.com/retrieve/pii/0304414982900515},
+  urldate = {2024-08-15},
+  langid = {english}
 }

@@ -13,7 +13,7 @@
 \ProvidesClass{make_files/statsmsc}[2024/04/18 Thesis template for MSc in Statistics]
 
 \LoadClass[fontsize=12pt,headings=optiontohead,twoside=false, parskip=half]{scrbook}
-\counterwithout{section}{chapter}
+% \counterwithout{section}{chapter}
 \counterwithout{equation}{chapter}
 \setcounter{secnumdepth}{3}
 
@@ -43,8 +43,8 @@
 \RequirePackage[absolute]{textpos}
 
 % for bibtex
-\RequirePackage[round,authoryear,sort]{natbib}
-\setlength{\bibsep}{0em}
+% \RequirePackage[round,authoryear,sort]{natbib}
+% \setlength{\bibsep}{0em}
 %\usepackage[authoryear]{natbib}
 %\usepackage[numbers]{natbib}
 
@@ -91,7 +91,7 @@
 \begin{titlepage}
 \ifdefined\@logoimg
 \begin{textblock*}{8cm}(1.75cm,1.75cm)
-\includegraphics[width=70mm]{imperial_logo.pdf}
+\includegraphics[width=70mm]{assets/imperial_logo.pdf}
 \end{textblock*}
 \vspace*{1cm}
 \else
@@ -232,16 +232,3 @@ otherwise stated.
     \usefontofkomafont{title}%
     \normalsize%
 }
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%
-%     References/Bibliography
-%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
-% change Bibliography to References
-%\renewcommand{\bibname}{References}
-\renewcommand{\bibsection}{\section*{References}}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
