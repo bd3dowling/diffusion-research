@@ -1,13 +1,314 @@
 \chapter{SMC-Guided Conditional Diffusion Sampling}
 
-\section{\texttt{SMCOpt} for General Optimization Problems}
+\section{\texttt{SMCOpt} for General Optimization Problems} \label{sec:gen-opt}
 
-Text
+Consider some function $f: \mathcal{X} \to \mathbb{R}$ whose minima, $\{\mathbf{x}^*_i\}_{i=1}^M$,
+we wish to find. Consider $q(\mathbf{x}; \gamma) \propto \exp\{-\gamma f(\mathbf{x})\}$. Suppose we
+have some pre-trained score network which we can use to sample from $p_{\text{data}}$ via some
+$p_\theta$ in $T$ time-steps. Take $p_\theta$ as a prior for use in  \ref{prop:opt-sampling}. Write
+$\mathbf{x}_0 := \mathbf{x}$. Naieve targeting of
+$\pi(\mathbf{x}_0) \propto q(\mathbf{x}_0; \beta)p_\theta(\mathbf{x}_0)$ amounts to sampling
+$\mathbf{x}_0$ according to \ref{eq:uncond-sampling}, and using some form of MCMC-type sampling with
+annealing for $\beta$ to target \ref{eq:opt-target-inf}. In cases where $f$ is non-convex and/or
+induces a highly rugged loss landscape (`peaky'). This is highly inefficient and challenging
+to tune \parencite{kongDiffusionModelsConstrained2024}.
 
-\section{Inverse Problems as a Special Case}
+Instead, we consider using the intermediate unconditional transition functions of the diffusion
+model, $p_\theta(\mathbf{x}_{t} \mid \mathbf{x}_{t+1})$, and guide these with the objective
+function. Using some annealing schedule, $\gamma(t)$, we construct a sequence
+$\{q_t(\mathbf{x}_t; \gamma_t)\}_{t=0}^T$. Loosely (though concretely in
+\ref{sec:inv-prob-spec-case}), we may view $q_t$ as a likelihood, with $f$ emitting observations
+$\mathbf{y}_t$ based on $\mathbf{x}_t$. That is, we may consider $q_t(\mathbf{x_t}; \gamma_t)$
+as some $g(\mathbf{y}_t \mid \mathbf{x}_t)$. The task is now frameable through a Bayesian filtering
+lens, with the intermediate targets being
+\begin{equation}
+    p(\mathbf{x}_t \mid \mathbf{y}_{T:t}) \propto p(\mathbf{x}_t \mid \mathbf{y}_{T:t+1})g(\mathbf{y}_t \mid \mathbf{x}_t)
+\end{equation}
+(as in \ref{eq:bayesian-filtering-2} with time reversed). SMC methods provide a principled
+method of targeting these and ultimately
+$p(\mathbf{x}_0 \mid \mathbf{y}_{0:T}) \approx q_\infty \propto q(\mathbf{x}; \infty)p_\theta(\mathbf{x})$
+of \ref{prop:opt-sampling}, yielding $\{\mathbf{x}^*_i\}_{i=1}^M$.
 
-Text
+\begin{remark}[Diffusion Models Learn Data Manifolds]
+    A key feature which enables $p_\theta$ to act as a good prior is the ability of diffusion models
+    to implicitly learn the data manifold \parencite{debortoliDiffusionSchrOdinger2021,pidstrigachScoreBasedGenerativeModels2022,wenliangScorebasedGenerativeModels2023}.
+    In the context of optimization, the diffusion model essentially enables us to only consider
+    optimization over `sensible' values of $\mathbf{x}$; a feasibility constraint. Put differently,
+    the unconditional diffusion prior acts as a regularization to encourage optimization of $f$ over
+    $\mathcal{X} \subseteq \mathbb{R}^{d_x}$ as opposed to over all of $\mathbb{R}^{d_x}$.
+\end{remark}
+
+If we consider the \emph{bootstrap} proposal,
+$r(\cdot \mid \mathbf{x}_{t+1}, \mathbf{y}) = p_\theta(\cdot \mid \mathbf{x}_{t+1})$, then the
+weight function in \ref{eq:weight-func-gen} reduces to
+$g(\mathbf{y}_t \mid \mathbf{x}_t) = q_t(\mathbf{x}; \gamma_t)$, the `likelihood'. In the case where
+$q_t(\mathbf{x}_t; \gamma_t)$ is `peaky' over its support (which is guaranteed for $t$ close to 0
+assuming reasonable annealing), this will generally be a poor proposal
+\parencite{chopinIntroductionSequentialMonte2020}, as its akin to the `observations',
+$\mathbf{y}_t$, being informative about the `states', $\mathbf{x}_t$. The obvious remedy is to
+choose a better proposal. In the case of general optimization, however, this is a non-trivial task.
+
+Instead we consider using an \emph{auxiliary variable}, adjusting the weight
+for each particle based on their \emph{previous} likelihood. Heuristically, this implies we weight
+more heavily those particles whose likelihood \emph{significantly increases} compared to their
+previous position; we impose a form of regularization that implicitly discourages concentration on
+high likelihood regions near the initial distribution, $p(\mathbf{x}_T)$. Geometrically, this
+regularization may be viewed as dynamically flattening the optimization landscape for each particle
+based on its position. The role of $\gamma(t)$ is to provide global annealing of the landscape,
+gradually attenuating this dynamic effect and ultimately applying \ref{prop:opt-sampling} to
+enable sampling from $Q_\infty$. The full algorithm is described in \ref{alg:smc-opt}.
+
+\begin{algorithm}[ht]
+    \caption{\texttt{SMCOpt} for General Optimization} \label{alg:smc-opt}
+    \begin{algorithmic}
+        \Require $f: \mathcal{X} \to \mathbb{R}$, an objective function to \emph{minimize} (take $-f$ to \emph{maximize}).
+        \Require $s_\theta(\mathbf{x}_t, t)$, a pre-trained score network (or noise-predictor and apply \ref{prop:score-to-noise}).
+        \Require $r(\cdot \mid \mathbf{x}_{t+1}, \mathbf{y})$, a proposal distribution. Default to $p_\theta(\cdot \mid \mathbf{x}_{t+1})$.
+        \Require $\gamma(t)$, some annealing schedule.
+        \Require $N$, number of particles to use.
+        \State Draw $\mathbf{x}_T^{(i)} \sim \mathcal{N}(0, \mathbf{I}_{d_x}),\quad i=1,\ldots,N$
+        \For{$t \gets T-1$ to $0$}
+            \For {$i \gets 1$ to $N$}
+                \State \textbf{Move}: $\tilde{\mathbf{x}}_{t}^{(i)} \sim r(\cdot \mid \mathbf{x}_{t+1}, \mathbf{y})$
+                \State \textbf{Compute weight}:
+                \begin{equation}
+                    w_t^{(i)} \gets \frac{\exp\left\{-\gamma(t) f(\tilde{\mathbf{x}}_t^{(i)})\right\}}{\exp\left\{-\gamma(t+1) f(\mathbf{x}_{t+1}^{(i)})\right\}} \label{eq:weight-formula}
+                \end{equation}
+                \State \textbf{Normalise weight}: $W_t^{(i)} \gets \frac{w_t^{(i)}}{\sum_{i=1}^N w_t^{(i)}}$
+                \State \textbf{Resample}: $\{\mathbf{x}_{T:t}^{(i)}\}_{i=1}^N \sim \text{Multinomial}\left(\{\tilde{\mathbf{x}}_{T:t}^{(i)}\}_{i=1}^N; \{W_t^{(i)}\}_{i=1}^N\right)$
+            \EndFor
+        \EndFor
+        \State \textbf{return} $\{\mathbf{x}_0^{(i)}\}_{i=1}^N$, some summary statistic computed
+        using $\{w_0^{(i)}\}_{i=1}^N$, or some $\{\mathbf{x}_0^{(i)}\}_{i \in \mathcal{I}}$
+        subset which achieve the (perhaps within a threshold) minimal value amongst all particles.
+    \end{algorithmic}
+\end{algorithm}
+
+\begin{remark}[Auxiliary Variable]
+    The concept of using an auxiliary variable to adjust the weights is the foundation of the
+    \emph{auxiliary particle filter} \parencite{chopinIntroductionSequentialMonte2020} and can be
+    justified analytically. The exact procedure for auxiliary particle filters differs very slightly
+    from that described in \ref{def:smc}, mainly pertaining to how the intermediate distributions
+    are approximated from the particles. Since these intermediate distributions aren't actually of
+    principle interest we omit describing these adjustments.
+\end{remark}
+
+\begin{remark}[Gradient-free] \label{rem:grad-free}
+    Note that we don't require any gradient information about $f$. This makes \ref{alg:smc-opt}
+    suitable in black-box optimization settings where we might only be able to evaluate $f$ and
+    can't access its gradient (e.g. via back-propagation). However, where we can compute the
+    gradient, $\nabla_{\mathbf{x}_{t}} f(\mathbf{x}_{t})$, we can instead consider using
+    these gradients to `twist' \parencite{wuPracticalAsymptoticallyExact2023} the proposal
+    distribution, yielding a proposal $r_t(\cdot \mid \mathbf{x}_{t+1})$ closer to the true
+    `posterior', $p(\cdot \mid \mathbf{x}_{t+1}, \mathbf{y}_t)$, reducing the variance of the
+    weights and making the sampler more efficient (enabling lower number of particles, $N$).
+    We discuss alternative proposals in more detail in \ref{sec:relation-to-related}.
+    Alternatively, we may consider adding additional steps after moving the particles, nudging
+    (perhaps a subset of) the particles as in \textcite{akyildizNudgingParticleFilter2020}.
+    Note here though that even with access to gradients, the algorithm offers substantial
+    advantages over standard gradient-based optimization in cases where $f$ is `peaky'.
+    We demonstrate this experimentally in \ref{sec:branin}.
+\end{remark}
+
+\begin{remark}[Annealing-only]
+    In principle we could remove the auxiliary variable, and just tune the $\gamma(t)$
+    annealing schedule. In practice, however, this is extremely challenging and adds even heavier
+    dependence on the nature of $f$; in cases where it's very `peaky', the annealing schedule needs
+    to be unreasonably gentle (very slowly increasing from 0), which is often infeasible due to the
+    fixed $T$ time-steps that the diffusion sampler takes (would need to consider intermediate
+    diffusions with, for example, extra Langevin steps in a fashion like
+    \textcite{janatiDivideandConquerPosteriorSampling2024} to work around). The auxiliary variable
+    helps make the tuning of $\gamma(t)$ much easier by mitigating its importance in adequately
+    flattening and annealing the landscape. This was observed strongly in \ref{sec:branin}, for
+    example.
+    % As mentioned in \ref{rem:grad-free}, we might instead consider a more optimal proposal
+    % distribution. But the construction of such a proposal will be task specific and generally
+    % challenging; under certain assumptions on $f$ this is feasible, as discussed in
+    % \ref{sec:relation-to-related}.
+\end{remark}
+
+\begin{remark}[Adaptive Resampling]
+    In practice, we don't usually resample at every iteration in \ref{alg:smc-opt}, instead
+    resampling only when particle diversity falls below some certain threshold (typically using
+    effective sample size as a metric). Given this, the weight formula in \ref{eq:weight-formula} is
+    adjusted by pre-multiplying by the previous un-normalised weight (or 1 if resampled); the
+    procedure is otherwise identical. See \textcite{chopinIntroductionSequentialMonte2020} for
+    more information.
+\end{remark}
+
+\section{Inverse Problems as a Special Case} \label{sec:inv-prob-spec-case}
+
+\begin{proposition}[Obvservation Diffusion] \label{prop:obs-diffusion}
+    \textcite[Proposition B.1]{douDiffusionPosteriorSampling2023}.
+    Let $\mathbf{x}_t$ be generated according to the forward marginal of some diffusion process.
+    Let $\mathbf{y} = \mathbf{y}_0$ be some (linear) measurement we have about the clean sample,
+    $\mathbf{x}_0$. Construct a sequence $\{\mathbf{y}_t\}_{t=1}^T$ by:
+    \begin{equation*}
+        \mathbf{y}_t = a_t\cdot \mathbf{y}_{t-1} + b_t\cdot A\epsilon_t,\quad \epsilon_t \sim \mathcal{N}(0, \mathbf{I}_{d_y})
+    \end{equation*}
+    where $\epsilon_t$ is the same as used for forward noising $\mathbf{x}_0$ at time-step $t$.
+    It follows that:
+    \begin{equation}
+        \mathbf{Y}_t \mid \mathbf{X}_t = \mathbf{x}_t \sim \mathcal{N}(A\mathbf{x}_t, \sigma_y^2c_t^2\cdot \mathbf{I}_{d_y}) \label{eq:obs-likelihood}
+    \end{equation}
+    with $g(\mathbf{y}_0 \mid \mathbf{x}_0) = g(\mathbf{y} \mid \mathbf{x}_0) = \mathcal{N}(\mathbf{y}; A\mathbf{x}_0, \sigma_y^2\cdot \mathbf{I}_{d_y})$
+    exactly the measurement density.
+\end{proposition}
+
+From this, and \textcite[Remark B.1]{douDiffusionPosteriorSampling2023}, we can generate some
+$\{\mathbf{y}_t\}_{t=0}^T$ using the following proposition.
+
+\begin{proposition}[Observation Generation] \label{prop:obs-generation}
+    Considering the setup of \ref{prop:obs-diffusion}, we can generate some $\mathbf{y}_t$ according
+    to the measurement forwards marginal given by:
+    \begin{equation*}
+        \mathbf{Y}_t \mid \mathbf{X}_0 = \mathbf{x}_0 \sim \mathcal{N}(c_t\cdot A\mathbf{x}_0, \sigma_y^2c_t^2\cdot\mathbf{I}_{d_y} + d_t^2\cdot AA^\top)
+    \end{equation*}
+    Hence:
+    \begin{equation}
+        \mathbf{Y}_t \mid \mathbf{Y} = \mathbf{y} \sim \mathcal{N}(c_t\cdot \mathbf{y}, \sigma_y^2c_t^2\cdot\mathbf{I}_{d_y} + d_t^2\cdot AA^\top) \label{eq:obs-generation}
+    \end{equation}
+\end{proposition}
+
+\begin{proof}
+    See \ref{prf:obs-generation}
+\end{proof}
+
+\begin{remark}[Shrinking] \label{rem:shrinking}
+    The important characteristic of \ref{eq:obs-generation} is that it `shrinks' the
+    observations (or rather their mean) towards 0 (in tandem, theoretically, with how $\mathbf{x}_0$
+    is shrunk towards zero according to its forward process). This essentially creates an
+    \emph{aligned} observation sequence so that the likelihoods (i.e. density evaluations of
+    \ref{eq:obs-likelihood}) are sensibly sized, enabling their usage in SMC algorithms.
+\end{remark}
+
+Importantly, note that this generation does not depend on the clean sample, $\mathbf{x}_0$. As such,
+it can be generated prior to running the guided sampling and we may view sampling from
+$p(\mathbf{x}_0 \mid \mathbf{y})$ as a Bayesian filtering task. This is described succinctly in
+\textcite{douDiffusionPosteriorSampling2023}:
+\begin{quote}
+    We can generate a sample $\mathbf{x}_0$ from the Bayesian posterior distribution
+    $p_\theta(\mathbf{x}_0 \mid \mathbf{y}_0)$ by first sampling from
+    $p_\theta(\mathbf{y}_{1:T} \mid \mathbf{y}_0)$ before sampling from
+    $p_\theta(\mathbf{x}_0 \mid \mathbf{y}_{0:T})$. This is because
+    $p_\theta(\mathbf{x}_0 \mid \mathbf{y}_0) = \int p_\theta(\mathbf{x}_0 \mid \mathbf{y}_{0:T})p_\theta(\mathbf{y}_{1:T} \mid \mathbf{y}_0)\, d\mathbf{y}_{1:T}$.
+\end{quote}
+
+\begin{remark}[Backwards Generation]
+    Alternatively, $\{\mathbf{y}_t\}_{t=0}^T$ can be generated via the backwards process as
+    described in \textcite{douDiffusionPosteriorSampling2023}. This follows because where in the
+    backwards process for $\mathbf{x}_t$ we use an estimate of $\mathbf{x}_0$ (via Tweedie's
+    formula), for the observations we have $\mathbf{y}_0$, and an expression can be analytically
+    derived. We opt for the forwards approach for simplicity and generalizability.
+\end{remark}
+
+\begin{remark}[Dirac Generation] \label{rem:dirac-generation}
+    In practice, we may want to deterministically `shrink' the measurements to generate
+    $\{\mathbf{y}_t\}_{t=0}^T$. We may consider instead generating them according to:
+    \begin{equation}
+        \mathbf{Y}_t \mid \mathbf{Y} = \mathbf{y} \sim \delta(\mathbf{y}_t - c_t\cdot \mathbf{y}) \label{eq:dirac-gen}
+    \end{equation}
+    i.e. $\mathbf{y}_t = c_t\cdot \mathbf{y}$. This essentially ignores the variance terms of
+    \ref{eq:obs-generation} and amounts to simply shrinking the observation towards zero.
+    This removes the analytic guarantees derived in
+    \textcite{douDiffusionPosteriorSampling2023} when we use these in SMC; the general idea of
+    \ref{rem:shrinking} still applies. Given $\sigma_y^2$ is typically very small, and
+    $c_t^2,d_t^2 \in (0,1)$, this essentially assumes that $\det(AA^\top)$ is small. Whether this
+    holds or not depends on the specific linear inverse task. Note, however, that this approximation
+    can be applied to non-linear inverse tasks. This assumes that the true measurement-induced
+    distribution, $g(\mathbf{y}_t \mid \mathbf{x}_0)$ (which is not analytically available in the
+    non-linear case), likewise has very small variance.
+\end{remark}
+
+\begin{proposition}[Inverse Problem Objective]
+    Consider the following objective function:
+    \begin{equation}
+        f(\mathbf{x}_t) = -\frac{1}{2\sigma_y^2c_t^2}\Vert\mathbf{y}_t - A\mathbf{x}_t\Vert^2 \label{eq:inverse-objective}
+    \end{equation}
+    with $\mathbf{y}_t$ constructed from $\mathbf{y}$ according to \ref{eq:obs-generation} or
+    \ref{eq:dirac-gen} (though losing analytical validity). Plugging this in to
+    \ref{eq:weight-formula}, ignoring particle indices, the weight function reduces to:
+    \begin{equation}
+        w_t \gets \frac{\mathcal{N}(\mathbf{y}_t; A\tilde{\mathbf{x}}_t, \sigma_y^2c_t^2\mathbf{I}_{d_y})^{\gamma(t)}}{\mathcal{N}(\mathbf{y}_{t+1}; A\mathbf{x}_{t+1}, \sigma_y^2c_{t+1}^2\mathbf{I}_{d_y})^{\gamma(t+1)}} \label{eq:weight-formula-inverse}
+    \end{equation}
+\end{proposition}
+
+We see this is exactly the ratio of the likelihoods, annealed according to $\gamma(t)$. Its
+interpretation is exactly as in \ref{sec:gen-opt} except the notion of observations and posterior
+densities is now exact.
+
+\begin{remark}[Likelihood Maximization]
+    The choice of $f$ in \ref{eq:inverse-objective} essentially states that
+    we're choosing to maximize the likelihood, $g(\mathbf{y}_t \mid \mathbf{x}_t)$, meaning running
+    \ref{alg:smc-opt} seeks ultimately to yield those samples $\{\mathbf{x}_0^{(i)}\}_{i=1}^N$ which
+    maximize $g(\mathbf{y} \mid \mathbf{x}_0)$.
+\end{remark}
+
+\begin{remark}[Inner Tempering]
+    By symmetry of the Gaussian distribution, we have
+    $\mathcal{N}(\mathbf{y}_t; A\mathbf{x}_t, \sigma_y^2c_t^2\mathbf{I}_{d_y})=\mathcal{N}(A\mathbf{x}_t; \mathbf{y}_t, \sigma_y^2c_t^2\mathbf{I}_{d_y})$.
+    Noting $\EE{\mathbf{y}_t \mid \mathbf{y}} = c_t \mathbf{y}$, we see that there is essentially an
+    inner-level of tempering according to $c(t)$, defined by the unconditional diffusion model.
+    If we noise the observation according to \ref{eq:obs-generation}, it follows that we should be
+    able to take $\gamma(t) = 1\ \forall t$. If we noise the observation according to
+    \ref{eq:dirac-gen}, and in light of the variance assumptions discussed in
+    \ref{rem:dirac-generation}, we can view $\gamma(t)$ as providing further tempering to mitigate
+    these assumptions. In many settings (e.g. \ref{sec:gmm}), these assumptions are quite minor
+    and we can take $\gamma(t) = 1\ \forall t$ even when we use \ref{eq:dirac-gen}.
+\end{remark}
 
 \section{Relation to Related Work} \label{sec:relation-to-related}
 
-Text
+Taking $\mu_{t+1}(\mathbf{x}_{t+1}, \theta), \Sigma_{t+1}$ as the mean (e.g. \ref{eq:ddpm-mu}) and
+variance (e.g. \ref{eq:ddpm-sigma}) of the backwards transition kernel,
+$p_\theta(\mathbf{x}_t \mid \mathbf{x}_{t+1})$, the Monte Carlo Guided Diffusion (MCGDiff)
+\parencite{cardosoMonteCarloGuided2023} and Filter Posterior Sampling SMC (FPS-SMC)
+\parencite{douDiffusionPosteriorSampling2023} frameworks consider equivalent proposals:
+\begin{align*}
+    r(\tilde{\mathbf{x}}_{t} \mid \mathbf{x}_{t+1}, \mathbf{y}_t) &\propto p_\theta(\tilde{\mathbf{x}}_t \mid \mathbf{x}_{t+1})g(\mathbf{y}_{t} \mid \tilde{\mathbf{x}}_{t})
+    = \mathcal{N}(\mu^{*}_{t+1}(\mathbf{x}_{t+1}, \mathbf{y}_t, \theta), \Sigma_{t+1}^{*})
+\end{align*}
+(by Normal-Normal conjugacy) with
+\begin{align*}
+    \Sigma_{t+1}^{*} &= \left(\Sigma_{t+1}^{-1} + \frac{1}{\sigma_y^2c_t^2}\cdot A^\top A \right)^{-1} \\
+    \mu_{t+1}^{*}(\mathbf{x}_{t+1}, \mathbf{y}_t, \theta) &= \Sigma_{t+1}^{*}\cdot\left(\Sigma_{t+1}^{-1}\mu_{t+1}(\mathbf{x}_{t+1}, \theta) + \frac{1}{\sigma_y^2c_t^2}\cdot A^\top\mathbf{y}_t \right)
+\end{align*}
+and $\mathbf{y}_t$ constructed by \ref{eq:obs-generation} and $g$ as in \ref{eq:obs-likelihood}.
+Plugging this in to \ref{eq:weight-func-gen}, we get:
+\begin{align*}
+    w_t &= \int p_\theta(\tilde{\mathbf{x}}_t \mid \mathbf{x}_{t+1})g(\mathbf{y}_{t} \mid \tilde{\mathbf{x}}_{t})\, d\mathbf{x}_t
+    = g(\mathbf{y}_t \mid \mathbf{x}_{t+1}) \\
+    &= \mathcal{N}\left(\mathbf{y}_t; A\mu_{t+1}(\mathbf{x}_{t+1}, \theta), \sigma_y^2c_{t+1}^2\cdot\mathbf{I}_{d_y} + A\Sigma_{t+1}A^\top\right)
+\end{align*}
+where we apply \ref{prop:gaussian-exact}. Note this \emph{only} holds when we have a linear inverse
+problem; otherwise $g(\mathbf{y}_t \mid \mathbf{x}_{t+1})$ is intractable. In the case of FPS-SMC,
+these are exactly the weights used in the SMC procedure; in the case of MCGDiff they similarly
+use the previous likelihood, $g(\mathbf{y}_{t+1} \mid \mathbf{x}_{t+1})$, as an auxiliary variable.
+Through this lens, we may view MCGDiff as a special case of \ref{alg:smc-opt} where we choose:
+\begin{align*}
+    f(\tilde{\mathbf{x}}_t) &= g(\mathbf{y}_t \mid \mathbf{x}_{t+1}) \\
+    &= -\frac{1}{2}(\mathbf{y}_t - A\mu_{t+1}(\mathbf{x}_{t+1}, \theta))^\top\left(\sigma_y^2c_{t+1}^2\cdot\mathbf{I}_{d_y} + A\Sigma_{t+1}A^\top\right)^{-1}(\mathbf{y}_t - A\mu_{t+1}(\mathbf{x}_{t+1}, \theta))
+\end{align*}
+but keep the auxiliary variable (abusing notation) as
+$f(\mathbf{x}_{t+1}) = g(\mathbf{y}_{t+1} \mid \mathbf{x}_{t+1})$. The interpretation is very
+similar to before except rather than more strongly weighting those particles whose likelihood
+\emph{increased} relative to their previous position, we more strongly weight those whose whose
+likelihood \emph{will increase with the next transition} relative to their previous position more
+strongly. The idea is then to properly implement an auxiliary particle filter, and weight particles
+\emph{before} moving them. This generally should improve the performance since it's essentially
+`forward-looking'. However, it's important to note this can only be applied to \emph{linear
+inverse problems} due to the intractability of $g(\mathbf{y}_t \mid \mathbf{x}_{t+1})$ generally;
+it similarly cannot be applied for general optimization tasks.
+
+With that said, there is nothing prohibiting us from using other proposals, such as that of
+MCGDiff/FPS-SMC, in \ref{alg:smc-opt} while still using the same weight function
+\ref{eq:weight-formula-inverse}. As mentioned in \ref{rem:grad-free}, we could consider using
+gradients to construct the proposals. \textcite{wuPracticalAsymptoticallyExact2023} consider
+$\nabla_{\mathbf{x}_t}\log p_{\mathbf{y} \mid \hat{\mathbf{x}}_0(\mathbf{x}_t, \theta)}$ (with
+$\hat{\mathbf{x}}_0(\mathbf{x}_t, \theta)$ as in \ref{eq:tweedie}) computed using back-propagation
+through the network, $s_\theta$, to twist the proposal. \textcite{boysTweedieMomentProjected2023}
+consider $\nabla_{\mathbf{x}_t}\hat{\mathbf{x}}_0(\mathbf{x}_t, \theta)$ to choose a more optimal
+covariances in $p_\theta(\mathbf{x}_{t-1} \mid \mathbf{x}_t)$. Such methods incur additional
+computational cost and are, again, restricted to linear inverse problems. In such cases, however,
+the added efficiency of the proposal can (significantly) reduce the number of particles, $N$,
+mitigating some of this added computational cost.

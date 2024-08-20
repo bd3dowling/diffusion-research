@@ -10,5 +10,11 @@
         "**/*.synctex.gz": true,
         "**/.ruff_cache": true,
         "**/.venv": true,
-    }
+    },
+    "cSpell.words": [
+        "DDIM",
+        "DDPM",
+        "Ornstein",
+        "Uhlenbeck"
+    ]
 }
