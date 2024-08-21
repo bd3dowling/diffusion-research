@@ -806,22 +806,6 @@
   langid = {english}
 }
 
-@online{pidstrigachScoreBasedGenerativeModels2022a,
-  title = {Score-{{Based Generative Models Detect Manifolds}}},
-  author = {Pidstrigach, Jakiw},
-  date = {2022-10-15},
-  eprint = {2206.01018},
-  eprinttype = {arXiv},
-  eprintclass = {cs, math, stat},
-  doi = {10.48550/arXiv.2206.01018},
-  url = {http://arxiv.org/abs/2206.01018},
-  urldate = {2024-08-19},
-  abstract = {Score-based generative models (SGMs) need to approximate the scores \$\textbackslash nabla \textbackslash log p\_t\$ of the intermediate distributions as well as the final distribution \$p\_T\$ of the forward process. The theoretical underpinnings of the effects of these approximations are still lacking. We find precise conditions under which SGMs are able to produce samples from an underlying (low-dimensional) data manifold \$\textbackslash mathcal\{M\}\$. This assures us that SGMs are able to generate the "right kind of samples". For example, taking \$\textbackslash mathcal\{M\}\$ to be the subset of images of faces, we find conditions under which the SGM robustly produces an image of a face, even though the relative frequencies of these images might not accurately represent the true data generating distribution. Moreover, this analysis is a first step towards understanding the generalization properties of SGMs: Taking \$\textbackslash mathcal\{M\}\$ to be the set of all training samples, our results provide a precise description of when the SGM memorizes its training data.},
-  pubstate = {prepublished},
-  keywords = {68T99,Computer Science - Machine Learning,I.2.0,Mathematics - Numerical Analysis,Mathematics - Probability,Statistics - Machine Learning},
-  file = {/Users/ben/Zotero/storage/5FPM7LUR/Pidstrigach - 2022 - Score-Based Generative Models Detect Manifolds.pdf;/Users/ben/Zotero/storage/AWS56ZVU/2206.html}
-}
-
 @online{debortoliDiffusionSchrOdinger2021,
   title = {Diffusion {{Schr}}\textbackslash "odinger {{Bridge}} with {{Applications}} to {{Score-Based Generative Modeling}}},
   author = {De Bortoli, Valentin and Thornton, James and Heng, Jeremy and Doucet, Arnaud},
@@ -848,4 +832,50 @@
   pubstate = {prepublished},
   keywords = {Computer Science - Computer Vision and Pattern Recognition,Computer Science - Machine Learning,Statistics - Machine Learning},
   file = {/Users/ben/Zotero/storage/7VFZ2VM3/Wenliang and Moran - 2023 - Score-based generative models learn manifold-like .pdf;/Users/ben/Zotero/storage/9M3YEN6E/2311.html}
+}
+
+@inproceedings{pmlr-v37-sohl-dickstein15,
+  title = {Deep Unsupervised Learning Using Nonequilibrium Thermodynamics},
+  booktitle = {Proceedings of the 32nd International Conference on Machine Learning},
+  author = {Sohl-Dickstein, Jascha and Weiss, Eric and Maheswaranathan, Niru and Ganguli, Surya},
+  editor = {Bach, Francis and Blei, David},
+  date = {2015-07-07/2015-07-09},
+  series = {Proceedings of Machine Learning Research},
+  volume = {37},
+  pages = {2256--2265},
+  publisher = {PMLR},
+  location = {Lille, France},
+  url = {https://proceedings.mlr.press/v37/sohl-dickstein15.html},
+  abstract = {A central problem in machine learning involves modeling complex data-sets using highly flexible families of probability distributions in which learning, sampling, inference, and evaluation are still analytically or computationally tractable. Here, we develop an approach that simultaneously achieves both flexibility and tractability. The essential idea, inspired by non-equilibrium statistical physics, is to systematically and slowly destroy structure in a data distribution through an iterative forward diffusion process. We then learn a reverse diffusion process that restores structure in data, yielding a highly flexible and tractable generative model of the data. This approach allows us to rapidly learn, sample from, and evaluate probabilities in deep generative models with thousands of layers or time steps, as well as to compute conditional and posterior probabilities under the learned model. We additionally release an open source reference implementation of the algorithm.}
+}
+
+@online{hoVideoDiffusionModels2022,
+  title = {Video {{Diffusion Models}}},
+  author = {Ho, Jonathan and Salimans, Tim and Gritsenko, Alexey and Chan, William and Norouzi, Mohammad and Fleet, David J.},
+  date = {2022-06-22},
+  eprint = {2204.03458},
+  eprinttype = {arXiv},
+  eprintclass = {cs},
+  url = {http://arxiv.org/abs/2204.03458},
+  urldate = {2024-08-21},
+  abstract = {Generating temporally coherent high fidelity video is an important milestone in generative modeling research. We make progress towards this milestone by proposing a diffusion model for video generation that shows very promising initial results. Our model is a natural extension of the standard image diffusion architecture, and it enables jointly training from image and video data, which we find to reduce the variance of minibatch gradients and speed up optimization. To generate long and higher resolution videos we introduce a new conditional sampling technique for spatial and temporal video extension that performs better than previously proposed methods. We present the first results on a large text-conditioned video generation task, as well as state-of-the-art results on established benchmarks for video prediction and unconditional video generation. Supplementary material is available at https://video-diffusion.github.io/},
+  pubstate = {prepublished},
+  keywords = {Computer Science - Artificial Intelligence,Computer Science - Computer Vision and Pattern Recognition,Computer Science - Machine Learning},
+  file = {/Users/ben/Zotero/storage/ZPJXPXC2/Ho et al. - 2022 - Video Diffusion Models.pdf;/Users/ben/Zotero/storage/NI4RC6VF/2204.html}
+}
+
+@online{xuGeoDiffGeometricDiffusion2022,
+  title = {{{GeoDiff}}: A {{Geometric Diffusion Model}} for {{Molecular Conformation Generation}}},
+  shorttitle = {{{GeoDiff}}},
+  author = {Xu, Minkai and Yu, Lantao and Song, Yang and Shi, Chence and Ermon, Stefano and Tang, Jian},
+  date = {2022-03-06},
+  eprint = {2203.02923},
+  eprinttype = {arXiv},
+  eprintclass = {cs, q-bio},
+  url = {http://arxiv.org/abs/2203.02923},
+  urldate = {2024-08-21},
+  abstract = {Predicting molecular conformations from molecular graphs is a fundamental problem in cheminformatics and drug discovery. Recently, significant progress has been achieved with machine learning approaches, especially with deep generative models. Inspired by the diffusion process in classical non-equilibrium thermodynamics where heated particles will diffuse from original states to a noise distribution, in this paper, we propose a novel generative model named GeoDiff for molecular conformation prediction. GeoDiff treats each atom as a particle and learns to directly reverse the diffusion process (i.e., transforming from a noise distribution to stable conformations) as a Markov chain. Modeling such a generation process is however very challenging as the likelihood of conformations should be roto-translational invariant. We theoretically show that Markov chains evolving with equivariant Markov kernels can induce an invariant distribution by design, and further propose building blocks for the Markov kernels to preserve the desirable equivariance property. The whole framework can be efficiently trained in an end-to-end fashion by optimizing a weighted variational lower bound to the (conditional) likelihood. Experiments on multiple benchmarks show that GeoDiff is superior or comparable to existing state-of-the-art approaches, especially on large molecules.},
+  pubstate = {prepublished},
+  keywords = {Computer Science - Machine Learning,Quantitative Biology - Quantitative Methods},
+  file = {/Users/ben/Zotero/storage/RLPI3HQ7/Xu et al. - 2022 - GeoDiff a Geometric Diffusion Model for Molecular.pdf;/Users/ben/Zotero/storage/4KW6DB8W/2203.html}
 }

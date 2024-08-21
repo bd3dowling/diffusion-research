@@ -1,24 +1,62 @@
 \chapter{Introduction}
 
-\paragraph{Tips for the Introduction...} This is where you describe the topic and the research
-objectives of your project. 
+Score-based diffusion models
+\parencite{pmlr-v37-sohl-dickstein15,hoDenoisingDiffusionProbabilistic2020,songGenerativeModelingEstimating2020}
+have garnered significant attention for their ability to model complex data distributions,
+particularly in high-dimensional spaces such as image
+\parencite{dhariwalDiffusionModelsBeat2021,rombachHighResolutionImageSynthesis2021},
+video \parencite{hoVideoDiffusionModels2022}, and molecular
+\parencite{xuGeoDiffGeometricDiffusion2022} synthesis. These models operate by iteratively
+transforming noise into structured data, using a learned (Stein) score function, to effectively enable
+sampling from the underlying data distribution. Consequently, diffusion models have recently been
+considered as prior models for Bayesian posterior sampling tasks such as solving inverse problems
+\parencite{songGenerativeModelingEstimating2020} and, more recently, optimisation
+\parencite{krishnamoorthyDiffusionModelsBlackBox2023,guoGradientGuidanceDiffusion2024,kongDiffusionModelsConstrained2024}.
 
-You should attempt to set your work in the context of other work previously done in the field.
-Convey the background of your research referencing earlier work as appropriate. Define core terms.
-Include background and context, and focus as appropriate on the wider statistical context. Aim to
-demonstrate that you can confidently describe your project within a broader context of statistical
-research, as well as scientific research, that goes well beyond the more narrow topic of your
-project.
+There are roughly two core approaches to this posterior sampling task: training a conditional score
+network for the specific inverse problem
+\parencite{songGenerativeModelingEstimating2020,nicholGLIDEPhotorealisticImage2021, sahariaPaletteImagetoImageDiffusion2021,sahariaPhotorealisticTexttoImageDiffusion2022}
+or optimisation task \parencite{krishnamoorthyDiffusionModelsBlackBox2023,guoGradientGuidanceDiffusion2024};
+taking a pre-trained score network and guiding the generative process using approximations of the
+conditional score for inverse problems
+\parencite{chungDiffusionPosteriorSampling2022,song2023pseudoinverseguided,boysTweedieMomentProjected2023}
+or gradients of the objective for optimisation \parencite{kongDiffusionModelsConstrained2024}. We
+focus on the latter approach since it enables zero shot inference --- we can take any diffusion
+model and use it for inverse/optimisation tasks without needing access to labelled samples.
 
-The introduction needs to demonstrate that you are aware of what you are doing, and how it relates
-to other work that should be properly referenced. 
+We can view inverse problems as a special case of optimisation where the objective is the posterior
+density (i.e. maximum \emph{a posteriori} estimation of the data from the
+observations/conditioning variable). Hence, through the optimisation lens, we may view the prior
+diffusion model as imposing constraints on the optimisation procedure. These constraints ensure
+that outcomes of the optimisation procedure lie on or near the data manifold, representing
+realistic configurations \parencite{kongDiffusionModelsConstrained2024}.
 
-Clearly point out your main contributions at the end of the introduction, and provide an overview
-how the rest of your report is structured and links together. 
+Recent work has considered using sequential Monte Carlo (SMC) methods
+\parencite{chopinIntroductionSequentialMonte2020} to correct for the approximation errors incurred
+during the guiding process
+\parencite{trippeDiffusionProbabilisticModeling2023,cardosoMonteCarloGuided2023,douDiffusionPosteriorSampling2023,wuPracticalAsymptoticallyExact2023}.
+However, such frameworks have strictly focused on solving linear inverse problems.
+In this paper, we introduce \texttt{SMCDiffOpt}, a versatile framework that combines diffusion models
+with SMC methods to address both general optimization and inverse problems. Our framework views
+optimization as a posterior sampling problem from an annealed Boltzmann distribution, using
+diffusion models as priors and employing SMC methods to more effectively target the posterior
+distribution. It's also flexible, operating in zero-shot, accommodating different proposal
+distributions, and being able to operate without access to gradients of the objective, making it
+particularly effective in black-box optimization settings where only function evaluations are
+possible.
 
-Aim for approximately 1.5-3 pages, similar in style to a general science or statistics research
-paper\footnote{Tip: If you choose to use footnotes, do so sparingly.}.
+We contrast \texttt{SMCDiffOpt} with standard gradient-based optimizers on a synthetic optimisation
+task, highlighting its advantage at navigating complex optimization landscapes, including those
+with multiple optima. We also test it on the real-world SuperConductor black-box optimisation task
+\parencite{trabuccoDesignBenchBenchmarksDataDriven2022}, benchmarking it against other
+state-of-the-art approaches. Additionally, we demonstrate its performance and flexibility in solving
+inverse problems by comparing its posterior sampling efficiency to alternative methods on a
+synthetic Gaussian mixture model example.
 
-\newpage
-
-Text
+The paper is organized as follows: \hyperref[chap:background]{Section 2} reviews the relevant
+background on optimization, inverse problems, diffusion models, and SMC methods, as well as
+mentioning some related and alternative approaches. \hyperref[chap:methods]{Section 3} introduces
+the \texttt{SMCDiffOpt} framework, detailing its application to both general optimization tasks and
+inverse problems.  \hyperref[chap:experiments]{Section 4} presents experimental results, and
+\hyperref[chap:discussion]{Section 5} discusses the broader implications of our findings and
+suggests directions for future research.

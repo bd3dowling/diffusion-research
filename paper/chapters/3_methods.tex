@@ -1,6 +1,6 @@
-\chapter{SMC-Guided Conditional Diffusion Sampling}
+\chapter{SMC-Guided Conditional Diffusion Sampling} \label{chap:methods}
 
-\section{\texttt{SMCOpt} for General Optimization Problems} \label{sec:gen-opt}
+\section{\texttt{SMCDiffOpt} for General Optimization Problems} \label{sec:gen-opt}
 
 Consider some function $f: \mathcal{X} \to \mathbb{R}$ whose minima, $\{\mathbf{x}^*_i\}_{i=1}^M$,
 we wish to find. Consider $q(\mathbf{x}; \gamma) \propto \exp\{-\gamma f(\mathbf{x})\}$. Suppose we
@@ -59,7 +59,7 @@ gradually attenuating this dynamic effect and ultimately applying \ref{prop:opt-
 enable sampling from $Q_\infty$. The full algorithm is described in \ref{alg:smc-opt}.
 
 \begin{algorithm}[ht]
-    \caption{\texttt{SMCOpt} for General Optimization} \label{alg:smc-opt}
+    \caption{\texttt{SMCDiffOpt} for General Optimization} \label{alg:smc-opt}
     \begin{algorithmic}
         \Require $f: \mathcal{X} \to \mathbb{R}$, an objective function to \emph{minimize} (take $-f$ to \emph{maximize}).
         \Require $s_\theta(\mathbf{x}_t, t)$, a pre-trained score network (or noise-predictor and apply \ref{prop:score-to-noise}).
@@ -72,9 +72,9 @@ enable sampling from $Q_\infty$. The full algorithm is described in \ref{alg:smc
                 \State \textbf{Move}: $\tilde{\mathbf{x}}_{t}^{(i)} \sim r(\cdot \mid \mathbf{x}_{t+1}, \mathbf{y})$
                 \State \textbf{Compute weight}:
                 \begin{equation}
-                    w_t^{(i)} \gets \frac{\exp\left\{-\gamma(t) f(\tilde{\mathbf{x}}_t^{(i)})\right\}}{\exp\left\{-\gamma(t+1) f(\mathbf{x}_{t+1}^{(i)})\right\}} \label{eq:weight-formula}
+                    \omega_t^{(i)} \gets \frac{\exp\left\{-\gamma(t) f(\tilde{\mathbf{x}}_t^{(i)})\right\}}{\exp\left\{-\gamma(t+1) f(\mathbf{x}_{t+1}^{(i)})\right\}} \label{eq:weight-formula}
                 \end{equation}
-                \State \textbf{Normalise weight}: $W_t^{(i)} \gets \frac{w_t^{(i)}}{\sum_{i=1}^N w_t^{(i)}}$
+                \State \textbf{Normalise weight}: $W_t^{(i)} \gets \frac{\omega_t^{(i)}}{\sum_{i=1}^N \omega_t^{(i)}}$
                 \State \textbf{Resample}: $\{\mathbf{x}_{T:t}^{(i)}\}_{i=1}^N \sim \text{Multinomial}\left(\{\tilde{\mathbf{x}}_{T:t}^{(i)}\}_{i=1}^N; \{W_t^{(i)}\}_{i=1}^N\right)$
             \EndFor
         \EndFor
@@ -229,7 +229,7 @@ $p(\mathbf{x}_0 \mid \mathbf{y})$ as a Bayesian filtering task. This is describe
     \ref{eq:dirac-gen} (though losing analytical validity). Plugging this in to
     \ref{eq:weight-formula}, ignoring particle indices, the weight function reduces to:
     \begin{equation}
-        w_t \gets \frac{\mathcal{N}(\mathbf{y}_t; A\tilde{\mathbf{x}}_t, \sigma_y^2c_t^2\mathbf{I}_{d_y})^{\gamma(t)}}{\mathcal{N}(\mathbf{y}_{t+1}; A\mathbf{x}_{t+1}, \sigma_y^2c_{t+1}^2\mathbf{I}_{d_y})^{\gamma(t+1)}} \label{eq:weight-formula-inverse}
+        \omega_t \gets \frac{\mathcal{N}(\mathbf{y}_t; A\tilde{\mathbf{x}}_t, \sigma_y^2c_t^2\mathbf{I}_{d_y})^{\gamma(t)}}{\mathcal{N}(\mathbf{y}_{t+1}; A\mathbf{x}_{t+1}, \sigma_y^2c_{t+1}^2\mathbf{I}_{d_y})^{\gamma(t+1)}} \label{eq:weight-formula-inverse}
     \end{equation}
 \end{proposition}
 
@@ -276,7 +276,7 @@ $p_\theta(\mathbf{x}_t \mid \mathbf{x}_{t+1})$, the Monte Carlo Guided Diffusion
 and $\mathbf{y}_t$ constructed by \ref{eq:obs-generation} and $g$ as in \ref{eq:obs-likelihood}.
 Plugging this in to \ref{eq:weight-func-gen}, we get:
 \begin{align*}
-    w_t &= \int p_\theta(\tilde{\mathbf{x}}_t \mid \mathbf{x}_{t+1})g(\mathbf{y}_{t} \mid \tilde{\mathbf{x}}_{t})\, d\mathbf{x}_t
+    \omega_t &= \int p_\theta(\tilde{\mathbf{x}}_t \mid \mathbf{x}_{t+1})g(\mathbf{y}_{t} \mid \tilde{\mathbf{x}}_{t})\, d\mathbf{x}_t
     = g(\mathbf{y}_t \mid \mathbf{x}_{t+1}) \\
     &= \mathcal{N}\left(\mathbf{y}_t; A\mu_{t+1}(\mathbf{x}_{t+1}, \theta), \sigma_y^2c_{t+1}^2\cdot\mathbf{I}_{d_y} + A\Sigma_{t+1}A^\top\right)
 \end{align*}

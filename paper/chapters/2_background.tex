@@ -1,59 +1,17 @@
-\chapter{Background}
-
-% \paragraph{Tips for the Methods section.} In general, you may structure the main body of your report
-% in a form that suits your project best. We recommend to start with a substantial Methods section
-% that includes, as in a research paper, a description of the following:
-
-% \begin{itemize}
-%     \item Key definitions and setting using mathematical notation. Any terminology related to the
-%         topic/data needs to be clearly presented and explained to the reader.
-%     \item Any data used in the project should be clearly explained in sufficient detail in the
-%         Methods section so that readers can follow the rest of your report without the need to
-%         consult an other report or any of your references.
-%     \item If in the project you have generated simulated data, a clear presentation of the
-%         generative procedure needs to be included. 
-%     \item Background statistical work using mathematical notation.
-%     \item All maths should be presented in inline or display formulas with appropriate referencing.
-%         For example, use $\exp(x)$ not exp(x) and $\sin(\theta)$ not $sin(\theta)$ or sin($\theta$).
-%         Display formulas should be numbered using the equation environment if they are referenced in
-%         the main text. Display equation blocks should be numbered using the subequations
-%         environment:
-%         \begin{subequations}\label{eq:Y}
-%             \begin{align}
-%                 Y & = 1 + Z \label{eq:Y1} \\ 
-%                 Z & \sim \mathcal{N}(0,1) \label{eq:Y2},
-%             \end{align}
-%         \end{subequations}
-%         so that you can reference~\eqref{eq:Y}, ~\eqref{eq:Y1}, and ~\eqref{eq:Y2}.
-%     \item If your main findings are of an applied nature, you may prefer to describe any
-%         new/original statistical procedures or models here. Include the key derivations and proofs
-%         if there are any, and any supplementary derivations in the appendix. Clearly highlight your
-%         contribution relative to existing work. 
-%     \item If your main findings are of a theoretical nature, you may prefer to describe any
-%         new/original statistical procedures or models in the Results section.
-%     \item Structure your Methods section using LaTeX   subsections and reference them using labels.
-%     \item Aim for approximately 8-15 pages, similar in style to a general science or statistics
-%         research paper.
-% \end{itemize}
-
-\section{Notation}\label{sec:notation}
-
-\begin{itemize}
-    \item $\mathcal{X} \subseteq \mathbb{R}^{d_x}$ is the \emph{state space}.
-    \item $\mathcal{Y} \subseteq \mathbb{R}^{d_y}$ is the \emph{measurement space}.
-\end{itemize}
+\chapter{Background} \label{chap:background}
 
 \section{Inverse Problems}\label{sec:inverse-problems}
 
 \begin{definition}[Inverse Problem with Gaussian Noise]\label{def:inverse-problem}
-    Given  a data-point $\mathbf{x} \in \mathcal{X}$,
+    Given  a data-point $\mathbf{x} \in \mathcal{X} \subseteq \mathbb{R}^{d_x}$,
     denote some lossy measurement by
     \begin{equation}
         \mathbf{y} = m(\mathbf{x}) + \sigma_y\epsilon \in \mathcal{Y},\quad \epsilon \sim \mathcal{N}\left(0, \mathbf{I}_{d_y}\right) \label{eq:inverse-problem}
     \end{equation}
-    where $m: \mathcal{X} \to \mathcal{Y}$ is some \emph{measurement operator},
+    where $m: \mathcal{X} \to \mathcal{Y} \subseteq \mathbb{R}^{d_y}$ is some \emph{measurement operator},
     and $\sigma_y \in \mathbb{R}^+$ controls the measurement noise. The goal of an inverse problem
-    is to recover $\mathbf{x}$ from $\mathbf{y}$.
+    is to recover $\mathbf{x}$ from $\mathbf{y}$. We call $\mathcal{X}$ the \emph{state space} and
+    $\mathcal{Y}$ the \emph{measurement space}.
 \end{definition}
 
 \begin{definition}[Linear Inverse Problem]\label{def:linear-inverse-problem}
@@ -72,6 +30,13 @@
     generated according to \ref{eq:inverse-problem}, the goal of inferring the unblurred image,
     $\mathbf{x}$, represents a linear inverse problem.
 \end{example}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=1\textwidth]{assets/inverse_problems.png}
+    \caption{Examples of inverse problems for image data \parencite{douDiffusionPosteriorSampling2023}.}
+    \label{fig:inverse-problems}
+\end{figure}
 
 \begin{remark}[Bayesian Solution to Ill-posed Inverse Problems]
     Typically $d_x > d_y$, leading to a many-to-one $\mathbf{x} \rightarrow \mathbf{y}$ mapping
@@ -318,7 +283,7 @@ $\Sigma_t$. For DDPM, we have:
     $\{\mathbf{x}_t^{(i)}\}_{i=1}^N$, according to some initial distribution, $r_0(\cdot)$,
     moving them according to some \emph{proposal distribution},
     $r_t(\cdot \mid \mathbf{x}_{t-1}, \mathbf{y}_{t})$, weighting the particles according to
-    some weighting function, $w_t(\mathbf{x}_t, \mathbf{x}_{t-1}, \mathbf{y}_t)$, and
+    some weighting function, $\omega_t(\mathbf{x}_t, \mathbf{x}_{t-1}, \mathbf{y}_t)$, and
     resampling\footnote{We present multinomial resampling for simplicity, but in practice
     alternative methods, such as systematic resampling, are used due to inefficiencies in the
     multinomial scheme \parencite{chopinIntroductionSequentialMonte2020}} the particles according to
@@ -326,8 +291,8 @@ $\Sigma_t$. For DDPM, we have:
     from $t=1,\ldots,T$:
     \begin{itemize}
         \item \textbf{Propose}: $\tilde{\mathbf{x}}_t^{(i)} \sim r_t(\cdot \mid \mathbf{x}_{t-1}^{(i)}, \mathbf{y}_t), \quad i = 1,\ldots,N$
-        \item \textbf{Weight}: $w_t^{(i)} \leftarrow w_t(\tilde{\mathbf{x}}_t^{(i)}, \mathbf{x}_{t-1}^{(i)}, \mathbf{y}_t), \quad i = 1,\ldots,N$
-        \item \textbf{Resample}: $\{\mathbf{x}_{0:t}^{(i)}\}_{i=1}^N \sim \text{Multinomial}\left(\{\tilde{\mathbf{x}}_{0:t}^{(i)}\}_{i=1}^N; \{w_t^{(i)}\}_{i=1}^N\right)$
+        \item \textbf{Weight}: $\omega_t^{(i)} \leftarrow \omega_t(\tilde{\mathbf{x}}_t^{(i)}, \mathbf{x}_{t-1}^{(i)}, \mathbf{y}_t), \quad i = 1,\ldots,N$
+        \item \textbf{Resample}: $\{\mathbf{x}_{0:t}^{(i)}\}_{i=1}^N \sim \text{Multinomial}\left(\{\tilde{\mathbf{x}}_{0:t}^{(i)}\}_{i=1}^N; \{\omega_t^{(i)}\}_{i=1}^N\right)$
     \end{itemize}
     At the last step, we can yield an empirical distribution over the particles:
     \begin{equation*}
@@ -343,7 +308,7 @@ $\Sigma_t$. For DDPM, we have:
     filtering case for an SSM as in \ref{def:ssm}, the weight function is given by the ratio of the
     two \parencite{chopinIntroductionSequentialMonte2020}:
     \begin{align}
-        w_t^{(i)} &= \frac{p(\tilde{\mathbf{x}}_t^{(i)} \mid \mathbf{x}_{t-1}^{(i)}, \mathbf{y}_t)}{r_t(\tilde{\mathbf{x}}_t^{(i)} \mid \mathbf{x}_{t-1}^{(i)}, \mathbf{y}_{t})} \nonumber \\
+        \omega_t^{(i)} &= \frac{p(\tilde{\mathbf{x}}_t^{(i)} \mid \mathbf{x}_{t-1}^{(i)}, \mathbf{y}_t)}{r_t(\tilde{\mathbf{x}}_t^{(i)} \mid \mathbf{x}_{t-1}^{(i)}, \mathbf{y}_{t})} \nonumber \\
         &\propto \frac{f(\tilde{\mathbf{x}}_t \mid \mathbf{x}_{t-1}^{(i)})g(\mathbf{y}_t \mid \tilde{\mathbf{x}}_t^{(i)})}{r_t(\mathbf{x}_t \mid \mathbf{x}_{t-1}, \mathbf{y}_{t})} \label{eq:weight-func-gen}
     \end{align}
 \end{remark}
