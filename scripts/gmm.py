@@ -26,6 +26,13 @@ from diffusionlib.sampler.predictor_corrector import PCSampler
 from diffusionlib.sde import SDE, VP
 from diffusionlib.solver import EulerMaruyama
 
+from diffusionlib.mcg_diff.particle_filter import mcg_diff
+from diffusionlib.mcg_diff.sgm import ScoreModel
+from diffusionlib.mcg_diff.utils import (
+    NetReparametrized,
+    get_optimal_timesteps_from_singular_values,
+)
+
 
 # Config
 num_steps = 1000
@@ -37,17 +44,21 @@ beta_max = 20.0
 
 # Experimental Grid
 methods = (
-    SamplerName.SMC_DIFF_OPT,
-    SamplerName.MCG_DIFF,
     ConditioningMethodName.DIFFUSION_POSTERIOR_SAMPLING,
     ConditioningMethodName.PSEUDO_INVERSE_GUIDANCE,
     ConditioningMethodName.VJP_GUIDANCE,
+    SamplerName.MCG_DIFF,
+    SamplerName.SMC_DIFF_OPT,
 )
-sigma_ys = (0.1, 0.5, 1.0)
-dim_xs = (10,100)
+sigma_ys = (0.01, 0.1, 1.0)
+dim_xs = (8, 80)
 dim_ys = (1, 2, 4)
-seeds = (0, 10, 100, 1000, 404, 101)
+seeds = (0, 1, 10, 100, 1000)
 grid = it.product(methods, sigma_ys, dim_xs, dim_ys, seeds)
+
+
+def _jax_to_torch(array: Array) -> torch.Tensor:
+    return torch.from_numpy(jax.device_get(array).copy())
 
 
 def sliced_wasserstein(dist_1, dist_2, n_slices=100):
@@ -75,6 +86,7 @@ def get_model_fn(
         )
     )
 
+
 def get_score_fn(
     ou_dist: Callable[[Array], dist.MixtureSameFamily], sde: SDE
 ) -> Callable[[Array, Array], Array]:
@@ -89,6 +101,17 @@ def ou_mixt(mean_coeff: float, means: Array, dim_x: int, weights: Array) -> dist
         component_distribution=dist.MultivariateNormal(loc=means, covariance_matrix=covs),
         mixing_distribution=dist.CategoricalProbs(weights),
     )
+
+
+def ou_mixt_torch(alpha_t, means, dim, weights):
+    cat = torch.distributions.Categorical(weights, validate_args=False)
+
+    ou_norm = torch.distributions.MultivariateNormal(
+        torch.vstack(tuple((alpha_t**0.5) * m for m in means)),
+        torch.eye(dim).repeat(len(means), 1, 1),
+        validate_args=False,
+    )
+    return torch.distributions.MixtureSameFamily(cat, ou_norm, validate_args=False)
 
 
 # Define posterior
@@ -201,6 +224,13 @@ def extended_svd(a: Array) -> tuple[Array, Array, Array, Array]:
     return u, s, v, coordinate_mask
 
 
+def build_extended_svd_torch(A: torch.Tensor):
+    U, d, V = torch.linalg.svd(A, full_matrices=True)
+    coordinate_mask = torch.ones_like(V[0])
+    coordinate_mask[len(d) :] = 0
+    return U, d, coordinate_mask, V
+
+
 def generate_measurement_equations(
     dim_x: int,
     dim_y: int,
@@ -246,6 +276,7 @@ def experiment(
 ) -> float:
     print(f"{method=}, {dim_x=}, {dim_y=}, {measurement_noise_std=}, {seed=}")
     key = random.PRNGKey(seed)
+    torch.manual_seed(seed)
 
     # Build prior (equal weighted, grid GMM)
     means = [
@@ -285,8 +316,7 @@ def experiment(
     key, sub_key = random.split(key)
     posterior_samples = posterior.sample(sub_key, (num_samples,))
 
-
-    if isinstance(method, SamplerName):
+    if method == SamplerName.SMC_DIFF_OPT:
         guided_sampler = get_sampler(
             method,
             base_sampler=sampler,
@@ -294,16 +324,75 @@ def experiment(
             obs_noise=measurement_noise_std,
             num_particles=num_samples,
         )
+    # NOTE: janking in to ensure not user issue for bad results...
+    elif method == SamplerName.MCG_DIFF:
+        a = _jax_to_torch(a)
+        init_obs = _jax_to_torch(init_obs)
+        alphas_cumprod = _jax_to_torch(sampler.alphas_cumprod)
+        means = [_jax_to_torch(mean) for mean in means]
+        weights = _jax_to_torch(weights)
+
+        u, diag, coordinate_mask, v = build_extended_svd_torch(a)
+
+        from functools import partial
+
+        ou_mixt_fun = partial(ou_mixt_torch, means=means, dim=dim_x, weights=weights)
+        score_network = lambda x, alpha_t: torch.func.grad(
+            lambda y: ou_mixt_fun(alpha_t).log_prob(y).sum()
+        )(x)
+
+        score_model = ScoreModel(
+            NetReparametrized(
+                base_score_module=lambda x, t: -score_network(x, alphas_cumprod[t])
+                * ((1 - alphas_cumprod[t]) ** 0.5),
+                orthogonal_transformation=v,
+            ),
+            alphas_cumprod=alphas_cumprod,
+            device="cpu",
+        )
+
+        adapted_timesteps = get_optimal_timesteps_from_singular_values(
+            alphas_cumprod=alphas_cumprod,
+            singular_value=diag,
+            n_timesteps=100,
+            var=measurement_noise_std,
+            mode="else",
+        )
+
+        def mcg_diff_fun(initial_samples):
+            samples, log_weights = mcg_diff(
+                initial_particles=initial_samples,
+                observation=(u.T @ init_obs),
+                score_model=score_model,
+                likelihood_diagonal=diag,
+                coordinates_mask=coordinate_mask.bool(),
+                var_observation=measurement_noise_std,
+                timesteps=adapted_timesteps,
+                eta=1,
+                gaussian_var=1e-8,
+            )
+            return (
+                samples[
+                    torch.distributions.Categorical(logits=log_weights, validate_args=False).sample(
+                        sample_shape=(num_samples,)
+                    )
+                ] @ v
+            )
+
+        # particle_samples = torch.func.vmap(mcg_diff_fun, in_dims=(0,), randomness="different")(
+        #     torch.randn(size=(num_samples, 1000, dim_x))
+        # )
+        particle_samples = mcg_diff_fun(torch.randn(size=(num_samples, dim_x)))
     else:
         cond_method = get_conditioning_method(
             name=method,
             sde=sde.reverse(score),
             y=jnp.tile(init_obs, (num_samples, 1)),
             H=a,
-            HHT=a@a.T,
+            HHT=a @ a.T,
             observation_map=lambda x: a @ x.flatten(),
             shape=(num_samples, dim_x),
-            scale=num_steps + 0.05, # DPS scale
+            scale=num_steps + 0.05,  # DPS scale
             noise_std=measurement_noise_std,
         )
         solver = EulerMaruyama(
@@ -311,13 +400,13 @@ def experiment(
         )
         guided_sampler = PCSampler(shape=(num_samples, dim_x), outer_solver=solver)
 
-
-    smc_particle_samples = guided_sampler.sample(key, y=init_obs, ESSrmin=0.9)
+    if method != SamplerName.MCG_DIFF:
+        particle_samples = guided_sampler.sample(key, y=init_obs, ESSrmin=0.8)
 
     sliced_wasserstein_distance = sliced_wasserstein(
         dist_1=np.array(posterior_samples),
-        dist_2=np.array(smc_particle_samples),
-        n_slices=10000,
+        dist_2=np.array(particle_samples),
+        n_slices=10_000,
     )
 
     return sliced_wasserstein_distance
@@ -335,11 +424,14 @@ def save_results(results, filename):
 
 
 if __name__ == "__main__":
-    results_file = "gmm.csv"
+    results_file = "gmm-2.csv"
     exp_results = load_existing_results(results_file)
 
     # Convert existing results to a set of tuples for quick lookup
-    existing_combinations = set((res["method"], res["sigma_y"], res["dim_x"], res["dim_y"], res["seed"]) for res in exp_results)
+    existing_combinations = set(
+        (res["method"], res["sigma_y"], res["dim_x"], res["dim_y"], res["seed"])
+        for res in exp_results
+    )
 
     for method, sigma_y, dim_x, dim_y, seed in grid:
         if (method, sigma_y, dim_x, dim_y, seed) in existing_combinations:
@@ -359,4 +451,6 @@ if __name__ == "__main__":
 
         # Save the current results to the CSV
         save_results(exp_results, results_file)
-        print(f"Saved results for: sigma_y={sigma_y}, dim_x={dim_x}, dim_y={dim_y}")
+        print(
+            f"Saved results for: method={method}, sigma_y={sigma_y}, dim_x={dim_x}, dim_y={dim_y}"
+        )
