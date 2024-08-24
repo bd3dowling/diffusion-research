@@ -38,7 +38,7 @@ beta_max = 20.0
 # Experimental Grid
 methods = (
     SamplerName.SMC_DIFF_OPT,
-    # SamplerName.MCG_DIFF,
+    SamplerName.MCG_DIFF,
     ConditioningMethodName.DIFFUSION_POSTERIOR_SAMPLING,
     ConditioningMethodName.PSEUDO_INVERSE_GUIDANCE,
     ConditioningMethodName.VJP_GUIDANCE,
@@ -312,7 +312,7 @@ def experiment(
         guided_sampler = PCSampler(shape=(num_samples, dim_x), outer_solver=solver)
 
 
-    smc_particle_samples = guided_sampler.sample(key, y=init_obs)
+    smc_particle_samples = guided_sampler.sample(key, y=init_obs, ESSrmin=0.9)
 
     sliced_wasserstein_distance = sliced_wasserstein(
         dist_1=np.array(posterior_samples),

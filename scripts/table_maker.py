@@ -7,7 +7,7 @@ col_names = {
     "dim_x": r"$d_x$",
     "dim_y": r"$d_y$",
     "smc_diff_opt": "SMCDiffOpt",
-    # "mcg_diff": "MCGDiff",
+    "mcg_diff": "MCGDiff",
     "diffusion_posterior_sampling": "DPS",
     "pseudo_inverse_guidance": r"$\Pi$IGD",
     "vjp_guidance": "TMPD",
@@ -34,8 +34,8 @@ print(
         aggfunc=lambda x: ''.join(x)
     )
     .reset_index()
-    # .reindex(columns=["dim_x", "dim_y", "smc_diff_opt", "mcg_diff", "diffusion_posterior_sampling", "pseudo_inverse_guidance", "vjp_guidance"])
-    .reindex(columns=["dim_x", "dim_y", "smc_diff_opt", "diffusion_posterior_sampling", "pseudo_inverse_guidance", "vjp_guidance"])
+    .reindex(columns=["dim_x", "dim_y", "smc_diff_opt", "mcg_diff", "diffusion_posterior_sampling", "pseudo_inverse_guidance", "vjp_guidance"])
+    # .reindex(columns=["dim_x", "dim_y", "smc_diff_opt", "diffusion_posterior_sampling", "pseudo_inverse_guidance", "vjp_guidance"])
     .rename(columns=col_names)
     .to_latex(index=False)
 )
@@ -62,8 +62,8 @@ print(
     )
     .reset_index()
     .assign(sigma_y = lambda frame: frame["sigma_y"].round(1).astype(str))
-    # .reindex(columns=["sigma_y", "dim_x", "dim_y", "smc_diff_opt", "mcg_diff", "diffusion_posterior_sampling", "pseudo_inverse_guidance", "vjp_guidance"])
-    .reindex(columns=["sigma_y", "dim_x", "dim_y", "smc_diff_opt", "diffusion_posterior_sampling", "pseudo_inverse_guidance", "vjp_guidance"])
+    .reindex(columns=["sigma_y", "dim_x", "dim_y", "smc_diff_opt", "mcg_diff", "diffusion_posterior_sampling", "pseudo_inverse_guidance", "vjp_guidance"])
+    # .reindex(columns=["sigma_y", "dim_x", "dim_y", "smc_diff_opt", "diffusion_posterior_sampling", "pseudo_inverse_guidance", "vjp_guidance"])
     .rename(columns=col_names)
     .to_latex(index=False)
 )
