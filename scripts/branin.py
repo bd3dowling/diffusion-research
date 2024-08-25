@@ -383,14 +383,14 @@ if __name__ == "__main__":
     adam_trajectories = optimize_with_adam_and_trajectories(
         get_branin(),
         start_points,
-        learning_rate=0.01,
+        learning_rate=0.05,
         num_iterations=1000,
     )
 
     adam_trajectories_2 = optimize_with_adam_and_trajectories(
         get_branin(),
         4 * start_points,
-        learning_rate=0.01,
+        learning_rate=0.05,
         num_iterations=1000,
     )
 
@@ -425,28 +425,73 @@ if __name__ == "__main__":
         beta_min=BETA_MIN,
         beta_max=BETA_MAX,
         eta=1.0,  # NOTE: equates to using DDPM
-        stack_samples=True,
     )
+
+    # Prior samples
+    key, sub_key = random.split(key)
+    prior_samples = sampler.sample(sub_key)
 
     # Get optimizer
     optimizer = SMCDiffOptOptimizer(base_sampler=sampler, gamma_t=lambda t: 1 - d_t(t))
 
     # Get optimizer trajectories
-    particle_samples = optimizer.optimize(key, get_branin_vec())
+    particle_samples = jnp.array(optimizer.optimize(key, get_branin_vec(), stack_samples=True))
 
-    # Particle samples
+    # Prior samples plot
     fig, ax = plot_branin_contour(x_1_meshpoints, x_2_meshpoints, branin_values, minima_points)
     ax.add_patch(get_ellipse())
     ax.scatter(
-        x=particle_samples[:, 0],
-        y=particle_samples[:, 1],
+        x=prior_samples[:, 0],
+        y=prior_samples[:, 1],
         alpha=0.8,
         color="orange",
         edgecolors="black",
         lw=0.5,
         s=10,
-        label="Particles"
+        label="Prior Samples",
+    )
+    ax.legend()
+    plt.savefig("paper/assets/smc_branin_prior.pdf", format="pdf", bbox_inches="tight")
+    plt.close(fig)
+
+    # Particle samples plot
+    fig, ax = plot_branin_contour(x_1_meshpoints, x_2_meshpoints, branin_values, minima_points)
+    ax.add_patch(get_ellipse())
+    ax.scatter(
+        x=particle_samples[-1, :, 0],
+        y=particle_samples[-1, :, 1],
+        alpha=0.8,
+        color="orange",
+        edgecolors="black",
+        lw=0.5,
+        s=10,
+        label="Particles",
     )
     ax.legend()
     plt.savefig("paper/assets/smc_branin.pdf", format="pdf", bbox_inches="tight")
+    plt.close(fig)
+
+    # Plot the mean values over time
+    branin = get_branin_vec()
+    particle_branins = branin(particle_samples.reshape(-1, 2)).reshape(1000, 1000)
+    mean_particle_branins = jnp.mean(particle_branins, axis=1)
+
+    fig, ax = plt.subplots(figsize=(10, 5))
+
+    ax.plot(mean_particle_branins, label="Particle Mean")
+    ax.axhline(y=0.397887, color="red", linestyle="--", label="Global Minimum")
+
+    ax.set_xlabel(r"$t$")
+    ax.set_ylabel("Branin Value")
+
+    ticks = jnp.arange(0, 1001, 200)
+    ax.set_xticks(ticks)
+    ax.set_xticklabels(ticks[::-1])
+
+    ax.legend()
+    ax.grid()
+
+    # Display the plot
+    plt.tight_layout()
+    plt.savefig("paper/assets/smc_branin_mean_val.pdf", format="pdf", bbox_inches="tight")
     plt.close(fig)

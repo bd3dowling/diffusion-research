@@ -26,9 +26,9 @@ COLOR_ALGORITHM = "#ff7878"
 NUM_STEPS = 1000
 NUM_SAMPLES = 1000
 SIGMA_Y = 1.0
-DIM_X = 10
+DIM_X = 8
 DIM_Y = 2
-SEED = 0
+SEED = 100
 
 SIZE = 8.0  # mean multiplier
 CENTER_RANGE = np.array((-2, 2))
@@ -36,10 +36,10 @@ BETA_MIN = 0.01
 BETA_MAX = 20.0
 
 CHART_LIMS = SIZE * (CENTER_RANGE + np.array((-0.5, 0.5)))
+CHART_TICKS = np.arange(CENTER_RANGE[0] * SIZE, CENTER_RANGE[1] * (SIZE + 1), SIZE)
 
 methods = (
     SamplerName.SMC_DIFF_OPT,
-    # SamplerName.MCG_DIFF,
     ConditioningMethodName.DIFFUSION_POSTERIOR_SAMPLING,
     ConditioningMethodName.PSEUDO_INVERSE_GUIDANCE,
     ConditioningMethodName.VJP_GUIDANCE,
@@ -294,6 +294,46 @@ sampler = DDIMVP(
     stack_samples=True,
 )
 
+# %%
+key, sub_key = random.split(key)
+prior_samples = sampler.sample(sub_key)
+
+# Plot model prior samples
+fig, ax = plt.subplots(figsize=(6, 6))
+
+# Axes
+ax.axhline(0, color="black", linewidth=0.5)
+ax.axvline(0, color="black", linewidth=0.5)
+
+# Samples
+ax.scatter(
+    x=prior_samples[0, :, 0],
+    y=prior_samples[0, :, 1],
+    color=COLOR_ALGORITHM,
+    alpha=0.5,
+    edgecolors="black",
+    lw=0.5,
+    s=10,
+)
+
+# Limits
+ax.set_xlim(*CHART_LIMS)
+ax.set_ylim(*CHART_LIMS)
+
+ax.set_xticks(CHART_TICKS)
+ax.set_yticks(CHART_TICKS)
+
+# Labels
+ax.set_xlabel(r"$x_1$")
+ax.set_ylabel(r"$x_2$")
+
+ax.grid(True)
+
+plt.tight_layout()
+plt.savefig("paper/assets/gmm_prior_samples.pdf", format="pdf", bbox_inches="tight")
+plt.close(fig)
+
+# %%
 # Setup inverse problem
 key, sub_key = random.split(key)
 
@@ -340,9 +380,56 @@ title_map = {
     ConditioningMethodName.VJP_GUIDANCE: "TMPD",
 }
 
-fig, axs = plt.subplots(nrows=1, ncols=len(methods), figsize=(6 * len(methods), 6))
+smc_samples = particle_samples[SamplerName.SMC_DIFF_OPT]
 
-for (method, samples), ax in zip(particle_samples.items(), axs.flatten()):
+fig, ax = plt.subplots(nrows=1, ncols=1, figsize=(6, 6))
+
+ax.axhline(0, color="black", lw=0.5)
+ax.axvline(0, color="black", lw=0.5)
+
+# True posterior samples
+ax.scatter(
+    x=posterior_samples[:, 0],
+    y=posterior_samples[:, 1],
+    color=COLOR_POSTERIOR,
+    alpha=0.5,
+    edgecolors="black",
+    lw=0.5,
+    s=10,
+)
+
+# Particle samples
+ax.scatter(
+    x=smc_samples[-1, :, 0],
+    y=smc_samples[-1, :, 1],
+    color=COLOR_ALGORITHM,
+    alpha=0.5,
+    edgecolors="black",
+    lw=0.5,
+    s=10,
+)
+
+# Limits
+ax.set_xlim(*CHART_LIMS)
+ax.set_ylim(*CHART_LIMS)
+
+ax.set_xticks(CHART_TICKS)
+ax.set_yticks(CHART_TICKS)
+
+# Labels
+ax.set_xlabel("$x_1$")
+ax.set_ylabel("$x_2$")
+
+ax.grid(True)
+
+plt.tight_layout()
+plt.savefig("paper/assets/gmm_smc_samples.pdf", format="pdf", bbox_inches="tight")
+plt.close(fig)
+
+# %%
+fig, axs = plt.subplots(nrows=1, ncols=len(methods), figsize=(6 * len(methods), 6), sharey=True)
+
+for i, ((method, samples), ax) in enumerate(zip(particle_samples.items(), axs.flatten())):
     ax.axhline(0, color="black", lw=0.5)
     ax.axvline(0, color="black", lw=0.5)
 
@@ -372,13 +459,18 @@ for (method, samples), ax in zip(particle_samples.items(), axs.flatten()):
     ax.set_xlim(*CHART_LIMS)
     ax.set_ylim(*CHART_LIMS)
 
+    ax.set_xticks(CHART_TICKS)
+    ax.set_yticks(CHART_TICKS)
+
     # Labels
-    ax.set_xlabel("$x_1$")
-    ax.set_ylabel("$x_2$")
     ax.set_title(f"{title_map[method]}")
+    ax.set_xlabel("$x_1$")
+    if i == 0:
+        ax.set_ylabel("$x_2$")
 
     ax.grid(True)
 
+plt.tight_layout()
 plt.savefig("paper/assets/gmm_samples.pdf", format="pdf", bbox_inches="tight")
 plt.close(fig)
 
@@ -410,6 +502,8 @@ ax.set_xticklabels(ticks[::-1])
 
 ax.legend()
 ax.grid(True)
+
+plt.tight_layout()
 plt.savefig("paper/assets/gmm_log_likelihoods.pdf", format="pdf", bbox_inches="tight")
 plt.close(fig)
 
@@ -442,5 +536,6 @@ ax.set_xticklabels(ticks[::-1])
 ax.legend()
 ax.grid(True)
 
+plt.tight_layout()
 plt.savefig("paper/assets/gmm_posterior_densities.pdf", format="pdf", bbox_inches="tight")
 plt.close(fig)
