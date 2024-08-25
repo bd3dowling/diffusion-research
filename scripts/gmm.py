@@ -44,11 +44,11 @@ beta_max = 20.0
 
 # Experimental Grid
 methods = (
+    SamplerName.SMC_DIFF_OPT,
     ConditioningMethodName.DIFFUSION_POSTERIOR_SAMPLING,
     ConditioningMethodName.PSEUDO_INVERSE_GUIDANCE,
     ConditioningMethodName.VJP_GUIDANCE,
     SamplerName.MCG_DIFF,
-    SamplerName.SMC_DIFF_OPT,
 )
 sigma_ys = (0.01, 0.1, 1.0)
 dim_xs = (8, 80)
@@ -372,16 +372,24 @@ def experiment(
                 gaussian_var=1e-8,
             )
             return (
-                samples[
+                v.T
+                @ samples[
                     torch.distributions.Categorical(logits=log_weights, validate_args=False).sample(
-                        sample_shape=(num_samples,)
+                        sample_shape=(1,)
                     )
-                ] @ v
+                ][0]
             )
+            # return (
+            #     samples[
+            #         torch.distributions.Categorical(logits=log_weights, validate_args=False).sample(
+            #             sample_shape=(num_samples,)
+            #         )
+            #     ] @ v
+            # )
 
-        # particle_samples = torch.func.vmap(mcg_diff_fun, in_dims=(0,), randomness="different")(
-        #     torch.randn(size=(num_samples, 1000, dim_x))
-        # )
+        particle_samples = torch.func.vmap(mcg_diff_fun, in_dims=(0,), randomness="different")(
+            torch.randn(size=(1, 1000, dim_x))
+        )
         particle_samples = mcg_diff_fun(torch.randn(size=(num_samples, dim_x)))
     else:
         cond_method = get_conditioning_method(
