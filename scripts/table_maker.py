@@ -1,6 +1,6 @@
 import pandas as pd
 
-df = pd.read_csv("gmm-2.csv")
+df = pd.read_csv("gmm.csv")
 
 col_names = {
     "sigma_y": r"$\sigma_y$",
