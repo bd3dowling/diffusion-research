@@ -2,70 +2,78 @@
 \addcontentsline{toc}{chapter}{Appendices}
 \markboth{Appendices}{Appendices}
 
-\section{Figures}\label{sec:figures}
-
-\begin{figure}[htbp]
-    \centering
-    \includegraphics[width=0.9\textwidth]{assets/fig1.pdf}
-    \caption{An example scatterplot (left) and box plot (right).}
-    \label{fig:axis-label-example}
-\end{figure}
-
-\newpage
-
-\section{Tables}\label{sec:tables}
+\section{Additional Tables and Figures}\label{sec:tables}
 
 \begin{table}[ht]
-\centering
-\begin{tabular}{rr}
-  \hline
-    $z$& $\textrm{P}(Z < z)$ \\
-  \hline
-    1.281& 0.900\\
-    1.645& 0.950\\
-    1.960& 0.975\\
-    2.326& 0.990 \\
-    2.576& 0.995 \\
-   \hline
-\end{tabular}
-    \caption{Partial table showing values of $z$ for $\textrm{P}(Z < z)$, 
-    where $Z$ has a standard normal distribution.}
-    \label{tab:normal}
+    \centering
+    \begin{tabular}{lllllll}
+        \toprule
+        $\sigma_y$ & $d_x$ & $d_y$ & SMCDiffOpt & DPS & $\Pi$IGD & TMPD \\
+        \midrule
+        \multirow[t]{6}{*}{0.0} & \multirow[t]{3}{*}{8} & 1 & 0.98 ± 0.44 & 8.22 ± 7.32 & 3.15 ± 2.58 & 3.5 ± 2.67 \\
+         &  & 2 & 0.55 ± 0.43 & 0.41 ± 0.29 & 0.33 ± 0.27 & 0.44 ± 0.34 \\
+         &  & 4 & 0.21 ± 0.07 & 0.12 ± 0.06 & 0.09 ± 0.03 & 0.08 ± 0.04 \\
+        \cline{2-7}
+         & \multirow[t]{3}{*}{80} & 1 & 0.75 ± 0.31 & 2.45 ± 1.79 & 3.18 ± 2.6 & 2.66 ± 1.47 \\
+         &  & 2 & 1.22 ± 1.04 & 1.35 ± 1.21 & 0.33 ± 0.27 & 0.81 ± 0.68 \\
+         &  & 4 & 0.26 ± 0.05 & 0.97 ± 0.86 & 0.08 ± 0.02 & 0.68 ± 0.44 \\
+        \cline{1-7} \cline{2-7}
+        \multirow[t]{6}{*}{0.1} & \multirow[t]{3}{*}{8} & 1 & 1.13 ± 0.51 & 8.18 ± 7.5 & 3.22 ± 2.67 & 3.11 ± 2.31 \\
+         &  & 2 & 0.2 ± 0.07 & 0.38 ± 0.28 & 0.19 ± 0.13 & 0.43 ± 0.34 \\
+         &  & 4 & 0.15 ± 0.05 & 0.16 ± 0.06 & 0.07 ± 0.01 & 0.06 ± 0.01 \\
+        \cline{2-7}
+         & \multirow[t]{3}{*}{80} & 1 & 1.25 ± 1.02 & 2.51 ± 2.11 & 2.93 ± 2.56 & 2.56 ± 1.18 \\
+         &  & 2 & 0.45 ± 0.32 & 1.27 ± 1.14 & 0.62 ± 0.56 & 0.66 ± 0.54 \\
+         &  & 4 & 0.23 ± 0.06 & 1.03 ± 0.9 & 0.08 ± 0.02 & 0.63 ± 0.34 \\
+        \cline{1-7} \cline{2-7}
+        \multirow[t]{6}{*}{1.0} & \multirow[t]{3}{*}{8} & 1 & 1.35 ± 1.0 & 6.62 ± 4.96 & 1.16 ± 0.72 & 1.35 ± 0.9 \\
+         &  & 2 & 0.44 ± 0.28 & 2.92 ± 2.42 & 0.94 ± 0.89 & 1.44 ± 1.15 \\
+         &  & 4 & 0.15 ± 0.03 & 1.19 ± 0.66 & 0.1 ± 0.03 & 0.45 ± 0.26 \\
+        \cline{2-7}
+         & \multirow[t]{3}{*}{80} & 1 & 1.69 ± 1.37 & 5.26 ± 4.4 & 1.2 ± 0.79 & 1.23 ± 0.53 \\
+         &  & 2 & 0.89 ± 0.78 & 3.21 ± 2.95 & 1.68 ± 1.62 & 1.41 ± 1.16 \\
+         &  & 4 & 1.12 ± 0.92 & 1.54 ± 0.99 & 0.89 ± 0.74 & 1.37 ± 0.67 \\
+        \cline{1-7} \cline{2-7}
+        \bottomrule
+    \end{tabular}
+    \caption{Sliced-Wasserstein distances for different $\sigma_y$.}
+    \label{tab:gmm-sigma-split}
 \end{table}
 
 \newpage
 
 \section{Proofs}\label{sec:proofs}
 
-\begin{proof} \label{prf:obs-generation}
-    (\hyperref[prop:obs-generation]{Proposition \ref{prop:obs-generation}}).
+\begin{proof}[Proof of \autoref{prop:obs-gen}] \label{prf:obs-generation}
     Given:
     \begin{align*}
-        \mathbf{X}_t \mid \mathbf{X}_0 = \mathbf{x}_0 \sim \mathcal{N}(c_t\cdot\mathbf{x}_0, d_t^2\cdot\mathbf{I}_{d_x}) \\
-        \mathbf{Y}_t \mid \mathbf{X}_t = \mathbf{x}_t \sim \mathcal{N}(A\mathbf{x}_t, \sigma_y^2c_t^2\cdot\mathbf{I}_{d_y})
+        \mathbf{X}_t \mid \mathbf{X}_0 = \mathbf{x}_0 &\sim \mathcal{N}(c_t\cdot\mathbf{x}_0, d_t^2\cdot\mathbf{I}_{d_x}) \\
+        \mathbf{Y}_t \mid \mathbf{Y}_0 = \mathbf{y}_0 &\sim \delta(\mathbf{y}_t - c_t\cdot \mathbf{y}_0) \\
+        \mathbf{Y}_0 \mid \mathbf{X}_0 = \mathbf{x}_0 &\sim \mathcal{N}(A\mathbf{x}_t, \sigma_y^2\mathbf{I}_{d_y})
     \end{align*}
     We have:
     \begin{align*}
-        \EE{\mathbf{Y}_t \mid \mathbf{X}_0} &= \EE{\EE{\mathbf{Y}_t \mid \mathbf{X}_t} \mid \mathbf{X}_0} \\
-        &= \EE{A\mathbf{X}_t \mid \mathbf{X}_0} \\
-        &= A\EE{\mathbf{X}_t \mid \mathbf{X}_0} \\
+        \EE{\mathbf{Y}_t \mid \mathbf{X}_0} &= \EE{\EE{\mathbf{Y}_t \mid \mathbf{Y}_0} \mid \mathbf{X}_0} \\
+        &= \EE{c_t\cdot \mathbf{Y}_0 \mid \mathbf{X}_0} \\
         &= c_t\cdot A\mathbf{X}_0
     \end{align*}
     and
     \begin{align*}
-        \VV{\mathbf{Y}_t \mid \mathbf{X}_0} &= \EE{\VV{\mathbf{Y}_t \mid \mathbf{X}_t} \mid \mathbf{X}_0} + \VV{\EE{\mathbf{Y}_t \mid \mathbf{X}_t} \mid \mathbf{X}_0} \\
-        &= \EE{\sigma_y^2c_t^2\cdot \mathbf{I}_{d_y} \mid \mathbf{X}_0} + \VV{A\mathbf{X}_t \mid \mathbf{X}_0} \\
-        &= \sigma_y^2c_t^2\cdot \mathbf{I}_{d_y} + A\VV{\mathbf{X}_t \mid \mathbf{X}_0}A^\top \\
-        &= \sigma_y^2c_t^2\cdot \mathbf{I}_{d_y} + d_t^2\cdot AA^\top
+        \VV{\mathbf{Y}_t \mid \mathbf{X}_0} &= \EE{\VV{\mathbf{Y}_t \mid \mathbf{Y}_0} \mid \mathbf{X}_0} + \VV{\EE{\mathbf{Y}_t \mid \mathbf{Y}_0} \mid \mathbf{X}_0} \\
+        &= \VV{c_t\cdot \mathbf{Y}_0 \mid \mathbf{X}_0} \\
+        &= c_t^2\sigma_y^2\cdot \mathbf{I}_{d_y}
     \end{align*}
     Hence:
     \begin{equation*}
-        \mathbf{Y}_t \mid \mathbf{X}_0 = \mathbf{x}_0 \sim \mathcal{N}(c_t\cdot A\mathbf{x}_0, \sigma_y^2c_t^2\cdot \mathbf{I}_{d_y} + d_t^2\cdot AA^\top)
+        \mathbf{Y}_t \mid \mathbf{X}_0 = \mathbf{x}_0 \sim \mathcal{N}(c_t\cdot A\mathbf{x}_0, \sigma_y^2c_t^2\cdot \mathbf{I}_{d_y})
     \end{equation*}
-    But we note that $\mathbf{Y} = A\mathbf{X}_0$. Hence:
-    \begin{equation*}
-        \mathbf{Y}_t \mid \mathbf{Y} = \mathbf{y} \sim \mathcal{N}(c_t\cdot \mathbf{y}, \sigma_y^2c_t^2\cdot \mathbf{I}_{d_y} + d_t^2\cdot AA^\top)
-    \end{equation*}
+    Further:
+    \begin{align*}
+        A\mathbf{X}_t \mid \mathbf{X}_0 = \mathbf{x}_0 &\sim \mathcal{N}(c_t\cdot A\mathbf{x}_0, d_t^2\cdot AA^\top) \\
+        \implies \mathbf{Y}_t - A\mathbf{X}_t \mid \mathbf{X}_0 = \mathbf{x}_0 &\sim \mathcal{N}(0, \sigma_y^2c_t^2\cdot \mathbf{I}_{d_y} + d_t^2\cdot AA^\top) \\
+        \implies \mathbf{Y}_t \mid \mathbf{X}_t = \mathbf{x}_t &\sim \mathcal{N}(A\mathbf{x}_t, \sigma_y^2c_t^2\cdot \mathbf{I}_{d_y} + d_t^2\cdot AA^\top)
+    \end{align*}
+
 \end{proof}
 
 \begin{proposition}[Gaussian-Gaussian Exactness for Linear Observations] \label{prop:gaussian-exact}
@@ -114,9 +122,83 @@
     \end{align*}
 \end{proof}
 
-\section{Extra}
+\newpage
 
-\begin{remark}[DDIM Representation]
+\section{Further Experimental Details} \label{sec:experimental-extra}
+
+\paragraph{Gaussian Mixture Model} We initially aimed to include MCGdiff
+\parencite{cardosoMonteCarloGuided2023} in our comparison. However, we were unable to reproduce
+their results, even using the code on their repository. Indeed, we found that the resulting sliced
+Wasserstein distances from MCGdiff were almost uniformly larger (worse) than those of
+\text{SMCDiffOpt} on each experimental run (i.e. given identical setups and pseudo-RNG seeds). This
+is doubly unexpected since the results we were seeing don't align with those found in their paper,
+and since theoretically their proposal should be more optimal than ours for this particular task;
+if we take the values they give in Table 1 of their paper and compare them with those in
+\autoref{tab:gmm} we see this is indeed the case. Given the time constraints, the exhaustion of all
+obvious potential author-errors, and assuming the validity of their results, we opted to omit our
+results from a comparison. For posterity, we provide in \autoref{tab:gmm-mcg} the results including
+MCGdiff but note with caution that we lack confidence in such figures.
+
+\begin{table}[ht]
+    \centering
+    \begin{tabular}{llllllll}
+        \toprule
+        $\sigma_y$ & $d_x$ & $d_y$ & SMCDiffOpt & MCGDiff & DPS & $\Pi$IGD & TMPD \\
+        \midrule
+        \multirow[t]{6}{*}{0.0} & \multirow[t]{3}{*}{8} & 1 & 0.98 ± 0.44 & 0.95 ± 0.44 & 8.22 ± 7.32 & 3.15 ± 2.58 & 3.5 ± 2.67 \\
+         &  & 2 & 0.55 ± 0.43 & 0.39 ± 0.33 & 0.41 ± 0.29 & 0.33 ± 0.27 & 0.44 ± 0.34 \\
+         &  & 4 & 0.21 ± 0.07 & 0.15 ± 0.09 & 0.12 ± 0.06 & 0.09 ± 0.03 & 0.08 ± 0.04 \\
+        \cline{2-8}
+         & \multirow[t]{3}{*}{80} & 1 & 0.75 ± 0.31 & 1.06 ± 0.77 & 2.45 ± 1.79 & 3.18 ± 2.6 & 2.66 ± 1.47 \\
+         &  & 2 & 1.22 ± 1.04 & 2.31 ± 2.21 & 1.35 ± 1.21 & 0.33 ± 0.27 & 0.81 ± 0.68 \\
+         &  & 4 & 0.26 ± 0.05 & 2.22 ± 1.92 & 0.97 ± 0.86 & 0.08 ± 0.02 & 0.68 ± 0.44 \\
+        \cline{1-8} \cline{2-8}
+        \multirow[t]{6}{*}{0.1} & \multirow[t]{3}{*}{8} & 1 & 1.13 ± 0.51 & 0.79 ± 0.62 & 8.18 ± 7.5 & 3.22 ± 2.67 & 3.11 ± 2.31 \\
+         &  & 2 & 0.2 ± 0.07 & 1.15 ± 1.09 & 0.38 ± 0.28 & 0.19 ± 0.13 & 0.43 ± 0.34 \\
+         &  & 4 & 0.15 ± 0.05 & 0.25 ± 0.12 & 0.16 ± 0.06 & 0.07 ± 0.01 & 0.06 ± 0.01 \\
+        \cline{2-8}
+         & \multirow[t]{3}{*}{80} & 1 & 1.25 ± 1.02 & 1.26 ± 0.87 & 2.51 ± 2.11 & 2.93 ± 2.56 & 2.56 ± 1.18 \\
+         &  & 2 & 0.45 ± 0.32 & 3.06 ± 2.93 & 1.27 ± 1.14 & 0.62 ± 0.56 & 0.66 ± 0.54 \\
+         &  & 4 & 0.23 ± 0.06 & 3.34 ± 3.01 & 1.03 ± 0.9 & 0.08 ± 0.02 & 0.63 ± 0.34 \\
+        \cline{1-8} \cline{2-8}
+        \multirow[t]{6}{*}{1.0} & \multirow[t]{3}{*}{8} & 1 & 1.35 ± 1.0 & 1.14 ± 0.7 & 6.62 ± 4.96 & 1.16 ± 0.72 & 1.35 ± 0.9 \\
+         &  & 2 & 0.44 ± 0.28 & 1.11 ± 1.04 & 2.92 ± 2.42 & 0.94 ± 0.89 & 1.44 ± 1.15 \\
+         &  & 4 & 0.15 ± 0.03 & 0.12 ± 0.06 & 1.19 ± 0.66 & 0.1 ± 0.03 & 0.45 ± 0.26 \\
+        \cline{2-8}
+         & \multirow[t]{3}{*}{80} & 1 & 1.69 ± 1.37 & 1.49 ± 0.75 & 5.26 ± 4.4 & 1.2 ± 0.79 & 1.23 ± 0.53 \\
+         &  & 2 & 0.89 ± 0.78 & 2.08 ± 1.97 & 3.21 ± 2.95 & 1.68 ± 1.62 & 1.41 ± 1.16 \\
+         &  & 4 & 1.12 ± 0.92 & 4.52 ± 2.55 & 1.54 ± 0.99 & 0.89 ± 0.74 & 1.37 ± 0.67 \\
+        \cline{1-8} \cline{2-8}
+        \bottomrule
+    \end{tabular}
+    \caption{Sliced-Wasserstein distances for GMM experiment with MCGdiff included. These results
+    do not align with those in \textcite{cardosoMonteCarloGuided2023}, despite running exactly
+    the script in their repository.}
+    \label{tab:gmm-mcg}
+\end{table}
+
+\paragraph{Branin Optimization} \textbf{TODO}: Model architecture description...
+
+\newpage
+
+\section{Additional Background and Related Works} \label{sec:extra}
+
+\paragraph{Diffusion Models}
+
+\begin{remark}[SDE Representation] \label{rem:sde-rep}
+    The DDPM approach corresponds to a discretized time rescaled Ornstein-Uhlenbeck process
+    \parencite{boysTweedieMomentProjected2023,songScoreBasedGenerativeModeling2021}:
+    $$
+    d\mathbf{x}_t = -\frac{1}{2}\beta(t)\mathbf{x}_t dt + \sqrt{\beta(t)}d\mathbf{w}_t
+    $$
+    and is often referred to as the variance-preserving SDE
+    \parencite{songScoreBasedGenerativeModeling2021}. Going forwards, we will stick to the Markov
+    (discretised) representation, but ultimately they are equivalent when it comes to sampling.
+    This point is worth noting though as the SDE representation is what analytically justifies the
+    backwards process (see \autoref{ftnt:sde-rep}).
+\end{remark}
+
+\begin{remark}[DDIM Representation] \label{rem:ddim}
     Under DDIM:
     \begin{equation*}
         u_t = \sqrt{\alpha_{t-1}} \quad
@@ -136,3 +218,34 @@
     whereby we can sample from the backwards process in fewer time-steps. In this paper, we don't
     consider such re-spacing though in principle our methodology does not prohibit it.
 \end{remark}
+
+\paragraph{FPS-SMC}
+
+Rather than \autoref{eq:obs-gen}, \textcite{douDiffusionPosteriorSampling2023} instead considers
+a ``shared-noise'' or ``duplex'' diffusion:
+
+\begin{proposition}[Obvservation Diffusion] \label{prop:obs-diffusion}
+    \textcite[Proposition B.1]{douDiffusionPosteriorSampling2023}.
+    Let $\mathbf{x}_t$ be generated according to the forward marginal of some diffusion process.
+    Let $\mathbf{y} = \mathbf{y}_0$ be some (linear) measurement we have about the clean sample,
+    $\mathbf{x}_0$. Construct a sequence $\{\mathbf{y}_t\}_{t=1}^T$ by:
+    \begin{equation*}
+        \mathbf{y}_t = a_t\cdot \mathbf{y}_{t-1} + b_t\cdot A\epsilon_t,\quad \epsilon_t \sim \mathcal{N}(0, \mathbf{I}_{d_y})
+    \end{equation*}
+    where $\epsilon_t$ is the \emph{same} as used for forward noising $\mathbf{x}_0$ at time-step $t$.
+    It follows that:
+    \begin{equation}
+        \mathbf{Y}_t \mid \mathbf{X}_t = \mathbf{x}_t \sim \mathcal{N}(A\mathbf{x}_t, \sigma_y^2c_t^2\cdot \mathbf{I}_{d_y}) \label{eq:obs-likelihood-dou}
+    \end{equation}
+    with $g(\mathbf{y}_0 \mid \mathbf{x}_0) = g(\mathbf{y} \mid \mathbf{x}_0) = \mathcal{N}(\mathbf{y}; A\mathbf{x}_0, \sigma_y^2\cdot \mathbf{I}_{d_y})$
+    exactly the measurement density.
+\end{proposition}
+
+Note because of the noise-sharing, we get cancellation in the covariance of the likelihood, dropping
+the $d_t^2\cdot AA^\top$ term as in \autoref{eq:obs-likelihood}.
+
+Based on \autoref{prop:obs-diffusion} and \textcite[Remark B.1]{douDiffusionPosteriorSampling2023},
+we can generate some $\{\mathbf{y}_t\}_{t=0}^T$ either forwards or \emph{backwards}.
+The latter follows because where in the backwards process for $\mathbf{x}_t$ we use an estimate of
+$\mathbf{x}_0$ (via Tweedie's formula), for the observations we have $\mathbf{y}_0$, and an
+expression can be analytically derived.

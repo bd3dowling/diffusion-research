@@ -22,10 +22,10 @@ conditional score for inverse problems
 \parencite{chungDiffusionPosteriorSampling2022,song2023pseudoinverseguided,boysTweedieMomentProjected2023}
 or gradients of the objective for optimisation \parencite{kongDiffusionModelsConstrained2024}. We
 focus on the latter approach since it enables zero shot inference --- we can take any diffusion
-model and use it for inverse/optimisation tasks without needing access to labelled samples.
+model and use it for any inverse/optimisation tasks without needing access to labelled samples.
 
 We can view inverse problems as a special case of optimisation where the objective is the posterior
-density (i.e. maximum \emph{a posteriori} estimation of the data from the
+density (i.e. maximum \emph{a posteriori} estimation of the state (data) from the
 observations/conditioning variable). Hence, through the optimisation lens, we may view the prior
 diffusion model as imposing constraints on the optimisation procedure. These constraints ensure
 that outcomes of the optimisation procedure lie on or near the data manifold, representing
@@ -41,8 +41,8 @@ with SMC methods to address both general optimization and inverse problems. Our 
 optimization as a posterior sampling problem from an annealed Boltzmann distribution, using
 diffusion models as priors and employing SMC methods to more effectively target the posterior
 distribution. It's also flexible, operating in zero-shot, accommodating different proposal
-distributions, and being able to operate without access to gradients of the objective, making it
-particularly effective in black-box optimization settings where only function evaluations are
+distributions, and being able to operate without access to gradients of the objective --- this makes
+it particularly effective in black-box optimization settings where only function evaluations are
 possible.
 
 We contrast \texttt{SMCDiffOpt} with standard gradient-based optimizers on a synthetic optimisation

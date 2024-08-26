@@ -51,13 +51,14 @@
 %% Theorem environment and numbering
 \theoremstyle{definition}
 \newtheorem{definition}{Definition}[section]
-\newtheorem{theorem}[definition]{Theorem}
-\newtheorem{proposition}[definition]{Proposition}
-\newtheorem{lemma}[definition]{Lemma}
-\newtheorem{corollary}[definition]{Corollary}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}{Proposition}[section]
+\newtheorem{lemma}{Lemma}[section]
+\newtheorem{corollary}{Corollary}[section]
+
 %% making example same as definition style
-\newtheorem{example}[definition]{Example}
-\newtheorem{remark}[definition]{Remark}
+\newtheorem{example}{Example}[section]
+\newtheorem{remark}{Remark}[section]
 
 % fixing proof environment
 \renewenvironment{proof}[1][\proofname]%

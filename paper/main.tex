@@ -2,6 +2,13 @@
 \usepackage{make_files/packages}
 \usepackage{make_files/macros}
 
+\renewcommand{\chapterautorefname}{Chapter}
+\renewcommand{\sectionautorefname}{Section}
+\newcommand{\definitionautorefname}{Definition}
+\newcommand{\propositionautorefname}{Proposition}
+\newcommand{\remarkautorefname}{Remark}
+\newcommand{\algorithmautorefname}{Algorithm}
+
 \addbibresource{references.bib}
 
 \title{Sequential Monte Carlo Guided Diffusion Sampling for General Optimization}
@@ -31,6 +38,8 @@
 \pagenumbering{arabic}
 \renewcommand*{\thepage}{A.\arabic{page}}
 \renewcommand{\thesection}{\Alph{section}}
+\renewcommand{\thetable}{\thesection.\arabic{table}}
+\renewcommand{\thefigure}{\thesection.\arabic{table}}
 
 \appendix
 \include{chapters/7_appendix}

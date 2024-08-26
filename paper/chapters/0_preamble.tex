@@ -7,8 +7,8 @@
     I want to give special thanks to my supervisor, Dr Deniz Akyildiz, who has provided excellent
     guidance over the course of this work. The dedication of his time towards answering my questions
     and suggesting avenues to explore went beyond expectations and was greatly appreciated.
-    I also want to thank Benjamin Boys for meeting with me several times and providing insightful
-    and guiding discussions related to this research.
+    I also want to thank Benjamin Boys for meeting with me several times, providing insightful
+    and guiding discussions related to this research, and for providing access to his code.
     I also want to give special thanks to my family for their continued support of my studies and
     for providing me the resources needed to excel.
     Lastly, I want to thank my fianc\'ee for her support over this challenging past year; without
@@ -17,10 +17,10 @@
 
 \begin{abstract}
     Diffusion models have have been shown to learn underlying data distributions, even in
-    high-dimensional settings as demonstrated by their state-of-the-art performance on image and
-    video synthesis tasks. From a Bayesian perspective, this makes them suitable as prior models.
-    Recent research has explored how to accurately \emph{guide} the diffusion process for posterior
-    sampling. Such methods have primarily focused on solving ill-posed inverse problems by
+    high-dimensional settings as demonstrated by their state-of-the-art performance on image, video
+    and molecular synthesis tasks. From a Bayesian perspective, this makes them suitable as prior
+    models. Recent research has explored how to accurately \emph{guide} the diffusion process for
+    posterior sampling. Such methods have primarily focused on solving ill-posed inverse problems by
     approximating the time conditional score function to use in the reverse sampling steps. In this
     paper, we present a novel and general framework, \texttt{SMCDiffOpt}, for guiding diffusion models
     with sequential Monte Carlo methods. The framework considers inverse problems as a special case
@@ -29,9 +29,9 @@
     a prior. This framework can be applied even in settings where gradients are not available,
     making it both computationally efficient and applicable in black-box optimization settings.
     Relatedly, this framework does not necessitate conditional score approximations though can
-    flexibly accommodate doing so through different \emph{twistings} of the proposal distribution.
-    We demonstrate the efficacy of the algorithm through experiments on synthetic and real-world
-    inverse problems and optimization tasks.
+    flexibly accommodate them for better sampling efficiency. We demonstrate the efficacy of the
+    algorithm through experiments on synthetic and real-world inverse problems and optimization
+    tasks.
 \end{abstract}
 
 \tableofcontents
