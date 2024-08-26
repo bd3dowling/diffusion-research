@@ -295,45 +295,6 @@ sampler = DDIMVP(
 )
 
 # %%
-key, sub_key = random.split(key)
-prior_samples = sampler.sample(sub_key)
-
-# Plot model prior samples
-fig, ax = plt.subplots(figsize=(6, 6))
-
-# Axes
-ax.axhline(0, color="black", linewidth=0.5)
-ax.axvline(0, color="black", linewidth=0.5)
-
-# Samples
-ax.scatter(
-    x=prior_samples[0, :, 0],
-    y=prior_samples[0, :, 1],
-    color=COLOR_ALGORITHM,
-    alpha=0.5,
-    edgecolors="black",
-    lw=0.5,
-    s=10,
-)
-
-# Limits
-ax.set_xlim(*CHART_LIMS)
-ax.set_ylim(*CHART_LIMS)
-
-ax.set_xticks(CHART_TICKS)
-ax.set_yticks(CHART_TICKS)
-
-# Labels
-ax.set_xlabel(r"$x_1$")
-ax.set_ylabel(r"$x_2$")
-
-ax.grid(True)
-
-plt.tight_layout()
-plt.savefig("paper/assets/gmm_prior_samples.pdf", format="pdf", bbox_inches="tight")
-plt.close(fig)
-
-# %%
 # Setup inverse problem
 key, sub_key = random.split(key)
 
@@ -372,6 +333,58 @@ particle_samples = {
 }
 
 # %%
+key, sub_key = random.split(key)
+prior_samples = sampler.sample(sub_key)
+
+# Plot model prior samples
+fig, ax = plt.subplots(figsize=(6, 6))
+
+# Axes
+ax.axhline(0, color="black", linewidth=0.5)
+ax.axvline(0, color="black", linewidth=0.5)
+
+# Samples
+ax.scatter(
+    x=prior_samples[0, :, 0],
+    y=prior_samples[0, :, 1],
+    color=COLOR_ALGORITHM,
+    alpha=0.5,
+    edgecolors="black",
+    lw=0.5,
+    s=10,
+    label="Unguided Samples",
+)
+
+ax.scatter(
+    x=posterior_samples[:, 0],
+    y=posterior_samples[:, 1],
+    color=COLOR_POSTERIOR,
+    alpha=0.5,
+    edgecolors="black",
+    lw=0.5,
+    s=10,
+    label="Posterior Samples",
+)
+
+# Limits
+ax.set_xlim(*CHART_LIMS)
+ax.set_ylim(*CHART_LIMS)
+
+ax.set_xticks(CHART_TICKS)
+ax.set_yticks(CHART_TICKS)
+
+# Labels
+ax.set_xlabel(r"$x_1$")
+ax.set_ylabel(r"$x_2$")
+
+ax.grid(True)
+ax.legend(loc="lower left", markerscale=2)
+
+plt.tight_layout()
+plt.savefig("paper/assets/gmm_prior_samples.pdf", format="pdf", bbox_inches="tight")
+plt.close(fig)
+
+# %%
 title_map = {
     SamplerName.SMC_DIFF_OPT: "SMCDiffOpt",
     SamplerName.MCG_DIFF: "MCGDiff",
@@ -396,6 +409,7 @@ ax.scatter(
     edgecolors="black",
     lw=0.5,
     s=10,
+    label="Posterior Samples",
 )
 
 # Particle samples
@@ -407,6 +421,7 @@ ax.scatter(
     edgecolors="black",
     lw=0.5,
     s=10,
+    label="SMCDiffOpt Guided Samples",
 )
 
 # Limits
@@ -421,15 +436,27 @@ ax.set_xlabel("$x_1$")
 ax.set_ylabel("$x_2$")
 
 ax.grid(True)
+ax.legend(loc="lower left", markerscale=2)
 
 plt.tight_layout()
 plt.savefig("paper/assets/gmm_smc_samples.pdf", format="pdf", bbox_inches="tight")
 plt.close(fig)
 
 # %%
-fig, axs = plt.subplots(nrows=1, ncols=len(methods), figsize=(6 * len(methods), 6), sharey=True)
+particle_samples_no_smc = {
+    method: samples
+    for method, samples in particle_samples.items()
+    if method != SamplerName.SMC_DIFF_OPT
+}
 
-for i, ((method, samples), ax) in enumerate(zip(particle_samples.items(), axs.flatten())):
+fig, axs = plt.subplots(
+    nrows=1,
+    ncols=len(particle_samples_no_smc),
+    figsize=(6 * len(particle_samples_no_smc), 6),
+    sharey=True,
+)
+
+for i, ((method, samples), ax) in enumerate(zip(particle_samples_no_smc.items(), axs.flatten())):
     ax.axhline(0, color="black", lw=0.5)
     ax.axvline(0, color="black", lw=0.5)
 
@@ -442,6 +469,7 @@ for i, ((method, samples), ax) in enumerate(zip(particle_samples.items(), axs.fl
         edgecolors="black",
         lw=0.5,
         s=10,
+        label="Posterior Samples",
     )
 
     # Particle samples
@@ -453,6 +481,7 @@ for i, ((method, samples), ax) in enumerate(zip(particle_samples.items(), axs.fl
         edgecolors="black",
         lw=0.5,
         s=10,
+        label="Guided Samples",
     )
 
     # Limits
@@ -469,6 +498,7 @@ for i, ((method, samples), ax) in enumerate(zip(particle_samples.items(), axs.fl
         ax.set_ylabel("$x_2$")
 
     ax.grid(True)
+    ax.legend(loc="lower left", markerscale=2)
 
 plt.tight_layout()
 plt.savefig("paper/assets/gmm_samples.pdf", format="pdf", bbox_inches="tight")
