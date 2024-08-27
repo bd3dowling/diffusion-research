@@ -896,3 +896,83 @@
   keywords = {Computer Science - Machine Learning},
   file = {/Users/ben/Zotero/storage/BETQ73M3/Kingma and Ba - 2017 - Adam A Method for Stochastic Optimization.pdf;/Users/ben/Zotero/storage/YDFH8C9Q/1412.html}
 }
+
+@inproceedings{NIPS1999_464d828b,
+  title = {Policy Gradient Methods for Reinforcement Learning with Function Approximation},
+  booktitle = {Advances in Neural Information Processing Systems},
+  author = {Sutton, Richard S and McAllester, David and Singh, Satinder and Mansour, Yishay},
+  editor = {Solla, S. and Leen, T. and Müller, K.},
+  date = {1999},
+  volume = {12},
+  publisher = {MIT Press},
+  url = {https://proceedings.neurips.cc/paper_files/paper/1999/file/464d828b85b0bed98e80ade0a5c43b0f-Paper.pdf}
+}
+
+@incollection{Hansen2006,
+  title = {The {{CMA}} Evolution Strategy: A Comparing Review},
+  booktitle = {Towards a New Evolutionary Computation: {{Advances}} in the Estimation of Distribution Algorithms},
+  author = {Hansen, Nikolaus},
+  editor = {Lozano, Jose A. and Larrañaga, Pedro and Inza, Iñaki and Bengoetxea, Endika},
+  date = {2006},
+  pages = {75--102},
+  publisher = {Springer Berlin Heidelberg},
+  location = {Berlin, Heidelberg},
+  doi = {10.1007/3-540-32494-1_4},
+  url = {https://doi.org/10.1007/3-540-32494-1_4},
+  abstract = {Derived from the concept of self-adaptation in evolution strategies, the CMA (Covariance Matrix Adaptation) adapts the covariance matrix of a multi-variate normal search distribution. The CMA was originally designed to perform well with small populations. In this review, the argument starts out with large population sizes, reflecting recent extensions of the CMA algorithm. Commonalities and differences to continuous Estimation of Distribution Algorithms are analyzed. The aspects of reliability of the estimation, overall step size control, and independence from the coordinate system (invariance) become particularly important in small populations sizes. Consequently, performing the adaptation task with small populations is more intricate.},
+  isbn = {978-3-540-32494-2}
+}
+
+@inproceedings{NEURIPS2020_373e4c5d,
+  title = {Model Inversion Networks for Model-Based Optimization},
+  booktitle = {Advances in Neural Information Processing Systems},
+  author = {Kumar, Aviral and Levine, Sergey},
+  editor = {Larochelle, H. and Ranzato, M. and Hadsell, R. and Balcan, M.F. and Lin, H.},
+  date = {2020},
+  volume = {33},
+  pages = {5126--5137},
+  publisher = {Curran Associates, Inc.},
+  url = {https://proceedings.neurips.cc/paper_files/paper/2020/file/373e4c5d8edfa8b74fd4b6791d0cf6dc-Paper.pdf}
+}
+
+@inproceedings{pmlr-v139-trabucco21a,
+  title = {Conservative Objective Models for Effective Offline Model-Based Optimization},
+  booktitle = {Proceedings of the 38th International Conference on Machine Learning},
+  author = {Trabucco, Brandon and Kumar, Aviral and Geng, Xinyang and Levine, Sergey},
+  editor = {Meila, Marina and Zhang, Tong},
+  date = {2021-07-18/2021-07-24},
+  series = {Proceedings of Machine Learning Research},
+  volume = {139},
+  pages = {10358--10368},
+  publisher = {PMLR},
+  url = {https://proceedings.mlr.press/v139/trabucco21a.html},
+  abstract = {In this paper, we aim to solve data-driven model-based optimization (MBO) problems, where the goal is to find a design input that maximizes an unknown objective function provided access to only a static dataset of inputs and their corresponding objective values. Such data-driven optimization procedures are the only practical methods in many real-world domains where active data collection is expensive (e.g., when optimizing over proteins) or dangerous (e.g., when optimizing over aircraft designs, actively evaluating malformed aircraft designs is unsafe). Typical methods for MBO that optimize the input against a learned model of the unknown score function are affected by erroneous overestimation in the learned model caused due to distributional shift, that drives the optimizer to low-scoring or invalid inputs. To overcome this, we propose conservative objective models (COMs), a method that learns a model of the objective function which lower bounds the actual value of the ground-truth objective on out-of-distribution inputs and uses it for optimization. In practice, COMs outperform a number existing methods on a wide range of MBO problems, including optimizing controller parameters, robot morphologies, and superconducting materials.}
+}
+
+@inproceedings{pmlr-v97-brookes19a,
+  title = {Conditioning by Adaptive Sampling for Robust Design},
+  booktitle = {Proceedings of the 36th International Conference on Machine Learning},
+  author = {Brookes, David and Park, Hahnbeom and Listgarten, Jennifer},
+  editor = {Chaudhuri, Kamalika and Salakhutdinov, Ruslan},
+  date = {2019-06-09/2019-06-15},
+  series = {Proceedings of Machine Learning Research},
+  volume = {97},
+  pages = {773--782},
+  publisher = {PMLR},
+  url = {https://proceedings.mlr.press/v97/brookes19a.html},
+  abstract = {We present a method for design problems wherein the goal is to maximize or specify the value of one or more properties of interest (e.g. maximizing the fluorescence of a protein). We assume access to black box, stochastic “oracle" predictive functions, each of which maps from design space to a distribution over properties of interest. Because many state-of-the-art predictive models are known to suffer from pathologies, especially for data far from the training distribution, the problem becomes different from directly optimizing the oracles. Herein, we propose a method to solve this problem that uses model-based adaptive sampling to estimate a distribution over the design space, conditioned on the desired properties.}
+}
+
+@article{HAMIDIEH2018346,
+  title = {A Data-Driven Statistical Model for Predicting the Critical Temperature of a Superconductor},
+  author = {Hamidieh, Kam},
+  date = {2018},
+  journaltitle = {Computational Materials Science},
+  volume = {154},
+  pages = {346--354},
+  issn = {0927-0256},
+  doi = {10.1016/j.commatsci.2018.07.052},
+  url = {https://www.sciencedirect.com/science/article/pii/S0927025618304877},
+  abstract = {We estimate a statistical model to predict the superconducting critical temperature based on the features extracted from the superconductor’s chemical formula. The statistical model gives reasonable out-of-sample predictions: ±9.5\,K based on root-mean-squared-error. Features extracted based on thermal conductivity, atomic radius, valence, electron affinity, and atomic mass contribute the most to the model’s predictive accuracy. It is crucial to note that our model does not predict whether a material is a superconductor or not; it only gives predictions for superconductors.},
+  keywords = {Critical temperature,Data mining,Machine learning,Statistical learning,Superconductivity,Superconductor}
+}
