@@ -357,7 +357,7 @@ However, our framework is generalised to solving any optimization task (not just
 Through this lens, our framework's objective and formulation aligns with that of
 \cite{kongDiffusionModelsConstrained2024}, with both employing \autoref{prop:opt-sampling} and
 essentially targeting the distribution induced by the diffusion model and the objective's
-associated annealed Boltmann distribution. However, where they guide the diffusion based on the
+associated annealed Boltzmann distribution. However, where they guide the diffusion based on the
 score of the objective (with further corrections via Metropolis-adjusted Langevin dynamics), we
 instead use interacting particle systems (i.e. SMC). This circumvents the need to compute gradients
 of the objective function, making our method even better suited to black-box optimization tasks

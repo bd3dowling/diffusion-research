@@ -6,7 +6,7 @@ Consider some function $f: \mathcal{X} \to \mathbb{R}$ whose minima, $\{\mathbf{
 we wish to find. Consider $q(\mathbf{x}; \gamma) \propto \exp\{-\gamma f(\mathbf{x})\}$. Suppose we
 have some pre-trained score network which we can use to sample from $p_{\text{data}}$ via some
 $p_\theta$ in $T$ time-steps. Take $p_\theta$ as a prior for use in  \autoref{prop:opt-sampling}. Write
-$\mathbf{x}_0 := \mathbf{x}$. Naieve targeting of
+$\mathbf{x}_0 := \mathbf{x}$. Naive targeting of
 $\pi(\mathbf{x}_0) \propto q(\mathbf{x}_0; \beta)p_\theta(\mathbf{x}_0)$ amounts to sampling
 $\mathbf{x}_0$ according to \autoref{eq:uncond-sampling}, and using some form of MCMC-type sampling with
 annealing for $\beta$ to target \autoref{eq:opt-target-inf}. In cases where $f$ is non-convex and/or
