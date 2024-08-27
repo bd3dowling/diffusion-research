@@ -10,7 +10,7 @@ $\mathbf{x}_0 := \mathbf{x}$. Naive targeting of
 $\pi(\mathbf{x}_0) \propto q(\mathbf{x}_0; \beta)p_\theta(\mathbf{x}_0)$ amounts to sampling
 $\mathbf{x}_0$ according to \autoref{eq:uncond-sampling}, and using some form of MCMC-type sampling with
 annealing for $\beta$ to target \autoref{eq:opt-target-inf}. In cases where $f$ is non-convex and/or
-induces a highly rugged loss landscape, making sampling either highly inefficient or challenging
+induces a highly rugged loss landscape, sampling can be either highly inefficient or challenging
 to tune \parencite{kongDiffusionModelsConstrained2024}.
 
 Instead, we consider using the intermediate unconditional transition functions of the diffusion
@@ -40,7 +40,7 @@ of \autoref{prop:opt-sampling}, yielding $\{\mathbf{x}^*_i\}_{i=1}^M$.
 \end{remark}
 
 If we consider the \emph{bootstrap} proposal,
-$r(\cdot \mid \mathbf{x}_{t+1}, \mathbf{y}) = p_\theta(\cdot \mid \mathbf{x}_{t+1})$, then the
+$r(\cdot \mid \mathbf{x}_{t+1}) = p_\theta(\cdot \mid \mathbf{x}_{t+1})$, then the
 weight function in \autoref{eq:weight-func-gen} reduces to
 $g(\mathbf{y}_t \mid \mathbf{x}_t) = q_t(\mathbf{x}; \gamma_t)$, the `likelihood'. In the case where
 $q_t(\mathbf{x}_t; \gamma_t)$ is `peaky' over its support (which is guaranteed for $t$ close to 0
@@ -114,9 +114,9 @@ enable sampling from $Q_\infty$. The full algorithm is described in \autoref{alg
 \begin{remark}[Annealing-only]
     In principle we could remove the auxiliary variable, and just tune the $\gamma(t)$
     annealing schedule. In practice, however, this is extremely challenging and adds even heavier
-    dependence on the nature of $f$; in cases where it's has steep gradients, the annealing schedule
+    dependence on the nature of $f$; in cases where it has steep gradients, the annealing schedule
     needs to be very gentle, which is often infeasible due to the fixed $T$ time-steps that the
-    diffusion sampler takes (would need to consider intermediate diffusions with, for example, extra
+    diffusion sampler takes (one would need to consider intermediate diffusions with, for example, extra
     Langevin steps in a fashion like \textcite{janatiDivideandConquerPosteriorSampling2024} to work
     around). The auxiliary variable helps make the tuning of $\gamma(t)$ much easier by mitigating
     its importance in adequately flattening the landscape. This was observed strongly in
@@ -128,7 +128,8 @@ enable sampling from $Q_\infty$. The full algorithm is described in \autoref{alg
     resampling only when particle diversity falls below some certain threshold (typically using
     effective sample size as a metric). Given this, the weight formula in \autoref{eq:weight-formula} is
     adjusted by pre-multiplying by the previous un-normalised weight (or 1 if resampled); the
-    procedure is otherwise identical.
+    procedure is otherwise identical. The choice of, say, ESS ratio is critical though for
+    \autoref{alg:smc-opt} and can significantly alleviate the difficulty in tuning $\gamma(t)$.
 \end{remark}
 
 \section{Inverse Problems as a Special Case} \label{sec:inv-prob-spec-case}
@@ -154,7 +155,7 @@ enable sampling from $Q_\infty$. The full algorithm is described in \autoref{alg
 \end{proposition}
 
 \begin{proof}
-    See \hyperref[prf:obs-generation]{Appendix}.
+    See \hyperref[prf:obs-generation]{Appendix B}.
 \end{proof}
 
 \begin{remark}[Shrinking] \label{rem:shrinking}
