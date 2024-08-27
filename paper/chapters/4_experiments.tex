@@ -145,10 +145,7 @@ Note that the numeric comparison of \texttt{SMCDiffOpt} with the other three met
 fair since the former is an interacting-particle algorithm; \texttt{SMCDiffOpt} requires several
 particles to operates whereas the others are independent runs. Reducing the number of particles
 will almost definitionally reduce the relative outperformance of \texttt{SMCDiffOpt} over the
-others. However, we might reasonably infer from these results that \texttt{SMCDiffOpt} will
-likewise perform well on general (non-linear) inverse problems, where $\Pi$IGD and TMPD can't be
-used, given \autoref{alg:smc-opt} only relied on access to the likelihood function and the
-transition function while still being able to well-target the posterior.
+others. This provides an interesting avenue for future research in the form of an ablation study.
 
 \section{Branin Function Optimization Experiment} \label{sec:branin}
 
@@ -239,14 +236,8 @@ being an (annealed) induced Boltzmann distribution from the Branin function. Cho
 $\gamma(t) = 1 - e^{-\zeta T}$ for some small, tunable $\zeta$ (e.g. $0.001$), we run
 \autoref{alg:smc-opt} with 1000 particles. In \autoref{fig:branin-smc}, we see that the procedure has
 well-discovered the two desired optima; using the final particle weights the precise global minima
-can be easily discovered. This is further highlighted in \autoref{fig:branin-mean-val}.
-
-\begin{figure}[t]
-    \centering
-    \includegraphics[width=1\textwidth]{assets/smc_branin_mean_val.pdf}
-    \caption{Mean value of \autoref{eq:branin} on particles over time.}
-    \label{fig:branin-mean-val}
-\end{figure}
+can be easily discovered. This is further highlighted in \autoref{fig:branin-mean-val} where we show
+how the mean Branin value across the particles evolves over time.
 
 The remarkable feature of \autoref{alg:smc-opt} is that it can achieve this optimisation without
 requiring access to the gradient of the objective. As mentioned in \autoref{chap:methods}, if we did
@@ -255,11 +246,7 @@ additional step after moving the particles
 (``gradient nudging''; \parencite{akyildizNudgingParticleFilter2020}) or as a means of picking a
 better proposal distribution (``twisting''; \parencite{wuPracticalAsymptoticallyExact2023}). In
 such cases, the requisite number of particles and the reliance on the $\gamma(t)$ schedule should
-likely reduce. A completely alternative approach might be that of
-\textcite{kongDiffusionModelsConstrained2024} who consider guiding the diffusion directly with an
-annealed gradient and then running some Langevin steps (i.e. MALA) after. This can work well but has
-the downside of relying on the gradient which means its usage in black-box settings requires the
-training of a surrogate model.
+likely reduce.
 
 \section{Black-Box Optimization Experiment} \label{sec:superconductor}
 

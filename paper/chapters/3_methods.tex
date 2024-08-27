@@ -107,24 +107,20 @@ enable sampling from $Q_\infty$. The full algorithm is described in \autoref{alg
     Alternatively, we may consider adding additional steps after moving the particles, nudging
     (perhaps a subset of) the particles as in \textcite{akyildizNudgingParticleFilter2020}.
     Note here though that even with access to gradients, the algorithm offers substantial
-    advantages over standard gradient-based optimization in cases where $f$ is `peaky'.
-    We demonstrate this experimentally in \autoref{sec:branin}.
+    advantages over standard gradient-based optimization in cases where $f$ has steep gradients
+    or is highly non-convex. We demonstrate this experimentally in \autoref{sec:branin}.
 \end{remark}
 
 \begin{remark}[Annealing-only]
     In principle we could remove the auxiliary variable, and just tune the $\gamma(t)$
     annealing schedule. In practice, however, this is extremely challenging and adds even heavier
-    dependence on the nature of $f$; in cases where it's very `peaky', the annealing schedule needs
-    to be unreasonably gentle (very slowly increasing from 0), which is often infeasible due to the
-    fixed $T$ time-steps that the diffusion sampler takes (would need to consider intermediate
-    diffusions with, for example, extra Langevin steps in a fashion like
-    \textcite{janatiDivideandConquerPosteriorSampling2024} to work around). The auxiliary variable
-    helps make the tuning of $\gamma(t)$ much easier by mitigating its importance in adequately
-    flattening the landscape. This was observed strongly in \autoref{sec:branin}, for example.
-    % As mentioned in \autoref{rem:grad-free}, we might instead consider a more optimal proposal
-    % distribution. But the construction of such a proposal will be task specific and generally
-    % challenging; under certain assumptions on $f$ this is feasible, as discussed in
-    % \autoref{sec:relation-to-related}.
+    dependence on the nature of $f$; in cases where it's has steep gradients, the annealing schedule
+    needs to be very gentle, which is often infeasible due to the fixed $T$ time-steps that the
+    diffusion sampler takes (would need to consider intermediate diffusions with, for example, extra
+    Langevin steps in a fashion like \textcite{janatiDivideandConquerPosteriorSampling2024} to work
+    around). The auxiliary variable helps make the tuning of $\gamma(t)$ much easier by mitigating
+    its importance in adequately flattening the landscape. This was observed strongly in
+    \autoref{sec:branin}, for example.
 \end{remark}
 
 \begin{remark}[Adaptive Resampling \parencite{chopinIntroductionSequentialMonte2020}]
@@ -151,7 +147,7 @@ enable sampling from $Q_\infty$. The full algorithm is described in \autoref{alg
     \end{equation*}
     and
     \begin{equation}
-        \mathbf{Y}_t \mid \mathbf{X}_t = \mathbf{x}_t \sim \mathcal{N}(c_t\cdot A\mathbf{x}_0, c_t^2\sigma_y^2\cdot \mathbf{I}_{d_y} + d_t^2\cdot AA^\top) \label{eq:obs-likelihood}
+        \mathbf{Y}_t \mid \mathbf{X}_t = \mathbf{x}_t \sim \mathcal{N}(A\mathbf{x}_t, c_t^2\sigma_y^2\cdot \mathbf{I}_{d_y} + d_t^2\cdot AA^\top) \label{eq:obs-likelihood}
     \end{equation}
     with $g(\mathbf{y}_0 \mid \mathbf{x}_0) = g(\mathbf{y} \mid \mathbf{x}_0) = \mathcal{N}(\mathbf{y}; A\mathbf{x}_0, \sigma_y^2\cdot \mathbf{I}_{d_y})$
     exactly the measurement density.
@@ -169,7 +165,7 @@ enable sampling from $Q_\infty$. The full algorithm is described in \autoref{alg
     \autoref{eq:obs-likelihood}) are sensibly sized, enabling their usage in SMC algorithms.
 \end{remark}
 
-Importantly, note that this generation does not depend on the clean sample, $\mathbf{x}_0$. As such,
+Note that this generation does not depend on the clean sample, $\mathbf{x}_0$. As such,
 it can be generated prior to running the guided sampling and we may view sampling from
 $p(\mathbf{x}_0 \mid \mathbf{y})$ as a Bayesian filtering task. This is described succinctly in
 \textcite{douDiffusionPosteriorSampling2023}:
@@ -217,10 +213,6 @@ densities is now exact.
     We see that there is essentially an inner-level of tempering according to $c(t)$, defined by the
     unconditional diffusion model. As such, for inverse problems we can generally take
     $\gamma(t) = 1\, \forall t$.
-\end{remark}
-
-\begin{remark}[Non-Linear Case]
-    \textbf{TODO}
 \end{remark}
 
 \section{Relation to Related Work} \label{sec:relation-to-related}
@@ -282,5 +274,13 @@ computational cost and are, again, restricted to linear inverse problems. In suc
 the added efficiency of the proposal can (significantly) reduce the number of particles, $N$,
 mitigating some of this added computational cost.
 
-\textbf{TODO}: Move some of related work/alternative methods at end of \ref{chap:experiments} to
-here; include \cite{guoGradientGuidanceDiffusion2024} and \cite{kongDiffusionModelsConstrained2024}.
+In the context of general optimization, an alternative approach considered by
+\textcite{kongDiffusionModelsConstrained2024}
+is to run a guided diffusion using the gradient of the objective, in order to roughly sample regions
+on the data manifold near to the optima, and then run Langevin steps (i.e. MALA) after to yield
+better optima. This has the advantage over \texttt{SMCDiffOpt} of yielding an independent sampler
+($N=1$), enabling it to be \emph{embarrassingly parallelized}. The downside to this method is its
+reliance on the gradient meaning it necessitates training a surrogate model for the objective
+function in black-box settings. Of course, the idea of supplementary sampling steps after running
+the guided diffusion is trivially applicable to our method if desired to yield better estimates of
+the optima.
