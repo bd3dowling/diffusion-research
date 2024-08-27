@@ -250,4 +250,17 @@ likely reduce.
 
 \section{Black-Box Optimization Experiment} \label{sec:superconductor}
 
-\textbf{TODO}
+\begin{table}[ht]
+    \centering
+    \resizebox{\textwidth}{!}{
+    \begin{tabular}{llllllll}
+        \toprule
+        CbAS & CMA-ES & Gradient Ascent & MINs & REINFORCE & DDOM & DiffOpt & SMCDiffOpt \\
+        \midrule
+        0.433 ± 0.027 & 0.474 ± 0.021 & 0.510 ± 0.009 & 0.473 ± 0.003 & 0.483 ± 0.015 & 0.560 ± 0.044 & 0.614 ± 0.029 & 0.644 ± 0.024 \\
+        \bottomrule
+    \end{tabular}
+    }
+    \caption{Normalized scores for SuperConductor experiment}
+    \label{tab:superconductor-norm}
+\end{table}

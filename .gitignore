@@ -1,6 +1,7 @@
 # data
 data/*
 !data/.gitkeep
+*.csv
 
 # macOS
 .DS_Store

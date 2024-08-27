@@ -40,6 +40,21 @@
     \label{tab:gmm-sigma-split}
 \end{table}
 
+\begin{table}[ht]
+    \centering
+    \resizebox{\textwidth}{!}{
+    \begin{tabular}{llllllll}
+        \toprule
+        CbAS & CMA-ES & Gradient Ascent & MINs & REINFORCE & DDOM & DiffOpt & SMCDiffOpt \\
+        \midrule
+        80.082 ± 4.933 & 87.774 ± 3.965 & 94.414 ± 1.719 & 87.483 ± 0.481 & 89.351 ± 2.708 & 103.600 ± 8.139 & 113.545 ± 5.322 & 119.059 ± 4.497 \\
+        \bottomrule
+    \end{tabular}
+    }
+    \caption{Un-normalized scores for SuperConductor experiment}
+    \label{tab:superconductor-unnorm}
+\end{table}
+
 \begin{figure}[t]
     \centering
     \includegraphics[width=1\textwidth]{assets/smc_branin_mean_val.pdf}
