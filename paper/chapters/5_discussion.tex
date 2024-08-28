@@ -1,39 +1,57 @@
 \chapter{Discussion} \label{chap:discussion}
 
-Summary:
-- Intro SMCDiffOpt, an SMC-based diffusion-based optimiser
+We proposed \texttt{SMCDiffOpt}, a novel approach for general optimisation based on sequential
+Monte Carlo guided diffusion models. The method operates in zero-shot, taking any pre-trained
+unconditional diffusion model and enabling its usage for optimisation and inverse problem tasks.
+Existing similar diffusion-based methods have been sub-divided into those which solve inverse problems
+\parencite{chungDiffusionPosteriorSampling2022,song2023pseudoinverseguided,boysTweedieMomentProjected2023,cardosoMonteCarloGuided2023,douDiffusionPosteriorSampling2023,wuPracticalAsymptoticallyExact2023}
+and those which solve optimisation tasks
+\parencite{kongDiffusionModelsConstrained2024,krishnamoorthyDiffusionModelsBlackBox2023,guoGradientGuidanceDiffusion2024}.
+Our approach bridges these domains by framing optimisation as a posterior sampling task and inverse
+problem solving as a special case of optimisation. For inverse problems, we described how the
+method can be applied by constructing a sequence of aligned measurements and likelihoods, taking
+maximisation of these likelihoods as the optimisation objective. We tested \texttt{SMCDiffOpt} on a
+variety of tasks and showed its ability to yield state-of-the-art performance.
 
-Benefits:
-- Performance
-- General optimisation
-- Flexible
-- Extensible
+Our approach offers several advantages over existing methods. It yields asymptotically exact
+posterior samples as the number of particle increases, giving significant performance gains over
+independent samplers in suitable settings. It also operates without requiring access to gradients,
+making it suitable for black-box optimisation tasks. It's also flexible, accommodating different
+proposals and incorporation of gradients via nudging. It's also extensible, supporting intermediate
+or terminal steps for improved sampling.
 
-Drawbacks:
-- Slow sampling time due to diffusion.
-- Not necessarily valid configs.
-- Needs multiple particles.
-- Requires approximations for non-linear inverse tasks.
-- Note that this is true in DPS too technically.
-- Requires tuning, particularly of $\gamma(t)$ and resampling rate.
+\texttt{SMCDiffOpt} is not without some limitations. The method inherits the slow sampling speed of
+diffusion models compared to other generative approaches. More importantly, the method requires
+multiple particles to work effectively --- in cases of certain inverse tasks more efficient
+proposals may mitigate this drawback but never fully remove it. Additionally, in the context of
+general optimisation, the final particles may not strictly adhere to valid configurations --- this
+problem is illustrated in \textcite{guoGradientGuidanceDiffusion2024}. In many settings, such as
+image generation, particles being `close' to the data manifold may be sufficient; in others, such
+as chemical generation, the requirements may be more stringent, with the results of
+\texttt{SMCDiffOpt} requiring further analysis and modification. \texttt{SMCDiffOpt} also offers
+only approximate methods for solving non-linear inverse tasks (see \autoref{sec:non-linear}), though
+it should be noted this is true even of DPS \parencite{chungDiffusionPosteriorSampling2022,boysTweedieMomentProjected2023}.
+Finally, in certain tasks, tuning of $\gamma(t)$ and the resampling rate (i.e. minimum ESS) may be
+challenging to tune.
 
-Future work:
-- More complete comparison of performance versus other SMC inverse solvers.
-- Apply to image data and contrast resulting FIDs with other inverse solvers.
-- Ablation study on performance as a function of:
-- Number of particles
-- Noising schedules
-- Trial of different proposals for inverse problems.
-- Examine incorporation of gradients via nudging.
-- Examine performance on non-linear inverse problems based on approximations.
-- Examine performance with time-re-spacing DDIM.
-- Complete benchmark on all tasks in design-bench benchmark.
-- Score for diversity...
-- Theoretical guarantees.
-
-Concluding remarks
-- In the last paragraph, conclude your report with a pitch using plain language that summarises the key implications of your research in the context of previous work. Write this last paragraph for the Imperial Press Office or journalists as audience.
-
+There are several potential avenues for future work. First, a comparison of the relative performance
+of \texttt{SMCDiffOpt} versus other SMC-based samplers
+\parencite{cardosoMonteCarloGuided2023,douDiffusionPosteriorSampling2023,wuPracticalAsymptoticallyExact2023}
+for linear inverse problems would be insightful (see \autoref{sec:experimental-extra}), including
+plugging their twisted proposals in to \autoref{alg:smc-opt} and measuring the relative efficiency
+gains. Relatedly, our work lacks an ablation study on the impact of the number of particles, the
+noising schedule, the resampling rate and the annealing schedule which are the key variables in
+\autoref{alg:smc-opt}. Examining the performance and viability of our method on higher-dimensional
+settings, such as image generation, would also be fruitful. Similarly, for non-linear inverse
+problems using the approximate methods described in \autoref{sec:non-linear}. An examination the
+performance of \texttt{SMCDiffOpt} under a \hyperref[rem:time-respacing]{time-respaced} diffusion
+model would be insightful and if positive suggest better applicability under query budget
+constraints for black-box optimisation. Fully benchmarking \texttt{SMCDiffOpt} on the
+\texttt{design-bench} black-box optimisation tasks must be carried out to validate the
+state-of-the-art performance of the algorithm over previous works. Devising a new scoring method
+which accounts for diversity of optimised samples should be considered too, since this is one of the
+key benefits of \texttt{SMCDiffOpt}. Lastly, an analysis of the theoretical guarantees of running
+\autoref{alg:smc-opt} should be conducted.
 
 \section*{Endmatter}
 
