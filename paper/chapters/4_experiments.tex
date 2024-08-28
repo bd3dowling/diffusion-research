@@ -127,7 +127,7 @@ distribution; we see that all but DPS follow similar trajectories.
 Examining \autoref{fig:gmm-log-likelihoods} in conjunction, we see that the methods appear to operate
 by first optimising the likelihood to a point before turning to optimise the posterior density,
 allowing the likelihood to decline. Essentially, \autoref{fig:gmm-metrics} highlights the regularization
-effect of the diffusion prior model. \textbf{IN THE CONTEXT OF OPTIMISATION}
+effect of the diffusion prior model while optimising \autoref{eq:inverse-objective}.
 
 Note that the numeric comparison of \texttt{SMCDiffOpt} with the other three methods isn't entirely
 fair since the former is an interacting-particle algorithm; \texttt{SMCDiffOpt} requires several
