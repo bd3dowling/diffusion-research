@@ -443,20 +443,14 @@ plt.savefig("paper/assets/gmm_smc_samples.pdf", format="pdf", bbox_inches="tight
 plt.close(fig)
 
 # %%
-particle_samples_no_smc = {
-    method: samples
-    for method, samples in particle_samples.items()
-    if method != SamplerName.SMC_DIFF_OPT
-}
-
 fig, axs = plt.subplots(
     nrows=1,
-    ncols=len(particle_samples_no_smc),
-    figsize=(6 * len(particle_samples_no_smc), 6),
+    ncols=len(particle_samples),
+    figsize=(6 * len(particle_samples), 6),
     sharey=True,
 )
 
-for i, ((method, samples), ax) in enumerate(zip(particle_samples_no_smc.items(), axs.flatten())):
+for i, ((method, samples), ax) in enumerate(zip(particle_samples.items(), axs.flatten())):
     ax.axhline(0, color="black", lw=0.5)
     ax.axvline(0, color="black", lw=0.5)
 
