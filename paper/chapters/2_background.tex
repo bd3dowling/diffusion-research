@@ -73,7 +73,7 @@
 \begin{proposition}[Optimization via Sampling
     \parencite{hwangLaplaceMethodRevisited1980, kongDiffusionModelsConstrained2024}] \label{prop:opt-sampling}
     Assume $h \in \mathrm{C}^3(\mathbb{R}^{d_x}, \mathbb{R})$ with $\{\mathbf{x}_i^*\}_{i=1}^M$ the
-    set of its minimizers. Let $p$ be a density on $\mathbb{R}^d$ such that there exists
+    set of its minimisers. Let $p$ be a density on $\mathbb{R}^d$ such that there exists
     $i_0 \in \{1, \dots, M\}$ with $p(\mathbf{x}_{i_0}^*) > 0$. Then $Q_\beta$, the distribution
     with density w.r.t the Lebesgue measure $\propto q(\mathbf{x}; \beta)p(\mathbf{x})$, weakly
     converges to $Q_{\infty}$ as $\beta \rightarrow \infty$ and we have that:
@@ -85,7 +85,7 @@
 
 \begin{remark}[Annealing]
     \autoref{prop:opt-sampling} tells us that by properly \emph{tempering}
-    $\beta$ (i.e. slowly increasing it), we can globally optimize (minimize or maximize via
+    $\beta$ (i.e. slowly increasing it), we can globally optimise (minimise or maximise via
     negation) the function $h$. Note here that because $\beta$ is the \emph{inverse} temperature,
     we refer to increasing it as \emph{annealing} (lowering the temperature). The density function
     $p$ can be interpreted as some \emph{prior} distribution we use to sample the points $\mathbf{x}$
@@ -353,12 +353,12 @@ framework is most heavily inspired by the scheme of \textcite{cardosoMonteCarloG
 framework. In fact, each of these methods can be applied under our framework since their differences
 essentially lie primarily in their choice of proposal distribution.
 
-However, our framework is generalised to solving any optimization task (not just inverse problems).
+However, our framework is generalised to solving any optimisation task (not just inverse problems).
 Through this lens, our framework's objective and formulation aligns with that of
 \cite{kongDiffusionModelsConstrained2024}, with both employing \autoref{prop:opt-sampling} and
 essentially targeting the distribution induced by the diffusion model and the objective's
 associated annealed Boltzmann distribution. However, where they guide the diffusion based on the
 score of the objective (with further corrections via Metropolis-adjusted Langevin dynamics), we
 instead use interacting particle systems (i.e. SMC). This circumvents the need to compute gradients
-of the objective function, making our method even better suited to black-box optimization tasks
+of the objective function, making our method even better suited to black-box optimisation tasks
 since it removes the need to train a surrogate model.

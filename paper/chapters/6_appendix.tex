@@ -51,7 +51,7 @@
         \bottomrule
     \end{tabular}
     }
-    \caption{Un-normalized scores for SuperConductor experiment}
+    \caption{Un-normalised scores for SuperConductor experiment}
     \label{tab:superconductor-unnorm}
 \end{table}
 
@@ -248,14 +248,14 @@ REF to convert it to a score approximating network, $s_\theta(\mathbf{x}_t, t)$.
 The model is a 4 layer MLP with 256 hidden dimensions in each layer and ReLU activation function.
 We also add some simple Fourier based time embeddings to encode the current time-step. The model
 is trained on 6000 datapoints --- uniformly sampled from the elliptical region of interest --- in
-20,000 epochs. We use an Adam optimizer for training model parameters with a base learning rate of
+20,000 epochs. We use an Adam optimiser for training model parameters with a base learning rate of
 $10^{-3}$. The diffusion is parametrised with $\beta_{\text{min}}=10^{-4}$,
 $\beta_{\text{max}}=0.02$, $T=1000$, with linear schedule and applying DDPM sampling.
 
 \paragraph{SuperConductor Optimization} Our model architecture is essentially identical to that used
-in the Branin optimization. For training, we used a 90:10 train:evaluation split of the 17,014
+in the Branin optimisation. For training, we used a 90:10 train:evaluation split of the 17,014
 subset of vectors, using a 256 batch size in 40,000 epochs, monitoring evaluation loss for early
-stopping. We use an AdaBelief optimizer for training model parameters with a base learning rate of
+stopping. We use an AdaBelief optimiser for training model parameters with a base learning rate of
 $3\times 10{-4}$. We similarly parametrise the diffusion as in the Branin experiment.
 
 \newpage
@@ -265,7 +265,7 @@ $3\times 10{-4}$. We similarly parametrise the diffusion as in the Branin experi
 \subsection{Diffusion Models}
 
 \begin{remark}[SDE Representation] \label{rem:sde-rep}
-    The DDPM approach corresponds to a discretized time rescaled Ornstein-Uhlenbeck process
+    The DDPM approach corresponds to a discretised time rescaled Ornstein-Uhlenbeck process
     \parencite{boysTweedieMomentProjected2023,songScoreBasedGenerativeModeling2021}:
     $$
     d\mathbf{x}_t = -\frac{1}{2}\beta(t)\mathbf{x}_t dt + \sqrt{\beta(t)}d\mathbf{w}_t

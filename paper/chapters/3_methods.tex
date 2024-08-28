@@ -32,9 +32,9 @@ of \autoref{prop:opt-sampling}, yielding $\{\mathbf{x}^*_i\}_{i=1}^M$.
 \begin{remark}[Diffusion Models Learn Data Manifolds]
     A key feature which enables $p_\theta$ to act as a good prior is the ability of diffusion models
     to implicitly learn the data manifold \parencite{debortoliDiffusionSchrOdinger2021,pidstrigachScoreBasedGenerativeModels2022,wenliangScorebasedGenerativeModels2023}.
-    In the context of optimization, the diffusion model essentially enables us to only consider
-    optimization over `sensible' values of $\mathbf{x}$; a feasibility constraint. Put differently,
-    the unconditional diffusion prior acts as a regularization to encourage optimization of $f$ over
+    In the context of optimisation, the diffusion model essentially enables us to only consider
+    optimisation over `sensible' values of $\mathbf{x}$; a feasibility constraint. Put differently,
+    the unconditional diffusion prior acts as a regularization to encourage optimisation of $f$ over
     $\mathcal{X} \subseteq \mathbb{R}^{d_x}$ as opposed to over all of $\mathbb{R}^{d_x}$
     \parencite{guoGradientGuidanceDiffusion2024}.
 \end{remark}
@@ -47,14 +47,14 @@ $q_t(\mathbf{x}_t; \gamma_t)$ is `peaky' over its support (which is guaranteed f
 assuming reasonable annealing), this will generally be a poor proposal
 \parencite{chopinIntroductionSequentialMonte2020}, as its akin to the `observations',
 $\mathbf{y}_t$, being informative about the `states', $\mathbf{x}_t$. The obvious remedy is to
-choose a better proposal. In the case of general optimization, however, this is a non-trivial task.
+choose a better proposal. In the case of general optimisation, however, this is a non-trivial task.
 
 Instead we consider using an \emph{auxiliary variable}, adjusting the weight
 for each particle based on their \emph{previous} likelihood. Heuristically, this implies we weight
 more heavily those particles whose likelihood \emph{significantly increased} compared to their
 previous position. This imposes a form of regularization that implicitly discourages concentration on
 high likelihood regions near the initial distribution, $p(\mathbf{x}_T)$. Geometrically, this
-regularization may be viewed as dynamically flattening the optimization landscape for each particle
+regularization may be viewed as dynamically flattening the optimisation landscape for each particle
 based on its position. The role of $\gamma(t)$ is to provide global annealing of the landscape,
 gradually attenuating this dynamic effect and ultimately applying \autoref{prop:opt-sampling} to
 enable sampling from $Q_\infty$. The full algorithm is described in \autoref{alg:smc-opt}.
@@ -62,7 +62,7 @@ enable sampling from $Q_\infty$. The full algorithm is described in \autoref{alg
 \begin{algorithm}[ht]
     \caption{\texttt{SMCDiffOpt} for General Optimization} \label{alg:smc-opt}
     \begin{algorithmic}
-        \Require $f: \mathcal{X} \to \mathbb{R}$, an objective function to \emph{minimize} (take $-f$ to \emph{maximize}).
+        \Require $f: \mathcal{X} \to \mathbb{R}$, an objective function to \emph{minimise} (take $-f$ to \emph{maximise}).
         \Require $s_\theta(\mathbf{x}_t, t)$, a pre-trained score network (or noise-predictor and apply \autoref{prop:score-to-noise}).
         \Require $r(\cdot \mid \mathbf{x}_{t+1})$, a proposal distribution. Default to $p_\theta(\cdot \mid \mathbf{x}_{t+1})$.
         \Require $\gamma(t)$, some annealing schedule.
@@ -95,7 +95,7 @@ enable sampling from $Q_\infty$. The full algorithm is described in \autoref{alg
 
 \begin{remark}[Gradient-free] \label{rem:grad-free}
     Note that we don't require any gradient information about $f$. This makes \autoref{alg:smc-opt}
-    suitable in black-box optimization settings where we might only be able to evaluate $f$ and
+    suitable in black-box optimisation settings where we might only be able to evaluate $f$ and
     can't access its gradient (by back-propagation or analytically). However, where we can compute
     the gradient, $\nabla_{\mathbf{x}_{t}} f(\mathbf{x}_{t})$, we can instead consider using
     these gradients to `twist' \parencite{wuPracticalAsymptoticallyExact2023} the proposal
@@ -107,7 +107,7 @@ enable sampling from $Q_\infty$. The full algorithm is described in \autoref{alg
     Alternatively, we may consider adding additional steps after moving the particles, nudging
     (perhaps a subset of) the particles as in \textcite{akyildizNudgingParticleFilter2020}.
     Note here though that even with access to gradients, the algorithm offers substantial
-    advantages over standard gradient-based optimization in cases where $f$ has steep gradients
+    advantages over standard gradient-based optimisation in cases where $f$ has steep gradients
     or is highly non-convex. We demonstrate this experimentally in \autoref{sec:branin}.
 \end{remark}
 
@@ -197,7 +197,7 @@ densities is now exact.
 
 \begin{remark}[MAP]
     The choice of $f$ in \autoref{eq:inverse-objective} essentially states that
-    we're choosing to maximize the likelihood, $g(\mathbf{y}_t \mid \mathbf{x}_t)$, subject to the
+    we're choosing to maximise the likelihood, $g(\mathbf{y}_t \mid \mathbf{x}_t)$, subject to the
     constraint/regularisation imposed by the prior diffusion model through
     $p_\theta(\cdot \mid \mathbf{x}_{t+1})$. Based on \ref{def:smc}, it follows that running
     \autoref{alg:smc-opt} seeks ultimately to yield those samples $\{\mathbf{x}_0^{(i)}\}_{i=1}^N$
@@ -259,7 +259,7 @@ strongly. The idea is then to properly implement an auxiliary particle filter, a
 \emph{before} moving them. This generally should improve the performance since it's essentially
 `forward-looking'. However, it's important to note this can only be applied to \emph{linear
 inverse problems} due to the intractability of $g(\mathbf{y}_t \mid \mathbf{x}_{t+1})$ generally;
-it similarly cannot be applied for general optimization tasks.
+it similarly cannot be applied for general optimisation tasks.
 
 With that said, there is nothing prohibiting us from using other proposals, such as that of
 MCGDiff/FPS-SMC, in \autoref{alg:smc-opt}, re-deriving the weight function for
@@ -275,12 +275,12 @@ computational cost and are, again, restricted to linear inverse problems. In suc
 the added efficiency of the proposal can (significantly) reduce the number of particles, $N$,
 mitigating some of this added computational cost.
 
-In the context of general optimization, an alternative approach considered by
+In the context of general optimisation, an alternative approach considered by
 \textcite{kongDiffusionModelsConstrained2024}
 is to run a guided diffusion using the gradient of the objective, in order to roughly sample regions
 on the data manifold near to the optima, and then run Langevin steps (i.e. MALA) after to yield
 better optima. This has the advantage over \texttt{SMCDiffOpt} of yielding an independent sampler
-($N=1$), enabling it to be \emph{embarrassingly parallelized}. The downside to this method is its
+($N=1$), enabling it to be \emph{embarrassingly parallelised}. The downside to this method is its
 reliance on the gradient meaning it necessitates training a surrogate model for the objective
 function in black-box settings. Of course, the idea of supplementary sampling steps after running
 the guided diffusion is trivially applicable to our method if desired to yield better estimates of

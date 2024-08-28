@@ -37,26 +37,26 @@ during the guiding process
 \parencite{trippeDiffusionProbabilisticModeling2023,cardosoMonteCarloGuided2023,douDiffusionPosteriorSampling2023,wuPracticalAsymptoticallyExact2023}.
 However, such frameworks have strictly focused on solving linear inverse problems.
 In this paper, we introduce \texttt{SMCDiffOpt}, a versatile framework that combines diffusion models
-with SMC methods to address both general optimization and inverse problems. Our framework views
-optimization as a posterior sampling problem from an annealed Boltzmann distribution, using
+with SMC methods to address both general optimisation and inverse problems. Our framework views
+optimisation as a posterior sampling problem from an annealed Boltzmann distribution, using
 diffusion models as priors and employing SMC methods to more effectively target the posterior
 distribution. It's also flexible, operating in zero-shot, accommodating different proposal
 distributions, and being able to operate without access to gradients of the objective --- this makes
-it particularly effective in black-box optimization settings where only function evaluations are
+it particularly effective in black-box optimisation settings where only function evaluations are
 possible.
 
-We contrast \texttt{SMCDiffOpt} with standard gradient-based optimizers on a synthetic optimisation
-task, highlighting its advantage at navigating complex optimization landscapes, including those
+We contrast \texttt{SMCDiffOpt} with standard gradient-based optimisers on a synthetic optimisation
+task, highlighting its advantage at navigating complex optimisation landscapes, including those
 with multiple optima. We also test it on the real-world SuperConductor black-box optimisation task
 \parencite{trabuccoDesignBenchBenchmarksDataDriven2022}, benchmarking it against other
 state-of-the-art approaches. Additionally, we demonstrate its performance and flexibility in solving
 inverse problems by comparing its posterior sampling efficiency to alternative methods on a
 synthetic Gaussian mixture model example.
 
-The paper is organized as follows: \hyperref[chap:background]{Section 2} reviews the relevant
-background on optimization, inverse problems, diffusion models, and SMC methods, as well as
+The paper is organised as follows: \hyperref[chap:background]{Section 2} reviews the relevant
+background on optimisation, inverse problems, diffusion models, and SMC methods, as well as
 mentioning some related and alternative approaches. \hyperref[chap:methods]{Section 3} introduces
-the \texttt{SMCDiffOpt} framework, detailing its application to both general optimization tasks and
+the \texttt{SMCDiffOpt} framework, detailing its application to both general optimisation tasks and
 inverse problems.  \hyperref[chap:experiments]{Section 4} presents experimental results, and
 \hyperref[chap:discussion]{Section 5} discusses the broader implications of our findings and
 suggests directions for future research.

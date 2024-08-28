@@ -125,9 +125,9 @@ likelihood, $g(\mathbf{y}_t \mid \mathbf{x}_t)$, over the course of the guided d
 each method. \autoref{fig:gmm-posterior} shows how well the methods ultimately target the posterior
 distribution; we see that all but DPS follow similar trajectories.
 Examining \autoref{fig:gmm-log-likelihoods} in conjunction, we see that the methods appear to operate
-by first optimizing the likelihood to a point before turning to optimize the posterior density,
+by first optimising the likelihood to a point before turning to optimise the posterior density,
 allowing the likelihood to decline. Essentially, \autoref{fig:gmm-metrics} highlights the regularization
-effect of the diffusion prior model.
+effect of the diffusion prior model. \textbf{IN THE CONTEXT OF OPTIMISATION}
 
 Note that the numeric comparison of \texttt{SMCDiffOpt} with the other three methods isn't entirely
 fair since the former is an interacting-particle algorithm; \texttt{SMCDiffOpt} requires several
@@ -156,7 +156,7 @@ others. This provides an interesting avenue for future research in the form of a
     \label{fig:branin-adam}
 \end{figure}
 
-For a general optimization task, we consider optimizing the Branin function as an objective over
+For a general optimisation task, we consider optimising the Branin function as an objective over
 some constrained region (the data manifold) as detailed in
 \textcite{kongDiffusionModelsConstrained2024}. The Branin function is defined by:
 \begin{equation}
@@ -167,29 +167,29 @@ It has three global minima located at $(-\pi, 12.275)$, $(\pi, 2.275)$ and $(9.4
 with a value of $0.397887$. We consider some uniform prior sampling distribution, $p_{\text{data}}$,
 over an ellipse region centred at $(-0.2, 7.5)$ with semi-axis lengths $(3.6, 8)$, tilted
 $25^\circ$. This region covers two of the global minima $(-\pi, 12.275)$ and $(\pi, 2.275)$.
-See \autoref{fig:branin-adam} to visualize.
+See \autoref{fig:branin-adam} to visualise.
 
 Similar to in \autoref{sec:gmm}, here we can easily sample from $p_{\text{data}}$ by inverse-transform
 sampling. Again, we suppose now that we can't do so and suppose also that we're in a high-dimensional
 setting where performing a simple visual analysis to quickly infer the geometry of the objective
-function and data manifold is not possible. Our stated objective is to optimize the function over
+function and data manifold is not possible. Our stated objective is to optimise the function over
 the data manifold, ideally finding the $(-\pi, 12.275)$ and $(\pi, 2.275)$ points, but \emph{not}
 the $(9.42478, 2.475)$ point (since it's outside the constrained region / not a \emph{valid
 configuration}).
 
-The obvious approach might be to use a gradient-based optimizer, such as the popular
-Adam \parencite{kingmaAdamMethodStochastic2017}, adaptive-moment-estimating optimizer. However,
-without prior knowledge of the data manifold, choosing initial points for the optimizer is
+The obvious approach might be to use a gradient-based optimiser, such as the popular
+Adam \parencite{kingmaAdamMethodStochastic2017}, adaptive-moment-estimating optimiser. However,
+without prior knowledge of the data manifold, choosing initial points for the optimiser is
 challenging. In \autoref{fig:branin-adam-a} we show choosing 10 (for visual clarity) starting points
 randomly from a $\mathcal{N}(0, \mathbf{I}_{d_x})$ distribution. Using a base learning rate of
-$0.05$ and 1000 iterations of the optimizer, we see that in this case the optimizer does find one of
+$0.05$ and 1000 iterations of the optimiser, we see that in this case the optimiser does find one of
 the optima, but has essentially no chance of finding the other. In \autoref{fig:branin-adam-b} we re-run
-the optimizer but with initial points randomly from a $\mathcal{N}(0, 16\cdot\mathbf{I}_{d_x})$
-distribution instead. Here we see that while the optimizer found the two desired points, it also found
+the optimiser but with initial points randomly from a $\mathcal{N}(0, 16\cdot\mathbf{I}_{d_x})$
+distribution instead. Here we see that while the optimiser found the two desired points, it also found
 one of the points outside the constrained region --- an invalid configuration. Furthermore, we see
 that one of trajectories didn't converge to an optima; this sample headed towards the saddle-point
 region between the two optima and essentially got stuck there requiring many iterations to escape.
-The key issue here is that the optimizer has no guidance towards the data manifold and relies solely
+The key issue here is that the optimiser has no guidance towards the data manifold and relies solely
 on the gradient. Obviously, if we could sample from $p_{\text{data}}$ analytically, choosing this as
 the distribution to pick initial samples is optimal. Since we can't generally, we resort to
 generative techniques, such as diffusion models.
@@ -206,7 +206,7 @@ generative techniques, such as diffusion models.
     \begin{subfigure}[b]{0.48\textwidth}
         \centering
         \includegraphics[width=1\textwidth]{assets/smc_branin.pdf}
-        \caption{\texttt{SMCDiffOpt}'s resulting particles from optimizing the Branin function.}
+        \caption{\texttt{SMCDiffOpt}'s resulting particles from optimising the Branin function.}
         \label{fig:branin-smc}
     \end{subfigure}
     \caption{Prior versus optimised samples under guidance through \texttt{SMCDiffOpt}.}
@@ -247,13 +247,13 @@ The dataset comprises 21,263 86-dimensional vectors and their associated critica
 vector represents the ``mixture of elements by number of atoms in the chemical
 formula of each superconductor'' \parencite{trabuccoDesignBenchBenchmarksDataDriven2022}. A provided
 oracle model takes any configuration and gives the associated temperature. This is the black-box
-function we wish to optimize; we want to find the vector which maximizes the oracle.
+function we wish to optimise; we want to find the vector which maximises the oracle.
 
 As suggested in \textcite{trabuccoDesignBenchBenchmarksDataDriven2022}, and applied in
 \textcite{kongDiffusionModelsConstrained2024,krishnamoorthyDiffusionModelsBlackBox2023},
 we use an 80\% subset of the data for training. This holds out rows with the top and bottom 10\% of
 temperatures. Training a score network on this data, the hope is this well models the data manifold
-(allowed configurations) enabling it to act as a strong prior model for optimization. In
+(allowed configurations) enabling it to act as a strong prior model for optimisation. In
 \autoref{fig:bb-samples} we show an example of a true sample (\autoref{fig:bb-real}) versus a sample
 generated by the model (\autoref{fig:bb-unconditional}). Details of the model's architecture are
 described in \autoref{sec:experimental-extra}.
@@ -261,7 +261,7 @@ described in \autoref{sec:experimental-extra}.
 Using this model, we can employ \texttt{SMCDiffOpt} for finding an optimal configuration. We can
 determine the performance of \texttt{SMCDiffOpt} by yielding an optimised temperature from its final
 particles (e.g. via sampling and evaluation, or evaluation then averaging; we choose latter for
-benchmark comparisons). We min-max normalize such a score based on the full dataset to give a more
+benchmark comparisons). We min-max normalise such a score based on the full dataset to give a more
 interpretable score; the maximum temperature in the full dataset is 185 and the minimum is
 $\approx 0$. We run the algorithm with annealing as in \autoref{sec:branin}, using only 100 particles,
 resampling when the ESS ratio drops below $0.5$.
@@ -276,7 +276,7 @@ methods. We also include the diffusion-based DDOM
 \autoref{tab:superconductor-norm} we present for each method the mean min-max normalised scores and
 their 95\% CLT confidence intervals based on 5 runs of each on different random seeds. We see that
 \texttt{SMCDiffOpt} comfortably outperforms each method, yielding state-of-the-art performance. We
-show an example configuration generated by the optimizer in \autoref{fig:bb-optimised}.
+show an example configuration generated by the optimiser in \autoref{fig:bb-optimised}.
 
 \begin{table}[t]
     \centering
@@ -289,7 +289,7 @@ show an example configuration generated by the optimizer in \autoref{fig:bb-opti
         \bottomrule
     \end{tabular}
     }
-    \caption{Normalized scores for SuperConductor experiment.}
+    \caption{Normalised scores for SuperConductor experiment.}
     \label{tab:superconductor-norm}
 \end{table}
 
