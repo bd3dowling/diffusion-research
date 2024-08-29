@@ -306,12 +306,13 @@ $\Sigma_t$. For DDPM, we have
     Without resampling, we would not get the desired asymptotic results.
 \end{remark}
 
-\section{Related Work} \label{sec:related-work}
+\section{Guided Diffusion} \label{sec:related-work}
 
 The goal of conditionally sampling from $p_{\text{data}}$ (learnt via a diffusion model) based on
-some $\mathbf{y}$ has been the center of significant recent research. The principle approach of most
-methods is to approximate $\nabla_{\mathbf{x}_t}\log q(\mathbf{x}_t \mid \mathbf{y})$, and plug this
-in to \autoref{eq:backwards-process} in place of its unconditional counterpart. The obvious approach is
+some $\mathbf{y}$ --- inverse problem solving --- has been the center of significant recent research.
+The principle approach of most methods is to approximate
+$\nabla_{\mathbf{x}_t}\log q(\mathbf{x}_t \mid \mathbf{y})$, and plug this in to
+\autoref{eq:backwards-process} in place of its unconditional counterpart. The obvious approach is
 to train a conditional model to learn some $s_{\theta}(\mathbf{x}_t, \mathbf{y}, t)$ and use this.
 Indeed, this is the approach that modern text-to-image, image-to-image, and image-to-video
 applications take \parencite{nicholGLIDEPhotorealisticImage2021,liDiffusionModelsImage2023,
