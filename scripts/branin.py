@@ -307,7 +307,7 @@ def plot_branin_contour(
         zorder=5,
         marker="x",
         s=100,
-        label="Globabl minima",
+        label="Global Minima",
     )
 
     ax.set_xlabel("$x_1$")
