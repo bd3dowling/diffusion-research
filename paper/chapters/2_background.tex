@@ -42,7 +42,7 @@
     Typically $d_x > d_y$, leading to a many-to-one $\mathbf{x} \rightarrow \mathbf{y}$ mapping
     \parencite{chungDiffusionPosteriorSampling2022}, and requiring some \emph{prior} information
     about $\mathbf{x}$. We call such an inverse problem \emph{ill-posed}. If we assume some prior
-    distribution of the data, $p(\mathbf{x})$, ``solving'' the inverse problem amounts to sampling
+    distribution of the data, $p(\mathbf{x})$, `solving' the inverse problem amounts to sampling
     from some posterior
     \begin{equation*}
         p(\mathbf{x} \mid \mathbf{y}) \propto p(\mathbf{x})g(\mathbf{y} \mid \mathbf{x})
@@ -186,7 +186,7 @@ $\mathbf{x}_T \sim \mathcal{N}(0, \mathbf{I}_{d_x})$ ($\approx q(\mathbf{x}_T \m
 and iterating backwards in time according to \autoref{eq:backwards-process} until $t=0$.
 
 Unfortunately, $\nabla_{\mathbf{x}_t}\log q(\mathbf{x}_t)$ is intractable\footnote{Note this is not
-$\nabla_{\mathbf{x}_t}\log q(\mathbf{x}_t \mid \mathbf{x}_0)$, which is tractable but ``useless''
+$\nabla_{\mathbf{x}_t}\log q(\mathbf{x}_t \mid \mathbf{x}_0)$, which is tractable but `useless'
 for sampling since we don't know $\mathbf{x}_0$ a priori (it's what we're trying to sample); this
 quantity is useful, however, for training where we \emph{do} know $\mathbf{x}_0$.}.
 As such, we train a score-approximating \parencite{songScoreBasedGenerativeModeling2021} neural
