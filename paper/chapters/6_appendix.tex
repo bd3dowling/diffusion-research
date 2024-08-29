@@ -260,7 +260,39 @@ $3\times 10{-4}$. We similarly parametrise the diffusion as in the Branin experi
 
 \newpage
 
-\section{Additional Background and Related Works} \label{sec:extra}
+\section{Non-Linear Case} \label{sec:non-linear}
+
+In the case of non-linear measurement operator, $m$, we must resort to approximate methods.
+Assuming $\mathbf{X}_0 \mid \mathbf{X}_t$ is Gaussian (this is the \emph{Moment Projection}
+assumption \parencite{boysTweedieMomentProjected2023}), we can easily show:
+\begin{equation*}
+    \mathbf{Y}_t \mid \mathbf{X}_t = \mathbf{x}_t \sim \mathcal{N}\left(c_t\cdot\EE{m(\mathbf{X}_0) \mid \mathbf{X}_t = \mathbf{x}_t}, c_t^2\left(\sigma_y^2\cdot \mathbf{I}_{d_y} + \VV{m(\mathbf{X}_0) \mid \mathbf{X}_t = \mathbf{x}_t}\right)\right)
+\end{equation*}
+and then use a first-order Taylor expansion (linearisation) so that
+\begin{eqnarray}
+    m(\mathbf{X}_0) \approx m(\mu_{\mathbf{X}_0 \mid \mathbf{X}_t}) + \nabla m(\mu_{\mathbf{X}_0 \mid \mathbf{X}_t})\cdot (\mathbf{X}_0 - \mu_{\mathbf{X}_0 \mid \mathbf{X}_t})
+\end{eqnarray}
+to approximate the likelihood by:
+\begin{equation*}
+    \mathbf{Y}_t \mid \mathbf{X}_t = \mathbf{x}_t \sim \mathcal{N}\left(c_t\cdot m(\mu_{\mathbf{X}_0 \mid \mathbf{X}_t}), c_t^2\left(\sigma_y^2\cdot \mathbf{I}_{d_y} + \nabla m(\mu_{\mathbf{X}_0 \mid \mathbf{X}_t})\Sigma_{\mathbf{X}_0 \mid \mathbf{X}_t}\nabla m(\mu_{\mathbf{X}_0 \mid \mathbf{X}_t})^\top\right)\right)
+\end{equation*}
+where $\mu_{\mathbf{X}_0} \approx \hat{\mathbf{x}}_0(\mathbf{x}_t)$, and we approximate
+$\Sigma_{\mathbf{X}_0 \mid \mathbf{X}_t}$ by $r_t^2\mathbf{I}_{d_x}$ with $r_t^2$ fixed based on
+the diffusion parameters \parencite{hoDenoisingDiffusionProbabilistic2020} or learnt
+\parencite{nicholImprovedDenoisingDiffusion2021}, or better approximated with a second-order
+Tweedie formula \parencite{boysTweedieMomentProjected2023}.
+
+Alternatively, we can make the approximate assumption $\mathbf{X}_t \approx c_t\mathbf{X}_0$, so
+that
+\begin{equation*}
+    \mathbf{Y}_t \mid \mathbf{X}_t = \mathbf{x}_t \sim \mathcal{N}\left(c_t\cdot m\left(\frac{\mathbf{x}_t}{c_t}\right), c_t^2\sigma_y^2\mathbf{I}_{d_y}\right).
+\end{equation*}
+Referring to \ref{eq:obs-likelihood}, this essentially ignores the second term in the variance.
+More concretely, it assumes we deterministically `noise' the data exactly as in \ref{eq:obs-gen}.
+This approximation can work well in cases where $g$ is not significantly non-linear, such as in
+\autoref{sec:gmm}.
+
+\section{Additional Background and Related Work} \label{sec:extra}
 
 \subsection{Diffusion Models}
 
@@ -310,38 +342,6 @@ $3\times 10{-4}$. We similarly parametrise the diffusion as in the Branin experi
 \begin{proof}
     Follows from forward marginal and Tweedie's formula (\autoref{eq:tweedie}).
 \end{proof}
-
-\subsection{Non-Linear Case} \label{sec:non-linear}
-
-In the case of non-linear measurement operator, $m$, we must resort to approximate methods.
-Assuming $\mathbf{X}_0 \mid \mathbf{X}_t$ is Gaussian (this is the \emph{Moment Projection}
-assumption \parencite{boysTweedieMomentProjected2023}), we can easily show:
-\begin{equation*}
-    \mathbf{Y}_t \mid \mathbf{X}_t = \mathbf{x}_t \sim \mathcal{N}\left(c_t\cdot\EE{m(\mathbf{X}_0) \mid \mathbf{X}_t = \mathbf{x}_t}, c_t^2\left(\sigma_y^2\cdot \mathbf{I}_{d_y} + \VV{m(\mathbf{X}_0) \mid \mathbf{X}_t = \mathbf{x}_t}\right)\right)
-\end{equation*}
-and then use a first-order Taylor expansion (linearisation) so that
-\begin{eqnarray}
-    m(\mathbf{X}_0) \approx m(\mu_{\mathbf{X}_0 \mid \mathbf{X}_t}) + \nabla m(\mu_{\mathbf{X}_0 \mid \mathbf{X}_t})\cdot (\mathbf{X}_0 - \mu_{\mathbf{X}_0 \mid \mathbf{X}_t})
-\end{eqnarray}
-to approximate the likelihood by:
-\begin{equation*}
-    \mathbf{Y}_t \mid \mathbf{X}_t = \mathbf{x}_t \sim \mathcal{N}\left(c_t\cdot m(\mu_{\mathbf{X}_0 \mid \mathbf{X}_t}), c_t^2\left(\sigma_y^2\cdot \mathbf{I}_{d_y} + \nabla m(\mu_{\mathbf{X}_0 \mid \mathbf{X}_t})\Sigma_{\mathbf{X}_0 \mid \mathbf{X}_t}\nabla m(\mu_{\mathbf{X}_0 \mid \mathbf{X}_t})^\top\right)\right)
-\end{equation*}
-where $\mu_{\mathbf{X}_0} \approx \hat{\mathbf{x}}_0(\mathbf{x}_t)$, and we approximate
-$\Sigma_{\mathbf{X}_0 \mid \mathbf{X}_t}$ by $r_t^2\mathbf{I}_{d_x}$ with $r_t^2$ fixed based on
-the diffusion parameters \parencite{hoDenoisingDiffusionProbabilistic2020} or learnt
-\parencite{nicholImprovedDenoisingDiffusion2021}, or better approximated with a second-order
-Tweedie formula \parencite{boysTweedieMomentProjected2023}.
-
-Alternatively, we can make the approximate assumption $\mathbf{X}_t \approx c_t\mathbf{X}_0$, so
-that
-\begin{equation*}
-    \mathbf{Y}_t \mid \mathbf{X}_t = \mathbf{x}_t \sim \mathcal{N}\left(c_t\cdot m\left(\frac{\mathbf{x}_t}{c_t}\right), c_t^2\sigma_y^2\mathbf{I}_{d_y}\right).
-\end{equation*}
-Referring to \ref{eq:obs-likelihood}, this essentially ignores the second term in the variance.
-More concretely, it assumes we deterministically `noise' the data exactly as in \ref{eq:obs-gen}.
-This approximation can work well in cases where $g$ is not significantly non-linear, such as in
-\autoref{sec:gmm}.
 
 \subsection{FPS-SMC Observation Noising}
 
