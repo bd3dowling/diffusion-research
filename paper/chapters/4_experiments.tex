@@ -221,7 +221,7 @@ to train a simple score-based diffusion model (details in \autoref{sec:experimen
 a model, we can now approximately generate samples from $p_{\text{data}}$. More importantly, we can
 use the model as a prior, using it as transition kernel in \autoref{alg:smc-opt}, with the `likelihood'
 being an (annealed) induced Boltzmann distribution from the Branin function. Choosing
-$\gamma(t) = 1 - e^{-\zeta T}$ for some small, tunable $\zeta$ (e.g. $0.001$), we run
+$\gamma(t) = e^{t \times \ln(\zeta)/T}$ for some small, tunable $\zeta$ (e.g. $0.001$), we run
 \autoref{alg:smc-opt} with 1000 particles, resampling when the ESS ratio drops below $0.5$. In
 \autoref{fig:branin-smc}, we see that the procedure has well-discovered the two desired optima;
 using the final particle weights the precise global minima can be easily discovered. This is further

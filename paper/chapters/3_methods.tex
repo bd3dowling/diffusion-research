@@ -10,10 +10,10 @@ $\mathbf{x}_0 := \mathbf{x}$. Naive targeting of
 $\pi(\mathbf{x}_0) \propto q(\mathbf{x}_0; \beta)p_\theta(\mathbf{x}_0)$ amounts to sampling
 $\mathbf{x}_0$ according to \autoref{eq:uncond-sampling}, and using some form of MCMC-type sampling with
 annealing for $\beta$ to target \autoref{eq:opt-target-inf}. In cases where $f$ is non-convex and/or
-induces a highly rugged loss landscape, sampling can be either highly inefficient or challenging
+induces a highly rugged loss landscape, sampling can be highly inefficient or challenging
 to tune \parencite{kongDiffusionModelsConstrained2024}.
 
-Instead, we consider using the intermediate unconditional transition functions of the diffusion
+Instead, we consider using the intermediate unconditional transition densities of the diffusion
 model, $p_\theta(\mathbf{x}_{t} \mid \mathbf{x}_{t+1})$, and guide these with the objective
 function. Using some annealing schedule, $\gamma(t)$, we construct a sequence
 $\{q_t(\mathbf{x}_t; \gamma_t)\}_{t=0}^T$. Loosely (though concretely in
@@ -45,11 +45,14 @@ weight function in \autoref{eq:weight-func-gen} reduces to
 $g(\mathbf{y}_t \mid \mathbf{x}_t) = q_t(\mathbf{x}; \gamma_t)$, the `likelihood'. In the case where
 $q_t(\mathbf{x}_t; \gamma_t)$ is `peaky' over its support (which is guaranteed for $t$ close to 0
 assuming reasonable annealing), this will generally be a poor proposal
-\parencite{chopinIntroductionSequentialMonte2020}, as its akin to the `observations',
-$\mathbf{y}_t$, being informative about the `states', $\mathbf{x}_t$. The obvious remedy is to
-choose a better proposal. In the case of general optimisation, however, this is a non-trivial task.
+\parencite{chopinIntroductionSequentialMonte2020}, as it corresponds to the `observations',
+$\mathbf{y}_t$, being informative about the `states', $\mathbf{x}_t$, and us ignoring those
+observations. The obvious remedy is to choose a better proposal. In the case of general
+optimisation, however, this is a non-trivial task; recall the `observations' here are not available
+\emph{a priori}. Incorporation of the gradient of $f$ might be one possibility, but this requires
+differentiability of $f$.
 
-Instead we consider using an \emph{auxiliary variable}, adjusting the weight
+Instead, we consider using an \emph{auxiliary variable}, adjusting the weight
 for each particle based on their \emph{previous} likelihood. Heuristically, this implies we weight
 more heavily those particles whose likelihood \emph{significantly increased} compared to their
 previous position. This imposes a form of regularisation that implicitly discourages concentration on
@@ -185,9 +188,9 @@ $p(\mathbf{x}_0 \mid \mathbf{y})$ as a Bayesian filtering task. This is describe
     \end{equation}
     with $\mathbf{y}_t$ constructed from $\mathbf{y}$ according to \autoref{eq:obs-gen}.
     Plugging this in to \autoref{eq:weight-formula}, ignoring particle indices, the weight function
-    reduces to
+    reduces to (by proportionality)
     \begin{equation}
-        \omega_t \gets \frac{\mathcal{N}(\mathbf{y}_t; A\tilde{\mathbf{x}}_t, c_t^2\sigma_y^2\cdot \mathbf{I}_{d_y} + d_t^2\cdot AA^\top)^{\gamma(t)}}{\mathcal{N}(\mathbf{y}_{t+1}; A\mathbf{x}_{t+1}, c_{t+1}^2\sigma_y^2\cdot \mathbf{I}_{d_y} + d_{t+1}^2\cdot AA^\top)^{\gamma(t+1)}} \label{eq:weight-formula-inverse}
+        \omega_t \gets \frac{\mathcal{N}(\mathbf{y}_t; A\tilde{\mathbf{x}}_t, c_t^2\sigma_y^2\cdot \mathbf{I}_{d_y} + d_t^2\cdot AA^\top)^{\gamma(t)}}{\mathcal{N}(\mathbf{y}_{t+1}; A\mathbf{x}_{t+1}, c_{t+1}^2\sigma_y^2\cdot \mathbf{I}_{d_y} + d_{t+1}^2\cdot AA^\top)^{\gamma(t+1)}}. \label{eq:weight-formula-inverse}
     \end{equation}
 \end{proposition}
 
