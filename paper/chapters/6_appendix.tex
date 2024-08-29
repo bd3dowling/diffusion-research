@@ -51,7 +51,7 @@
         \bottomrule
     \end{tabular}
     }
-    \caption{Un-normalised scores for SuperConductor experiment}
+    \caption{Raw scores for SuperConductor experiment (higher values are better).}
     \label{tab:superconductor-unnorm}
 \end{table}
 
@@ -60,7 +60,7 @@
     \begin{subfigure}[b]{0.48\textwidth}
       \centering
       \includegraphics[width=\textwidth]{assets/gmm_prior_samples.pdf}
-      \caption{GMM Prior samples generated under DDPM with analytic score; $d_x = 8, d_y = 2$.}
+      \caption{GMM prior samples under DDPM with analytic score; $d_x = 8, d_y = 2$.}
       \label{fig:gmm-prior}
     \end{subfigure}
     \hfill
@@ -111,13 +111,13 @@
 \section{Proofs}\label{sec:proofs}
 
 \begin{proof}[Proof of \autoref{prop:obs-gen}] \label{prf:obs-generation}
-    Given:
+    Given
     \begin{align*}
         \mathbf{X}_t \mid \mathbf{X}_0 = \mathbf{x}_0 &\sim \mathcal{N}(c_t\cdot\mathbf{x}_0, d_t^2\cdot\mathbf{I}_{d_x}) \\
         \mathbf{Y}_t \mid \mathbf{Y}_0 = \mathbf{y}_0 &\sim \delta(\mathbf{y}_t - c_t\cdot \mathbf{y}_0) \\
         \mathbf{Y}_0 \mid \mathbf{X}_0 = \mathbf{x}_0 &\sim \mathcal{N}(A\mathbf{x}_t, \sigma_y^2\mathbf{I}_{d_y})
     \end{align*}
-    We have:
+    we have
     \begin{align*}
         \EE{\mathbf{Y}_t \mid \mathbf{X}_0} &= \EE{\EE{\mathbf{Y}_t \mid \mathbf{Y}_0} \mid \mathbf{X}_0} \\
         &= \EE{c_t\cdot \mathbf{Y}_0 \mid \mathbf{X}_0} \\
@@ -127,13 +127,13 @@
     \begin{align*}
         \VV{\mathbf{Y}_t \mid \mathbf{X}_0} &= \EE{\VV{\mathbf{Y}_t \mid \mathbf{Y}_0} \mid \mathbf{X}_0} + \VV{\EE{\mathbf{Y}_t \mid \mathbf{Y}_0} \mid \mathbf{X}_0} \\
         &= \VV{c_t\cdot \mathbf{Y}_0 \mid \mathbf{X}_0} \\
-        &= c_t^2\sigma_y^2\cdot \mathbf{I}_{d_y}
+        &= c_t^2\sigma_y^2\cdot \mathbf{I}_{d_y}.
     \end{align*}
-    Hence:
+    Hence,
     \begin{equation*}
-        \mathbf{Y}_t \mid \mathbf{X}_0 = \mathbf{x}_0 \sim \mathcal{N}(c_t\cdot A\mathbf{x}_0, \sigma_y^2c_t^2\cdot \mathbf{I}_{d_y})
+        \mathbf{Y}_t \mid \mathbf{X}_0 = \mathbf{x}_0 \sim \mathcal{N}(c_t\cdot A\mathbf{x}_0, \sigma_y^2c_t^2\cdot \mathbf{I}_{d_y}).
     \end{equation*}
-    Further:
+    Further,
     \begin{align*}
         A\mathbf{X}_t \mid \mathbf{X}_0 = \mathbf{x}_0 &\sim \mathcal{N}(c_t\cdot A\mathbf{x}_0, d_t^2\cdot AA^\top) \\
         \implies \mathbf{Y}_t - A\mathbf{X}_t \mid \mathbf{X}_0 = \mathbf{x}_0 &\sim \mathcal{N}(0, \sigma_y^2c_t^2\cdot \mathbf{I}_{d_y} + d_t^2\cdot AA^\top) \\
@@ -148,30 +148,30 @@
         \mathbf{X}_{t} \mid \mathbf{X}_{t+1} &\sim \mathcal{N}\left( \mathbf{\mu}_{t+1}(\mathbf{x}_{t+1}), \Sigma_{t+1} \right)  \\
         \mathbf{Y}_{t} \mid \mathbf{X}_{t} = \mathbf{x}_{t} &\sim \mathcal{N}\left( A\mathbf{x}_{t}, \Xi_{t} \right)
     \end{align*}
-    Consider some proposal:
+    Consider some proposal
     \begin{align*}
-        p_{t}(\mathbf{x}_{t} \mid \mathbf{y}_{t}, \mathbf{x}_{t+1}) \propto p_{t}(\mathbf{x}_{t} \mid \mathbf{x}_{t+1})g_{t}(\mathbf{y}_{t} \mid \mathbf{x}_{t})
+        p_{t}(\mathbf{x}_{t} \mid \mathbf{y}_{t}, \mathbf{x}_{t+1}) \propto p_{t}(\mathbf{x}_{t} \mid \mathbf{x}_{t+1})g_{t}(\mathbf{y}_{t} \mid \mathbf{x}_{t}).
     \end{align*}
-    Then:
+    Then,
     \begin{align*}
-        \mathbf{Y}_{t} \mid \mathbf{X}_{t+1} = \mathbf{x}_{t+1} \sim \mathcal{N}\left( A\mu_{t+1}, \Xi_{t} + A\Sigma_{t+1}A^\top \right) 
+        \mathbf{Y}_{t} \mid \mathbf{X}_{t+1} = \mathbf{x}_{t+1} \sim \mathcal{N}\left( A\mu_{t+1}, \Xi_{t} + A\Sigma_{t+1}A^\top \right).
     \end{align*}
 \end{proposition}
 \begin{proof}
-    By Gaussian conjugacy, it immediately follows that:
+    By Gaussian conjugacy, it immediately follows that
     \begin{align*}
         \mathbf{X}_{t} \mid \mathbf{Y}_{t} = \mathbf{y}_{t}, \mathbf{X}_{t+1} = \mathbf{x}_{t+1} &\sim \mathcal{N}\left( \mu_{t+1}^P, \Sigma_{t+1}^P \right) 
     \end{align*}
     where
     \begin{align*}
         \mu_{t+1}^P &= \Sigma_{t+1}^P\left( \Sigma_{t+1}^{-1}\mu_{t+1}(\mathbf{x}_{t+1}) + A^\top\Xi_{t}^{-1}\mathbf{y}_{t} \right) \\
-        \Sigma_{t+1}^P &= \left( \Sigma_{t+1}^{-1} + A^\top \Xi_{t}^{-1}A \right)^{-1}
+        \Sigma_{t+1}^P &= \left( \Sigma_{t+1}^{-1} + A^\top \Xi_{t}^{-1}A \right)^{-1}.
     \end{align*}
-    The normalizing constant of the proposal is:
+    The normalizing constant of the proposal is
     \begin{align*}
         \int p_{t}(\mathbf{x}_{t} \mid \mathbf{x}_{t+1})g_{t}(\mathbf{y}_{t} \mid \mathbf{x}_{t}) \, d\mathbf{x}_{t} &= g_{t}(\mathbf{y}_{t} \mid \mathbf{x}_{t+1})
     \end{align*}
-    Note that:
+    Note that
     \begin{align*}
         \mathbb{E}\left\{ \mathbf{Y}_{t} \mid \mathbf{X}_{t+1} \right\} &= \mathbb{E}\left\{\mathbb{E}\left\{\mathbf{Y}_{t} \mid \mathbf{X}_{t}\right\} \mid \mathbf{X}_{t+1}\right\} &\dots\text{tower property} \\
         &= \mathbb{E}\left\{A\mathbf{X}_{t} \mid \mathbf{X}_{t+1}\right\} \\
@@ -184,7 +184,7 @@
     \end{align*}
     Since $\mathbf{Y}_{t}$ is an affine transformation, it follows then that:
     \begin{align*}
-        \mathbf{Y}_{t} \mid \mathbf{X}_{t+1} = \mathbf{x}_{t+1} \sim \mathcal{N}\left( A\mu_{t+1}, \Xi_{t} + A\Sigma_{t+1}A^\top \right) 
+        \mathbf{Y}_{t} \mid \mathbf{X}_{t+1} = \mathbf{x}_{t+1} \sim \mathcal{N}\left( A\mu_{t+1}, \Xi_{t} + A\Sigma_{t+1}A^\top \right).
     \end{align*}
 \end{proof}
 
@@ -196,13 +196,13 @@
 \parencite{cardosoMonteCarloGuided2023} in our comparison. However, we were unable to reproduce
 their results, even using the code on their repository. Indeed, we found that the resulting sliced
 Wasserstein distances from MCGdiff were almost uniformly larger than those of
-\text{SMCDiffOpt} on each experimental run (i.e. given identical setups and pseudo-RNG seeds). This
+\text{SMCDiffOpt} on each experimental run (with identical setups and pseudo-RNG seeds). This
 is doubly unexpected since the raw results don't align with those found in their paper,
 and since theoretically their proposal should be more optimal than ours for this particular task;
 if we take the values they give in Table 1 of their paper and compare them with those in
 \autoref{tab:gmm} we see this is indeed the case. Given the time constraints, the exhaustion of all
 obvious potential author-errors, and assuming the validity of their results, we opted to omit our
-results from a comparison. For posterity, we provide in \autoref{tab:gmm-mcg} the results including
+results from a comparison. However, we provide in \autoref{tab:gmm-mcg} the results including
 MCGdiff but note with caution that we lack confidence in such figures.
 
 \begin{table}[ht]
@@ -243,7 +243,7 @@ MCGdiff but note with caution that we lack confidence in such figures.
     \label{tab:gmm-mcg}
 \end{table}
 
-\paragraph{Branin Optimization} We train a noise estimating neural network and then employ
+\paragraph{Branin Optimisation} We train a noise estimating neural network and then employ
 REF to convert it to a score approximating network, $s_\theta(\mathbf{x}_t, t)$.
 The model is a 4 layer MLP with 256 hidden dimensions in each layer and ReLU activation function.
 We also add some simple Fourier based time embeddings to encode the current time-step. The model
@@ -252,7 +252,7 @@ is trained on 6000 datapoints --- uniformly sampled from the elliptical region o
 $10^{-3}$. The diffusion is parametrised with $\beta_{\text{min}}=10^{-4}$,
 $\beta_{\text{max}}=0.02$, $T=1000$, with linear schedule and applying DDPM sampling.
 
-\paragraph{SuperConductor Optimization} Our model architecture is essentially identical to that used
+\paragraph{SuperConductor Optimisation} Our model architecture is essentially identical to that used
 in the Branin optimisation. For training, we used a 90:10 train:evaluation split of the 17,014
 subset of vectors, using a 256 batch size in 40,000 epochs, monitoring evaluation loss for early
 stopping. We use an AdaBelief optimiser for training model parameters with a base learning rate of
@@ -281,13 +281,13 @@ $3\times 10{-4}$. We similarly parametrise the diffusion as in the Branin experi
 \end{remark}
 
 \begin{remark}[DDIM Representation] \label{rem:ddim}
-    Under DDIM:
+    Under DDIM, take
     \begin{equation*}
         u_t = \sqrt{\alpha_{t-1}} \quad
         v_t = -\sqrt{1 - \overline{\alpha}_{t-1} - \sigma_t^2}\sqrt{1 - \overline{\alpha}_t} \quad
         w_t = \sigma_t
     \end{equation*}
-    with $\{\sigma_t\}_{t=1}^T$ an arbitrary conditional variance sequence. It's common to consider:
+    with $\{\sigma_t\}_{t=1}^T$ an arbitrary conditional variance sequence. It's common to consider
     \begin{equation*}
         \sigma_t(\eta) = \eta\sqrt{\frac{1 - \alpha_{t-1}}{1 - \alpha_t}}\sqrt{1 - \frac{\alpha_t}{\alpha_{t-1}}},\quad \eta \in [0,1]
     \end{equation*}
@@ -319,11 +319,11 @@ assumption \parencite{boysTweedieMomentProjected2023}), we can easily show:
 \begin{equation*}
     \mathbf{Y}_t \mid \mathbf{X}_t = \mathbf{x}_t \sim \mathcal{N}\left(c_t\cdot\EE{m(\mathbf{X}_0) \mid \mathbf{X}_t = \mathbf{x}_t}, c_t^2\left(\sigma_y^2\cdot \mathbf{I}_{d_y} + \VV{m(\mathbf{X}_0) \mid \mathbf{X}_t = \mathbf{x}_t}\right)\right)
 \end{equation*}
-and then use a first-order Taylor expansion (linearization):
+and then use a first-order Taylor expansion (linearisation) so that
 \begin{eqnarray}
     m(\mathbf{X}_0) \approx m(\mu_{\mathbf{X}_0 \mid \mathbf{X}_t}) + \nabla m(\mu_{\mathbf{X}_0 \mid \mathbf{X}_t})\cdot (\mathbf{X}_0 - \mu_{\mathbf{X}_0 \mid \mathbf{X}_t})
 \end{eqnarray}
-to approximate this by:
+to approximate the likelihood by:
 \begin{equation*}
     \mathbf{Y}_t \mid \mathbf{X}_t = \mathbf{x}_t \sim \mathcal{N}\left(c_t\cdot m(\mu_{\mathbf{X}_0 \mid \mathbf{X}_t}), c_t^2\left(\sigma_y^2\cdot \mathbf{I}_{d_y} + \nabla m(\mu_{\mathbf{X}_0 \mid \mathbf{X}_t})\Sigma_{\mathbf{X}_0 \mid \mathbf{X}_t}\nabla m(\mu_{\mathbf{X}_0 \mid \mathbf{X}_t})^\top\right)\right)
 \end{equation*}
@@ -336,7 +336,7 @@ Tweedie formula \parencite{boysTweedieMomentProjected2023}.
 Alternatively, we can make the approximate assumption $\mathbf{X}_t \approx c_t\mathbf{X}_0$, so
 that
 \begin{equation*}
-    \mathbf{Y}_t \mid \mathbf{X}_t = \mathbf{x}_t \sim \mathcal{N}\left(c_t\cdot m\left(\frac{\mathbf{x}_t}{c_t}\right), c_t^2\sigma_y^2\mathbf{I}_{d_y}\right)
+    \mathbf{Y}_t \mid \mathbf{X}_t = \mathbf{x}_t \sim \mathcal{N}\left(c_t\cdot m\left(\frac{\mathbf{x}_t}{c_t}\right), c_t^2\sigma_y^2\mathbf{I}_{d_y}\right).
 \end{equation*}
 Referring to \ref{eq:obs-likelihood}, this essentially ignores the second term in the variance.
 More concretely, it assumes we deterministically `noise' the data exactly as in \ref{eq:obs-gen}.
@@ -346,18 +346,18 @@ This approximation can work well in cases where $g$ is not significantly non-lin
 \subsection{FPS-SMC Observation Noising}
 
 Rather than \autoref{eq:obs-gen}, \textcite{douDiffusionPosteriorSampling2023} instead considers
-a ``shared-noise'' or ``duplex'' diffusion:
+a ``shared-noise'' or ``duplex'' diffusion.
 
 \begin{proposition}[Obvservation Diffusion] \label{prop:obs-diffusion}
     \textcite[Proposition B.1]{douDiffusionPosteriorSampling2023}.
     Let $\mathbf{x}_t$ be generated according to the forward marginal of some diffusion process.
     Let $\mathbf{y} = \mathbf{y}_0$ be some (linear) measurement we have about the clean sample,
-    $\mathbf{x}_0$. Construct a sequence $\{\mathbf{y}_t\}_{t=1}^T$ by:
+    $\mathbf{x}_0$. Construct a sequence $\{\mathbf{y}_t\}_{t=1}^T$ by
     \begin{equation*}
         \mathbf{y}_t = a_t\cdot \mathbf{y}_{t-1} + b_t\cdot A\epsilon_t,\quad \epsilon_t \sim \mathcal{N}(0, \mathbf{I}_{d_y})
     \end{equation*}
     where $\epsilon_t$ is the \emph{same} as used for forward noising $\mathbf{x}_0$ at time-step $t$.
-    It follows that:
+    It follows that
     \begin{equation}
         \mathbf{Y}_t \mid \mathbf{X}_t = \mathbf{x}_t \sim \mathcal{N}(A\mathbf{x}_t, \sigma_y^2c_t^2\cdot \mathbf{I}_{d_y}) \label{eq:obs-likelihood-dou}
     \end{equation}

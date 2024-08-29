@@ -14,7 +14,7 @@ We generate some $d_y$-dimensional measurement, $\mathbf{y}$, according to the f
     and compute its SVD decomposition, $USV^\top$.
     \item Sample $s_{i,j} \sim \mathcal{U}[0,1]$ for $(i,j) \in \{-2, \dots, 2\}^2$.
     \item Set $A := U\, diag(\{s_{i,j}\})\, V^\top$.
-    \item Draw $\mathbf{x}_* \sim p_{\text{data}}$ and set $\mathbf{y} := A\mathbf{x}_* + \sigma_y\epsilon,\ \epsilon \sim \mathcal{N}(\mathbf{0}_{d_y}, \mathrm{I}_{d_y})$
+    \item Draw $\mathbf{x}_* \sim p_{\text{data}}$ and set $\mathbf{y} := A\mathbf{x}_* + \sigma_y\epsilon,\ \epsilon \sim \mathcal{N}(\mathbf{0}_{d_y}, \mathrm{I}_{d_y})$.
 \end{itemize}
 
 The goal of the inverse problem is to take $\mathbf{y}$ (with $A$ and $\sigma_y$ known), and use
@@ -25,12 +25,12 @@ $g(\mathbf{y} \mid \mathbf{x}) = \mathcal{N}(\mathbf{y}; A\mathbf{x}, \sigma_y\m
 as the measurement density, and then aim to sample from $p(\mathbf{x} \mid \mathbf{y})$.
 
 For this model, given $p_{\text{data}}$ is available in closed form, the posterior,
-$p(\mathbf{x}_* \mid \mathbf{y})$, is actually available in closed form as another GMM with:
+$p(\mathbf{x}_* \mid \mathbf{y})$, is actually available in closed form as another GMM with
 \begin{align*}
     c_{i,j} &:= \mathcal{N}\left(\Sigma\left(\sigma_y^{-2}\cdot A^\top\mathbf{y} + \mu_{i,j}\right), \Sigma\right) \\
     \tilde{\omega}_{i,j} &\propto \omega_{i,j} \mathcal{N}\left(\mathbf{y}; A\mu_{i,j}, \mathbf{I}_{d_x} + AA^\top \right)
 \end{align*}
-with $\Sigma := \left(\mathbf{I}_{d_x} + \sigma_y^{-2}\cdot A^\top A\right)^{-1}$. This enables
+where $\Sigma := \left(\mathbf{I}_{d_x} + \sigma_y^{-2}\cdot A^\top A\right)^{-1}$. This enables
 us to accurately benchmark the different numerical methods.
 
 Supposing $p_{\text{data}}$ was not available in closed form / easy to sample from, we may consider
@@ -126,7 +126,7 @@ each method. \autoref{fig:gmm-posterior} shows how well the methods ultimately t
 distribution; we see that all but DPS follow similar trajectories.
 Examining \autoref{fig:gmm-log-likelihoods} in conjunction, we see that the methods appear to operate
 by first optimising the likelihood to a point before turning to optimise the posterior density,
-allowing the likelihood to decline. Essentially, \autoref{fig:gmm-metrics} highlights the regularization
+allowing the likelihood to decline. Essentially, \autoref{fig:gmm-metrics} highlights the regularisation
 effect of the diffusion prior model while optimising \autoref{eq:inverse-objective}.
 
 Note that the numeric comparison of \texttt{SMCDiffOpt} with the other three methods isn't entirely
@@ -135,7 +135,7 @@ particles to operates whereas the others are independent runs. Reducing the numb
 will almost definitionally reduce the relative outperformance of \texttt{SMCDiffOpt} over the
 others. This provides an interesting avenue for future research in the form of an ablation study.
 
-\section{Branin Function Optimization} \label{sec:branin}
+\section{Branin Function Optimisation} \label{sec:branin}
 
 \begin{figure}[t]
     \centering
@@ -152,13 +152,13 @@ others. This provides an interesting avenue for future research in the form of a
         \caption{Adam with $\mathcal{N}(0, 16\cdot\mathbf{I}_{d_x})$ initialisation.}
         \label{fig:branin-adam-b}
     \end{subfigure}
-    \caption{Pitfalls of naieve gradient optimisation of the Branin function.}
+    \caption{Pitfalls of naive gradient optimisation of the Branin function.}
     \label{fig:branin-adam}
 \end{figure}
 
 For a general optimisation task, we consider optimising the Branin function as an objective over
 some constrained region (the data manifold) as detailed in
-\textcite{kongDiffusionModelsConstrained2024}. The Branin function is defined by:
+\textcite{kongDiffusionModelsConstrained2024}. The Branin function is defined by
 \begin{equation}
     f(x_1, x_2) = a(x_2 - bx_1^2 + cx_1 - r)^2 + s(1-t)\cos(x_1) + s \label{eq:branin}
 \end{equation}
@@ -237,7 +237,7 @@ better proposal distribution (``twisting'' \parencite{wuPracticalAsymptoticallyE
 such cases, the requisite number of particles and the reliance on the $\gamma(t)$ schedule should
 likely reduce.
 
-\section{Black-Box Optimization} \label{sec:superconductor}
+\section{Black-Box Optimisation} \label{sec:superconductor}
 
 For a black-box optimisation task, we consider the SuperConductor task of
 \textcite{trabuccoDesignBenchBenchmarksDataDriven2022}. Originally proposed in
@@ -252,7 +252,7 @@ function we wish to optimise; we want to find the vector which maximises the ora
 As suggested in \textcite{trabuccoDesignBenchBenchmarksDataDriven2022}, and applied in
 \textcite{kongDiffusionModelsConstrained2024,krishnamoorthyDiffusionModelsBlackBox2023},
 we use an 80\% subset of the data for training. This holds out rows with the top and bottom 10\% of
-temperatures. Training a score network on this data, the hope is this well models the data manifold
+temperatures. Training a score network on this data, the hope is this models well the data manifold
 (allowed configurations) enabling it to act as a strong prior model for optimisation. In
 \autoref{fig:bb-samples} we show an example of a true sample (\autoref{fig:bb-real}) versus a sample
 generated by the model (\autoref{fig:bb-unconditional}). Details of the model's architecture are
@@ -289,7 +289,7 @@ show an example configuration generated by the optimiser in \autoref{fig:bb-opti
         \bottomrule
     \end{tabular}
     }
-    \caption{Normalised scores for SuperConductor experiment.}
+    \caption{Normalised scores for SuperConductor experiment (higher values are better).}
     \label{tab:superconductor-norm}
 \end{table}
 

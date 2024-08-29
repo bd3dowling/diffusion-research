@@ -1,6 +1,6 @@
 \chapter{SMC-Guided Conditional Diffusion Sampling} \label{chap:methods}
 
-\section{\texttt{SMCDiffOpt} for General Optimization Problems} \label{sec:gen-opt}
+\section{\texttt{SMCDiffOpt} for General Optimisation Problems} \label{sec:gen-opt}
 
 Consider some function $f: \mathcal{X} \to \mathbb{R}$ whose minima, $\{\mathbf{x}^*_i\}_{i=1}^M$,
 we wish to find. Consider $q(\mathbf{x}; \gamma) \propto \exp\{-\gamma f(\mathbf{x})\}$. Suppose we
@@ -34,7 +34,7 @@ of \autoref{prop:opt-sampling}, yielding $\{\mathbf{x}^*_i\}_{i=1}^M$.
     to implicitly learn the data manifold \parencite{debortoliDiffusionSchrOdinger2021,pidstrigachScoreBasedGenerativeModels2022,wenliangScorebasedGenerativeModels2023}.
     In the context of optimisation, the diffusion model essentially enables us to only consider
     optimisation over `sensible' values of $\mathbf{x}$; a feasibility constraint. Put differently,
-    the unconditional diffusion prior acts as a regularization to encourage optimisation of $f$ over
+    the unconditional diffusion prior acts as a regularisation to encourage optimisation of $f$ over
     $\mathcal{X} \subseteq \mathbb{R}^{d_x}$ as opposed to over all of $\mathbb{R}^{d_x}$
     \parencite{guoGradientGuidanceDiffusion2024}.
 \end{remark}
@@ -52,15 +52,15 @@ choose a better proposal. In the case of general optimisation, however, this is 
 Instead we consider using an \emph{auxiliary variable}, adjusting the weight
 for each particle based on their \emph{previous} likelihood. Heuristically, this implies we weight
 more heavily those particles whose likelihood \emph{significantly increased} compared to their
-previous position. This imposes a form of regularization that implicitly discourages concentration on
+previous position. This imposes a form of regularisation that implicitly discourages concentration on
 high likelihood regions near the initial distribution, $p(\mathbf{x}_T)$. Geometrically, this
-regularization may be viewed as dynamically flattening the optimisation landscape for each particle
+regularisation may be viewed as dynamically flattening the optimisation landscape for each particle
 based on its position. The role of $\gamma(t)$ is to provide global annealing of the landscape,
 gradually attenuating this dynamic effect and ultimately applying \autoref{prop:opt-sampling} to
 enable sampling from $Q_\infty$. The full algorithm is described in \autoref{alg:smc-opt}.
 
 \begin{algorithm}[ht]
-    \caption{\texttt{SMCDiffOpt} for General Optimization} \label{alg:smc-opt}
+    \caption{\texttt{SMCDiffOpt} for General Optimisation} \label{alg:smc-opt}
     \begin{algorithmic}
         \Require $f: \mathcal{X} \to \mathbb{R}$, an objective function to \emph{minimise} (take $-f$ to \emph{maximise}).
         \Require $s_\theta(\mathbf{x}_t, t)$, a pre-trained score network (or noise-predictor and apply \autoref{prop:score-to-noise}).
@@ -70,13 +70,13 @@ enable sampling from $Q_\infty$. The full algorithm is described in \autoref{alg
         \State Draw $\mathbf{x}_T^{(i)} \sim \mathcal{N}(0, \mathbf{I}_{d_x}),\quad i=1,\ldots,N$
         \For{$t \gets T-1$ to $0$}
             \For {$i \gets 1$ to $N$}
-                \State \textbf{Move}: $\tilde{\mathbf{x}}_{t}^{(i)} \sim r(\cdot \mid \mathbf{x}_{t+1})$
+                \State \textbf{Move}: $\tilde{\mathbf{x}}_{t}^{(i)} \sim r(\cdot \mid \mathbf{x}_{t+1})$.
                 \State \textbf{Compute weight}:
                 \begin{equation}
-                    \omega_t^{(i)} \gets \frac{\exp\left\{-\gamma(t) f(\tilde{\mathbf{x}}_t^{(i)})\right\}}{\exp\left\{-\gamma(t+1) f(\mathbf{x}_{t+1}^{(i)})\right\}} \label{eq:weight-formula}
+                    \omega_t^{(i)} \gets \frac{\exp\left\{-\gamma(t) f(\tilde{\mathbf{x}}_t^{(i)})\right\}}{\exp\left\{-\gamma(t+1) f(\mathbf{x}_{t+1}^{(i)})\right\}}. \label{eq:weight-formula}
                 \end{equation}
-                \State \textbf{Normalise weight}: $W_t^{(i)} \gets \frac{\omega_t^{(i)}}{\sum_{i=1}^N \omega_t^{(i)}}$
-                \State \textbf{Resample}: $\{\mathbf{x}_{T:t}^{(i)}\}_{i=1}^N \sim \text{Multinomial}\left(\{\tilde{\mathbf{x}}_{T:t}^{(i)}\}_{i=1}^N; \{W_t^{(i)}\}_{i=1}^N\right)$
+                \State \textbf{Normalise weight}: $W_t^{(i)} \gets \frac{\omega_t^{(i)}}{\sum_{i=1}^N \omega_t^{(i)}}$.
+                \State \textbf{Resample}: $\{\mathbf{x}_{T:t}^{(i)}\}_{i=1}^N \sim \text{Multinomial}\left(\{\tilde{\mathbf{x}}_{T:t}^{(i)}\}_{i=1}^N; \{W_t^{(i)}\}_{i=1}^N\right)$.
             \EndFor
         \EndFor
         \State \textbf{return} $\{\mathbf{x}_0^{(i)}\}_{i=1}^N$, some summary statistic computed
@@ -138,11 +138,11 @@ enable sampling from $Q_\infty$. The full algorithm is described in \autoref{alg
     Let $\mathbf{y} = \mathbf{y}_0 = A\mathbf{x}_0 + \sigma_y\epsilon$ be some noisy linear
     measurement we have about a desired sample, $\mathbf{x}_0$. Construct a sequence
     $\{\mathbf{y}_t\}_{t=1}^T$ by $\mathbf{y}_t = a_t\cdot \mathbf{y}_{t-1}$ with $a_t$ of
-    \autoref{def:forward-process}. It follows that:
+    \autoref{def:forward-process}. It follows that
     \begin{equation}
         \mathbf{y}_t = c_t\cdot \mathbf{y} \label{eq:obs-gen}
     \end{equation}
-    From which we may conclude
+    from which we may conclude
     \begin{equation*}
         \mathbf{Y}_t \mid \mathbf{X}_0 = \mathbf{x}_0 \sim \mathcal{N}(c_t\cdot A\mathbf{x}_0, c_t^2\sigma_y^2\cdot \mathbf{I}_{d_y})
     \end{equation*}
@@ -179,13 +179,13 @@ $p(\mathbf{x}_0 \mid \mathbf{y})$ as a Bayesian filtering task. This is describe
 \end{quote}
 
 \begin{proposition}[Inverse Problem Objective]
-    Consider the following objective function:
+    Consider the objective function
     \begin{equation}
         f(\mathbf{x}_t) = -\frac{1}{2\sigma_y^2c_t^2}\Vert\mathbf{y}_t - A\mathbf{x}_t\Vert^2 \label{eq:inverse-objective}
     \end{equation}
     with $\mathbf{y}_t$ constructed from $\mathbf{y}$ according to \autoref{eq:obs-gen}.
     Plugging this in to \autoref{eq:weight-formula}, ignoring particle indices, the weight function
-    reduces to:
+    reduces to
     \begin{equation}
         \omega_t \gets \frac{\mathcal{N}(\mathbf{y}_t; A\tilde{\mathbf{x}}_t, c_t^2\sigma_y^2\cdot \mathbf{I}_{d_y} + d_t^2\cdot AA^\top)^{\gamma(t)}}{\mathcal{N}(\mathbf{y}_{t+1}; A\mathbf{x}_{t+1}, c_{t+1}^2\sigma_y^2\cdot \mathbf{I}_{d_y} + d_{t+1}^2\cdot AA^\top)^{\gamma(t+1)}} \label{eq:weight-formula-inverse}
     \end{equation}
@@ -216,14 +216,14 @@ densities is now exact.
     $\gamma(t) = 1\, \forall t$.
 \end{remark}
 
-\section{Relation to Related Work} \label{sec:relation-to-related}
+\section{Related Work} \label{sec:relation-to-related}
 
 Taking $\mu_{t+1}(\mathbf{x}_{t+1}, \theta), \Sigma_{t+1}$ as the mean (e.g. \autoref{eq:ddpm-mu}) and
 variance (e.g. \autoref{eq:ddpm-sigma}) of the backwards transition kernel,
 $p_\theta(\mathbf{x}_t \mid \mathbf{x}_{t+1})$, and $\Xi_t$ as the covariance of
 \ref{eq:obs-likelihood} the Monte Carlo Guided Diffusion (MCGdiff)
 \parencite{cardosoMonteCarloGuided2023} and Filter Posterior Sampling SMC (FPS-SMC)
-\parencite{douDiffusionPosteriorSampling2023} frameworks consider essentially equivalent proposals:
+\parencite{douDiffusionPosteriorSampling2023} frameworks consider essentially equivalent proposals
 \begin{align*}
     r(\tilde{\mathbf{x}}_{t} \mid \mathbf{x}_{t+1}, \mathbf{y}_t) &\propto p_\theta(\tilde{\mathbf{x}}_t \mid \mathbf{x}_{t+1})g(\mathbf{y}_{t} \mid \tilde{\mathbf{x}}_{t})
     = \mathcal{N}(\mu^{*}_{t+1}(\mathbf{x}_{t+1}, \mathbf{y}_t, \theta), \Sigma_{t+1}^{*})
@@ -236,7 +236,7 @@ $p_\theta(\mathbf{x}_t \mid \mathbf{x}_{t+1})$, and $\Xi_t$ as the covariance of
 and $\mathbf{y}_t$ constructed by \autoref{eq:obs-gen}\footnote{
 \textcite{douDiffusionPosteriorSampling2023} considers a slightly different construction which
 employs ``noise-sharing'' with the state's forward-process; see \ref{sec:extra}.} and $g$ as in
-\autoref{eq:obs-likelihood}. Plugging this in to \autoref{eq:weight-func-gen}, we get:
+\autoref{eq:obs-likelihood}. Plugging this in to \autoref{eq:weight-func-gen}, we get
 \begin{align*}
     \omega_t &= \int p_\theta(\tilde{\mathbf{x}}_t \mid \mathbf{x}_{t+1})g(\mathbf{y}_{t} \mid \tilde{\mathbf{x}}_{t})\, d\mathbf{x}_t
     = g(\mathbf{y}_t \mid \mathbf{x}_{t+1}) \\
@@ -246,7 +246,7 @@ where we apply \autoref{prop:gaussian-exact}. Note this \emph{only} holds when w
 problem; otherwise $g(\mathbf{y}_t \mid \mathbf{x}_{t+1})$ is intractable. In the case of FPS-SMC,
 these are exactly the weights used in the SMC procedure; in the case of MCGDiff they similarly
 use the previous likelihood, $g(\mathbf{y}_{t+1} \mid \mathbf{x}_{t+1})$, as an auxiliary variable.
-Through this lens, we may view MCGDiff as a special case of \autoref{alg:smc-opt} where we choose:
+Through this lens, we may view MCGDiff as a special case of \autoref{alg:smc-opt} where we choose
 \begin{align*}
     f(\tilde{\mathbf{x}}_t) &= g(\mathbf{y}_t \mid \mathbf{x}_{t+1}) = \mathcal{N}\left(\mathbf{y}_t; A\mu_{t+1}(\mathbf{x}_{t+1}, \theta), \Xi_t + A\Sigma_{t+1}A^\top\right)
 \end{align*}
