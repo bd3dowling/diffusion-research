@@ -1,0 +1,47 @@
+\documentclass{beamer}
+
+\usetheme[numbering=fraction, progressbar=foot]{metropolis}
+
+\usepackage{appendixnumberbeamer}
+\usepackage[backend=biber,style=apa]{biblatex}
+
+\definecolor{imperial_blue}{RGB}{23, 63, 140}
+\setbeamercolor{alerted text}{fg=imperial_blue}
+\setbeamercolor{frametitle}{bg=imperial_blue}
+
+\addbibresource{references.bib}
+
+\title{SMC-Guided Diffusion for General Optimisation}
+\date{\today}
+\author{Brendan Dowling, Dr O. Deniz Akyildiz}
+\institute{Imperial College London}
+\titlegraphic{\hfill\includegraphics[height=0.4cm]{assets/imperial_logo.pdf}}
+
+\begin{document}
+
+    \maketitle
+
+    \begin{frame}{Table of contents}
+        \setbeamertemplate{section in toc}[sections numbered]
+        \tableofcontents[hideallsubsections]
+    \end{frame}
+
+    \section{Introduction}
+    \begin{frame}{First Frame}
+        Hello, world! \textcite{andersonReversetimeDiffusionEquation1982,hoDenoisingDiffusionProbabilistic2020,douDiffusionPosteriorSampling2023,akyildizParallelSequentialMonte2020,delmoralCentralLimitTheorems2011}
+    \end{frame}
+
+    {
+    \setbeamercolor{palette primary}{bg=imperial_blue}
+    \begin{frame}[standout]
+        Thank you!
+    \end{frame}
+    }
+
+    \appendix
+
+    \begin{frame}[allowframebreaks]{References}
+        \printbibliography[heading=none]
+    \end{frame}
+
+\end{document}

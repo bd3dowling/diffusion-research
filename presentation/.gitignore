@@ -1,0 +1,17 @@
+# beamer files
+*.nav
+
+# intermediate files
+*.aux
+*.bbl*
+*.blg
+*.log
+*.nav
+*.out
+*.snm
+*.toc
+*.fdb_latexmk
+*.fls
+*.synctex.gz
+*.bcf
+*.xml
