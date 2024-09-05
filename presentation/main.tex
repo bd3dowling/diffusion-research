@@ -4,6 +4,7 @@
 
 \usepackage{appendixnumberbeamer}
 \usepackage[backend=biber,style=apa]{biblatex}
+\usepackage{animate}
 
 \definecolor{imperial_blue}{RGB}{23, 63, 140}
 \setbeamercolor{alerted text}{fg=imperial_blue}
@@ -29,6 +30,11 @@
     \section{Introduction}
     \begin{frame}{First Frame}
         Hello, world! \textcite{andersonReversetimeDiffusionEquation1982,hoDenoisingDiffusionProbabilistic2020,douDiffusionPosteriorSampling2023,akyildizParallelSequentialMonte2020,delmoralCentralLimitTheorems2011}
+    \end{frame}
+
+    \begin{frame}{Animation}
+        \centering
+        \animategraphics[loop,width=7cm]{50}{assets/gmm-prior/gmm-prior-}{0}{100}
     \end{frame}
 
     {

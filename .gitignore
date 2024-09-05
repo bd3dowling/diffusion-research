@@ -1,3 +1,6 @@
+# gif-converted-images
+*-*.png
+
 # data
 data/*
 !data/.gitkeep
