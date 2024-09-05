@@ -1,46 +1,58 @@
-# # Gaussian Mixture Model Example
-
-
 # Imports
+from pathlib import Path
 from typing import Callable
 
 import jax
 import jax.numpy as jnp
 import jax.random as random
-import matplotlib
-import matplotlib.animation as animation
 import matplotlib.pyplot as plt
 import numpy as np
 import numpyro.distributions as dist
-from IPython.display import HTML
+import particles.distributions as dists
 from jax import grad, vmap
 from jax.tree_util import Partial
 from jaxtyping import Array, PRNGKeyArray, Real
+from matplotlib.animation import FuncAnimation
+from scipy.stats import multivariate_normal
 
+from diffusionlib.conditioning_method import ConditioningMethodName, get_conditioning_method
+from diffusionlib.sampler import SamplerName, get_sampler
+from diffusionlib.sampler.base import Sampler
 from diffusionlib.sampler.ddim import DDIMVP
-from diffusionlib.sampler.smc import SMCDiffOptSampler
+from diffusionlib.sampler.predictor_corrector import PCSampler
 from diffusionlib.sde import SDE, VP
+from diffusionlib.solver import EulerMaruyama
 
-matplotlib.rcParams["animation.embed_limit"] = 2**128
 COLOR_POSTERIOR = "#a2c4c9"
 COLOR_ALGORITHM = "#ff7878"
+NUM_STEPS = 1000
+NUM_SAMPLES = 1000
+SIGMA_Y = 1.0
+DIM_X = 8
+DIM_Y = 2
+SEED = 100
 
+SIZE = 8.0  # mean multiplier
+CENTER_RANGE = np.array((-2, 2))
+BETA_MIN = 0.01
+BETA_MAX = 20.0
 
-# Config
-key = random.PRNGKey(100)
-num_steps = 1000
-num_samples = 1000
-dim_x = 80
-dim_y = 1
-measurement_noise_std = 1
-size = 8.0  # mean multiplier
-center_range = np.array((-2, 2))
+CHART_LIMS = SIZE * (CENTER_RANGE + np.array((-0.5, 0.5)))
+CHART_TICKS = np.arange(CENTER_RANGE[0] * SIZE, CENTER_RANGE[1] * (SIZE + 1), SIZE)
 
-beta_min = 0.01
-beta_max = 20.0
+OUT_BASE_PATH = Path() / "presentation" / "assets"
 
-# plotting
-chart_lims = size * (center_range + np.array((-0.5, 0.5)))
+methods = (
+    # SamplerName.SMC_DIFF_OPT,
+    ConditioningMethodName.VJP_GUIDANCE,
+)
+title_map = {
+    SamplerName.SMC_DIFF_OPT: "SMCDiffOpt",
+    SamplerName.MCG_DIFF: "MCGDiff",
+    ConditioningMethodName.DIFFUSION_POSTERIOR_SAMPLING: "DPS",
+    ConditioningMethodName.PSEUDO_INVERSE_GUIDANCE: r"$\Pi$IGD",
+    ConditioningMethodName.VJP_GUIDANCE: "TMPD",
+}
 
 
 # Define epsilon functions
@@ -54,6 +66,12 @@ def get_model_fn(
             * ou_dist(sde.marginal_mean_coeff(t)).log_prob(x)
         )
     )
+
+
+def get_score_fn(
+    ou_dist: Callable[[Array], dist.MixtureSameFamily], sde: SDE
+) -> Callable[[Array, Array], Array]:
+    return vmap(grad(lambda x, t: ou_dist(sde.marginal_mean_coeff(t)).log_prob(x)))
 
 
 # Define mixture model function
@@ -201,9 +219,9 @@ def generate_measurement_equations(
     a_recon: Real[Array, "{dim_y} {dim_x}"] = u @ s_new_mat @ v[coordinate_mask]
 
     # Sample initial data and simulate initial observations
-    init_sample: Real[Array, "{dim_x}"] = mixt.sample(key_init_sample)
+    init_sample: Real[Array, " {dim_x}"] = mixt.sample(key_init_sample)
 
-    init_obs: Real[Array, "{dim_y}"] = a_recon @ init_sample
+    init_obs: Real[Array, " {dim_y}"] = a_recon @ init_sample
     init_obs += random.normal(key_init_obs, init_obs.shape) * noise_std
 
     # Construct observation noise covariance matrix
@@ -212,157 +230,341 @@ def generate_measurement_equations(
     return a_recon, sigma_y, u, s_new, v, coordinate_mask, init_obs, init_sample
 
 
-# Build prior (equal weighted, grid GMM)
-means = [
-    jnp.array([-size * i, -size * j] * (dim_x // 2))
-    for i in range(center_range[0], center_range[1] + 1)
-    for j in range(center_range[0], center_range[1] + 1)
-]
-weights = jnp.ones(len(means))
-weights = weights / weights.sum()
+def make_sampler(
+    method,
+    base_sampler,
+    sde,
+    model,
+    score,
+    dim_x,
+    init_obs,
+    a,
+    measurement_noise_std,
+    num_samples,
+    num_steps,
+) -> Sampler:
+    if isinstance(method, SamplerName):
+        guided_sampler = get_sampler(
+            method,
+            base_sampler=base_sampler,
+            obs_matrix=a,
+            obs_noise=measurement_noise_std,
+            num_particles=num_samples,
+            stack_samples=True,
+        )
+    else:
+        cond_method = get_conditioning_method(
+            name=method,
+            sde=sde.reverse(score),
+            y=jnp.tile(init_obs, (num_samples, 1)),
+            H=a,
+            HHT=a @ a.T,
+            observation_map=lambda x: a @ x.flatten(),
+            shape=(num_samples, dim_x),
+            scale=num_steps + 0.05,  # DPS scale
+            noise_std=measurement_noise_std,
+        )
+        solver = EulerMaruyama(
+            num_steps=num_steps, sde=sde.reverse(model).guide(cond_method.guidance_score_func)
+        )
+        guided_sampler = PCSampler(
+            shape=(num_samples, dim_x), outer_solver=solver, stack_samples=True
+        )
 
-ou_mixt_fun = Partial(ou_mixt, means=means, dim_x=dim_x, weights=weights)
-mixt = ou_mixt_fun(1)
+    return guided_sampler
 
 
-# Get model prior samples (i.e. DDPM)
-key, sub_key = random.split(key)
+def animate_samples(
+    title: str,
+    samples: Real[Array, "{num_steps} {num_samples} {dim_x}"],
+    posterior_samples: Real[Array, "{num_samples} {dim_x}"] | None = None,
+    skip: int = 5,
+    reverse: bool = False,
+    figsize: tuple[int, int] = (6, 6),
+    base_sampler: DDIMVP | None = None,
+    rescale: bool = False,
+    init_obs: Array | None = None,
+) -> FuncAnimation:
+    fig, ax = plt.subplots(figsize=figsize)
 
-sde = VP(jnp.array(beta_min), jnp.array(beta_max))
-model = get_model_fn(ou_mixt_fun, sde)  # epsilon estimator
+    if base_sampler is not None:
+        c_t = base_sampler.sqrt_alphas_cumprod[::-1]
+        d_t = base_sampler.sqrt_1m_alphas_cumprod[::-1]
 
-sampler = DDIMVP(
-    num_steps=num_steps,
-    shape=(num_samples, dim_x),
-    model=model,
-    beta_min=beta_min,
-    beta_max=beta_max,
-    eta=1.0,  # NOTE: equates to using DDPM
-    stack_samples=True,
-)
+    def animate(t: int):
+        # Clear axis for next frame
+        ax.clear()
 
-# NOTE: lead axis of `prior_samples` is such that index 0 corresponds to X_0 (not X_T).
-prior_samples: Real[Array, "{num_steps} {num_samples} {dim_x}"] = sampler.sample(sub_key)
+        # Axes
+        ax.axhline(0, color="black", lw=0.5)
+        ax.axvline(0, color="black", lw=0.5)
+        ax.grid(True)
+
+        if posterior_samples is not None:
+            ax.scatter(
+                x=posterior_samples[:, 0],
+                y=posterior_samples[:, 1],
+                color=COLOR_POSTERIOR,
+                alpha=0.5,
+                edgecolors="black",
+                lw=0.5,
+                s=10,
+            )
+
+        if rescale and (base_sampler is not None):
+            total_size = 10 * NUM_SAMPLES
+            unscaled_size = dists.MvNormal(
+                loc=c_t[t] * init_obs, cov=c_t[t] ** 2 * sigma_y**2 + d_t[t] ** 2 * a @ a.T
+            ).pdf(samples[t, :, :] @ a.T)
+            scaled_size = unscaled_size / unscaled_size.sum()
+            size = total_size * scaled_size
+        else:
+            size = 10
+
+        # Particle samples
+        ax.scatter(
+            x=samples[t, :, 0],
+            y=samples[t, :, 1],
+            s=size,
+            color=COLOR_ALGORITHM,
+            alpha=0.5,
+            edgecolors="black",
+            lw=0.5,
+        )
+
+        # Limits
+        ax.set_xlim(*CHART_LIMS)
+        ax.set_ylim(*CHART_LIMS)
+
+        ax.set_xticks(CHART_TICKS)
+        ax.set_yticks(CHART_TICKS)
+
+        # Labels
+        ax.set_xlabel("Coordinate 1")
+        ax.set_ylabel("Coordinate 2")
+        ax.set_title(f"{title}\nt={t if reverse else (NUM_STEPS - t)}")
+
+    frames = (
+        jnp.arange(NUM_STEPS, -skip, -skip) if reverse else jnp.arange(0, NUM_STEPS + skip, skip)
+    )
+    ani = FuncAnimation(fig, animate, frames=frames, interval=25)
+    plt.close()
+
+    return ani
 
 
-# Create animation of particle posterior sampling
-subhist = [*prior_samples[::10], prior_samples[-1]][::-1]
+def plot_measurement_system(
+    prior_samples: Real[Array, "{num_samples} {dim_x}"],
+    posterior_samples: Real[Array, "{num_samples} {dim_x}"],
+    init_sample: Real[Array, " {dim_x}"],
+    init_obs: Real[Array, " {dim_y}"],
+    a: Real[Array, "{dim_y} {dim_x}"],
+):
+    fig, axes = plt.subplots(2, 2, figsize=(12, 10), sharex="col", sharey="col")
 
-fig, ax = plt.subplots(figsize=(6, 6))
+    transformed_samples = prior_samples[0] @ a.T
+    transformed_init_sample = a @ init_sample
 
+    noisy_samples = transformed_samples + SIGMA_Y * np.random.randn(*transformed_samples.shape)
 
-def animate(i: int):
-    # Clear axis for next frame
-    ax.clear()
-
-    # Axes
-    ax.axhline(0, color="black", lw=0.5)
-    ax.axvline(0, color="black", lw=0.5)
-
-    # Particle samples
-    ax.scatter(
-        x=subhist[i][:, 0],
-        y=subhist[i][:, 1],
-        color=COLOR_ALGORITHM,
-        alpha=0.5,
-        edgecolors="black",
-        lw=0.5,
-        s=10,
+    mu = transformed_init_sample
+    grid_range = 4
+    x_1_points = np.linspace(mu[0] - grid_range, mu[0] + grid_range, 100)
+    x_2_points = np.linspace(mu[1] - grid_range, mu[1] + grid_range, 100)
+    x_1_meshpoints, x_2_meshpoints = np.meshgrid(x_1_points, x_2_points)
+    z_vals = multivariate_normal(mu, sigma_y * np.eye(DIM_Y)).pdf(
+        np.dstack((x_1_meshpoints, x_2_meshpoints))
     )
 
-    # Limits
-    ax.set_xlim(*chart_lims)
-    ax.set_ylim(*chart_lims)
+    axes[0, 0].set_xlim(*CHART_LIMS)
+    axes[0, 0].set_ylim(*CHART_LIMS)
+    axes[0, 0].set_xticks(CHART_TICKS)
+    axes[0, 0].set_yticks(CHART_TICKS)
+    axes[0, 0].set_xlabel("Coordinate 1")
+    axes[0, 0].set_ylabel("Coordinate 2")
+    axes[0, 0].scatter(
+        prior_samples[0, :, 0],
+        prior_samples[0, :, 1],
+        alpha=0.5,
+        color=COLOR_ALGORITHM,
+        s=10,
+        edgecolors="black",
+        lw=0.5,
+    )
+    axes[0, 0].scatter(
+        init_sample[0], init_sample[1], edgecolors="black", lw=0.5, color="red", s=100
+    )
+    axes[0, 0].set_title("GMM Prior in $\\mathbf{x}_*$ space")
+    axes[0, 0].grid(True)
 
-    # Labels
-    ax.set_xlabel("Coordinate 1")
-    ax.set_ylabel("Coordinate 2")
-    ax.set_title(f"Particle posterior sampling\nt={num_steps - (i * 10)}")
+    axes[0, 1].set_xlabel("Coordinate 1")
+    axes[0, 1].set_ylabel("Coordinate 2")
+    axes[0, 1].scatter(
+        transformed_samples[:, 0],
+        transformed_samples[:, 1],
+        alpha=0.5,
+        color="orange",
+        s=10,
+        edgecolors="black",
+        lw=0.5,
+    )
+    axes[0, 1].scatter(
+        transformed_init_sample[0],
+        transformed_init_sample[1],
+        edgecolors="black",
+        lw=0.5,
+        color="red",
+        s=100,
+    )
+    axes[0, 1].set_title("Transformed GMM Prior in $\\mathbf{y}$ space")
+    axes[0, 1].grid(True)
 
-    ax.grid(True)
+    axes[1, 0].set_xlim(*CHART_LIMS)
+    axes[1, 0].set_ylim(*CHART_LIMS)
+    axes[1, 0].set_xticks(CHART_TICKS)
+    axes[1, 0].set_yticks(CHART_TICKS)
+    axes[1, 0].set_xlabel("Coordinate 1")
+    axes[1, 0].set_ylabel("Coordinate 2")
+    axes[1, 0].scatter(
+        posterior_samples[:, 0],
+        posterior_samples[:, 1],
+        alpha=0.5,
+        color=COLOR_POSTERIOR,
+        s=10,
+        edgecolors="black",
+        lw=0.5,
+    )
+    axes[1, 0].scatter(
+        init_sample[0], init_sample[1], edgecolors="black", lw=0.5, color="red", s=100
+    )
+    axes[1, 0].set_title("Posterior in $\\mathbf{x}_*$ space")
+    axes[1, 0].grid(True)
 
+    axes[1, 1].set_xlabel("Coordinate 1")
+    axes[1, 1].set_ylabel("Coordinate 2")
+    axes[1, 1].scatter(
+        noisy_samples[:, 0],
+        noisy_samples[:, 1],
+        alpha=0.5,
+        color="orange",
+        s=10,
+        edgecolors="black",
+        lw=0.5,
+    )
+    axes[1, 1].contour(x_1_meshpoints, x_2_meshpoints, z_vals, levels=10, zorder=1)
+    axes[1, 1].scatter(
+        transformed_init_sample[0],
+        transformed_init_sample[1],
+        edgecolors="black",
+        lw=0.5,
+        color="red",
+        s=100,
+    )
+    axes[1, 1].scatter(
+        init_obs[0], init_obs[1], color="dodgerblue", edgecolors="black", lw=0.5, s=100
+    )
+    axes[1, 1].set_title("Noisy observations in $\\mathbf{y}$ space")
+    axes[1, 1].grid(True)
 
-ani = animation.FuncAnimation(fig, animate, frames=len(subhist), interval=50)
-plt.close()
-
-ani.save("gmm-prior.gif", writer="pillow")
-
-
-# # Setup inverse problem
-# key, sub_key = random.split(key)
-
-# a, sigma_y, u, diag, v, coordinate_mask, init_obs, init_sample = generate_measurement_equations(
-#     dim_x, dim_y, mixt, measurement_noise_std, sub_key
-# )
-
-
-# # Get posterior samples
-# posterior = get_posterior(init_obs, mixt, a, sigma_y)
-# key, sub_key = random.split(key)
-
-# posterior_samples = posterior.sample(sub_key, (num_samples,))
-
-
-# smc_guided_sampler = SMCDiffOptSampler(
-#     base_sampler=sampler,
-#     obs_matrix=a,
-#     obs_noise=measurement_noise_std,
-#     num_particles=num_samples,
-#     stack_samples=True,
-# )
-
-# particle_samples = smc_guided_sampler.sample(key, y=init_obs)
-
-
-# # Create animation of particle posterior sampling
-# subhist = [*particle_samples[::10], particle_samples[-1]]
-
-# fig, ax = plt.subplots(figsize=(6, 6))
-
-
-# def animate(i: int):
-#     # Clear axis for next frame
-#     ax.clear()
-
-#     # Axes
-#     ax.axhline(0, color="black", lw=0.5)
-#     ax.axvline(0, color="black", lw=0.5)
-
-#     # True posterior samples
-#     ax.scatter(
-#         x=posterior_samples[:, 0],
-#         y=posterior_samples[:, 1],
-#         color=COLOR_POSTERIOR,
-#         alpha=0.5,
-#         edgecolors="black",
-#         lw=0.5,
-#         s=10,
-#     )
-
-#     # Particle samples
-#     ax.scatter(
-#         x=subhist[i][:, 0],
-#         y=subhist[i][:, 1],
-#         color=COLOR_ALGORITHM,
-#         alpha=0.5,
-#         edgecolors="black",
-#         lw=0.5,
-#         s=10,
-#     )
-
-#     # Limits
-#     ax.set_xlim(*chart_lims)
-#     ax.set_ylim(*chart_lims)
-
-#     # Labels
-#     ax.set_xlabel("Coordinate 1")
-#     ax.set_ylabel("Coordinate 2")
-#     ax.set_title(f"Particle posterior sampling\nt={num_steps - (i * 10)}")
-
-#     ax.grid(True)
+    return fig, axes
 
 
-# ani = animation.FuncAnimation(fig, animate, frames=len(subhist), interval=100)
-# plt.close()
+if __name__ == "__main__":
+    key = random.PRNGKey(SEED)
 
-# ani.save("gmm-posterior.gif", writer="pillow")
+    # Build prior (equal weighted, grid GMM)
+    means = [
+        jnp.array([-SIZE * i, -SIZE * j] * (DIM_X // 2))
+        for i in range(CENTER_RANGE[0], CENTER_RANGE[1] + 1)
+        for j in range(CENTER_RANGE[0], CENTER_RANGE[1] + 1)
+    ]
+    weights = jnp.ones(len(means))
+    weights = weights / weights.sum()
+
+    ou_mixt_fun = Partial(ou_mixt, means=means, dim_x=DIM_X, weights=weights)
+    mixt = ou_mixt_fun(1)
+
+    sde = VP(jnp.array(BETA_MIN), jnp.array(BETA_MAX))
+    model = get_model_fn(ou_mixt_fun, sde)  # epsilon estimator
+    score = get_score_fn(ou_mixt_fun, sde)
+
+    # Setup inverse problem
+    key, sub_key = random.split(key)
+
+    a, sigma_y, u, diag, v, coordinate_mask, init_obs, init_sample = generate_measurement_equations(
+        DIM_X, DIM_Y, mixt, SIGMA_Y, sub_key
+    )
+
+    # Setup samplers
+    prior_sampler = DDIMVP(
+        num_steps=NUM_STEPS,
+        shape=(NUM_SAMPLES, DIM_X),
+        model=model,
+        beta_min=BETA_MIN,
+        beta_max=BETA_MAX,
+        eta=1.0,  # NOTE: equates to using DDPM
+        stack_samples=True,
+    )
+
+    guided_samplers = {
+        method: make_sampler(
+            method,
+            prior_sampler,
+            sde,
+            model,
+            score,
+            DIM_X,
+            init_obs,
+            a,
+            SIGMA_Y,
+            NUM_SAMPLES,
+            NUM_STEPS,
+        )
+        for method in methods
+    }
+
+    # Make samples
+    key, sub_key = random.split(key)
+
+    prior_samples: Real[Array, "{num_steps} {num_samples} {dim_x}"] = prior_sampler.sample(sub_key)
+
+    posterior_samples = get_posterior(init_obs, mixt, a, sigma_y).sample(sub_key, (NUM_SAMPLES,))
+
+    particle_samples = {
+        method: jnp.array(sampler.sample(key, y=init_obs, ESSrmin=0.8))[
+            :: 1 if isinstance(method, SamplerName) else -1
+        ]
+        for method, sampler in guided_samplers.items()
+        if not print(method)
+    }
+
+    # Animate samples
+    prior_animation = animate_samples("Prior Sampling", prior_samples, reverse=True)
+    posterior_animations = {
+        method: animate_samples(
+            f"Posterior Sampling ({title_map[method]})",
+            samples,
+            posterior_samples,
+            base_sampler=prior_sampler,
+            rescale=method == SamplerName.SMC_DIFF_OPT,
+            init_obs=init_obs,
+        )
+        for method, samples in particle_samples.items()
+    }
+
+    # Plot measurement system demo
+    fig, ax = plot_measurement_system(prior_samples, posterior_samples, init_sample, init_obs, a)
+    out_path = OUT_BASE_PATH / "gmm-measurement-system.pdf"
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    plt.savefig(out_path, format="pdf", bbox_inches="tight")
+    plt.close(fig)
+
+    # Save animations
+    out_path = OUT_BASE_PATH / "gmm-prior" / "gmm-prior.gif"
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    prior_animation.save(out_path, writer="pillow", dpi=300)
+
+    for method, posterior_animation in posterior_animations.items():
+        out_path = OUT_BASE_PATH / f"gmm-posterior-{method}" / f"gmm-posterior-{method}.gif"
+        out_path.parent.mkdir(parents=True, exist_ok=True)
+        posterior_animation.save(out_path, writer="pillow", dpi=300)
