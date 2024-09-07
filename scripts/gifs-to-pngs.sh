@@ -1,13 +1,22 @@
 #!/bin/zsh
 
-magick convert -coalesce \
-    presentation/assets/gmm-posterior-smc_diff_opt/gmm-posterior-smc_diff_opt.gif \
-    presentation/assets/gmm-posterior-smc_diff_opt/gmm-posterior-smc_diff_opt.png
+# Base directory path
+base_dir="presentation/assets"
 
-magick convert -coalesce \
-    presentation/assets/gmm-posterior-vjp_guidance/gmm-posterior-vjp_guidance.gif \
-    presentation/assets/gmm-posterior-vjp_guidance/gmm-posterior-vjp_guidance.png
+# Define an array of asset file names (without the extensions)
+assets=(
+    "branin-adam"
+    "branin-adam-larger"
+    "branin-backwards"
+    "branin-forward"
+    "branin-particles"
+    "branin-particles-dynamic"
+    "gmm-posterior-smc_diff_opt"
+    "gmm-posterior-vjp_guidance"
+    "gmm-prior"
+)
 
-magick convert -coalesce \
-    presentation/assets/gmm-prior/gmm-prior.gif \
-    presentation/assets/gmm-prior/gmm-prior.png
+# Loop through each asset and convert the gif to png
+for asset in $assets; do
+    magick convert -coalesce "${base_dir}/${asset}/${asset}.gif" "${base_dir}/${asset}/${asset}.png"
+done

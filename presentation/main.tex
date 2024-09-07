@@ -74,7 +74,7 @@
 
     \begin{frame}{GMM Experiment --- Setup}
         Consider a Gaussian mixture model (GMM), $p_{\text{data}}$, with 25 equally weighted
-        ($\omega_{i,j} \propto 1$) $d_x$-dimensional Gaussian random variables with means
+        $d_x$-dimensional Gaussian random variables with means
         $\mathbf{\mu}_{i,j} := (8i, 8j, \dots, 8i, 8j) \in \mathbb{R}^{d_x}$
         for $(i, j)\in \{-2, \ldots, 2\}^2$ and unit variance.
         We generate some $d_y$-dimensional measurement, $\mathbf{y}$, according to the following process:
@@ -85,7 +85,6 @@
             \item Set $A := U\, diag(\{s_{i,j}\})\, V^\top$.
             \item Draw $\mathbf{x}_* \sim p_{\text{data}}$ and set $\mathbf{y} := A\mathbf{x}_* + \sigma_y\epsilon,\ \epsilon \sim \mathcal{N}(\mathbf{0}_{d_y}, \mathrm{I}_{d_y})$.
         \end{itemize}
-        
         The goal of the inverse problem is to take $\mathbf{y}$ (with $A$ and $\sigma_y$ known), and use
         it to infer $\mathbf{x}_*$. We consider $d_y < d_x$, making the problem ill-posed.
     \end{frame}
@@ -97,14 +96,14 @@
 
     \begin{frame}{GMM Experiment --- Prior Model and TMPD Guidance}
         \centering
-        % \animategraphics[loop,width=5cm]{25}{assets/gmm-prior/gmm-prior-}{0}{200}
-        % \animategraphics[loop,width=5cm]{25}{assets/gmm-posterior-vjp_guidance/gmm-posterior-vjp_guidance-}{0}{200}
+        \animategraphics[loop,width=5cm]{25}{assets/gmm-prior/gmm-prior-}{0}{200}
+        \animategraphics[loop,width=5cm]{25}{assets/gmm-posterior-vjp_guidance/gmm-posterior-vjp_guidance-}{0}{200}
     \end{frame}
 
     \begin{frame}{GMM Experiment --- \texttt{SMCDiffOpt}}
         \centering
-        % \animategraphics[loop,width=5cm]{25}{assets/gmm-prior/gmm-prior-}{0}{200}
-        % \animategraphics[loop,width=5cm]{25}{assets/gmm-posterior-smc_diff_opt/gmm-posterior-smc_diff_opt-}{0}{200}
+        \animategraphics[loop,width=5cm]{25}{assets/gmm-prior/gmm-prior-}{0}{200}
+        \animategraphics[loop,width=5cm]{25}{assets/gmm-posterior-smc_diff_opt/gmm-posterior-smc_diff_opt-}{0}{200}
     \end{frame}
 
     \begin{frame}{GMM Experiment --- Performance Comparison}
@@ -146,16 +145,32 @@
 
     \begin{frame}{Branin Experiment --- Pitfalls of Gradient Optimisation}
         \centering
-        \includegraphics[width=\textwidth]{assets/adam_branin.pdf}
+        \animategraphics[loop,width=10cm]{15}{assets/branin-adam/branin-adam-}{0}{39}
     \end{frame}
 
     \begin{frame}{Branin Experiment --- Pitfalls of Gradient Optimisation II}
         \centering
-        \includegraphics[width=\textwidth]{assets/adam_larger_branin.pdf}
+        \animategraphics[loop,width=10cm]{15}{assets/branin-adam-larger/branin-adam-larger-}{0}{100}
+    \end{frame}
+
+    \begin{frame}{Branin Experiment --- Forwards Noising Process}
+        \centering
+        \animategraphics[loop,width=10cm]{25}{assets/branin-forward/branin-forward-}{0}{200}
+    \end{frame}
+
+    \begin{frame}{Branin Experiment --- Learned De-Noising Process}
+        \centering
+        \animategraphics[loop,width=10cm]{25}{assets/branin-backwards/branin-backwards-}{0}{200}
     \end{frame}
 
     \begin{frame}{Branin Experiment --- \texttt{SMCDiffOpt}}
+        \centering
+        \animategraphics[loop,width=10cm]{25}{assets/branin-particles/branin-particles-}{0}{200}
+    \end{frame}
 
+    \begin{frame}{Branin Experiment --- \texttt{SMCDiffOpt} Landscape}
+        \centering
+        \animategraphics[loop,width=10cm]{25}{assets/branin-particles-dynamic/branin-particles-dynamic-}{0}{100}
     \end{frame}
 
     \begin{frame}{Black-Box Experiment --- Motivation}
